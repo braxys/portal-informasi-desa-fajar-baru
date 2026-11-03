@@ -61,6 +61,8 @@ public/brand/               # Aset logo (mark, horizontal, monokrom, putih)
 
 Deliverable Fase 1 (wireframe halaman publik mobile, login/dashboard admin desktop, palet hijau-biru, dan logo) tersedia di [`docs/design/`](./docs/design/). Mulai dari [`docs/design/README.md`](./docs/design/README.md) dan [`docs/design/fase-1-handoff.md`](./docs/design/fase-1-handoff.md).
 
+Token warna pada [`docs/design/color-tokens.css`](./docs/design/color-tokens.css) sudah terhubung ke Tailwind CSS v4. Gunakan kelas seperti `bg-fajar-600` dan `text-telaga-700` untuk warna utama, atau variabel CSS `--color-fajar-*` dan `--color-telaga-*` pada gaya kustom.
+
 ## Pekerjaan lanjutan
 
 1. Tinjau dan finalkan wireframe, palet warna, serta konten bersama UI/UX.

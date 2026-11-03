@@ -2,10 +2,10 @@
  * Design tokens — Portal Informasi Desa Fajar Baru
  * Fase 1 / handoff UI-UX
  *
- * Cara pakai pada Fase 2:
- * 1. Salin blok `:root` ke `src/app/globals.css`, atau import file ini.
- * 2. Ganti nilai hex inline di komponen dengan `var(--...)`.
- * 3. Jangan mengubah nama token tanpa memperbarui brand-guidelines.md.
+ * File ini diimpor dari `src/app/portal.css`.
+ * Gunakan kelas Tailwind seperti `bg-fajar-600` dan `text-telaga-700`,
+ * atau token CSS `var(--color-fajar-600)` untuk gaya kustom.
+ * Jangan mengubah nama token tanpa memperbarui brand-guidelines.md.
  */
 
 :root {
@@ -93,7 +93,7 @@
   --touch-target-min: 44px;
 }
 
-/* Tailwind CSS v4 theme bridge (opsional, aktifkan di Fase 2) */
+/* Tailwind CSS v4 theme bridge */
 @theme {
   --color-fajar-50: #ecfdf5;
   --color-fajar-100: #d1fae5;
