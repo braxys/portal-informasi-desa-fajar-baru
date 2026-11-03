@@ -93,7 +93,7 @@
   --touch-target-min: 44px;
 }
 
-/* Tailwind CSS v4 theme bridge (opsional, aktifkan di Fase 2) */
+/* Tailwind CSS v4 theme bridge, imported by src/app/portal.css */
 @theme {
   --color-fajar-50: #ecfdf5;
   --color-fajar-100: #d1fae5;

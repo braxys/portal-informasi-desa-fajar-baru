@@ -27,7 +27,7 @@ export function VillageMapSection() {
         <div className="mt-12 overflow-hidden rounded-[2rem] border border-white bg-white shadow-[0_24px_70px_-30px_rgba(15,67,58,.3)]">
           <div className="flex flex-col border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-fajar-100 text-fajar-700">
                 <Icon name="map" />
               </div>
               <div>
@@ -181,7 +181,7 @@ export function VillageMapSection() {
               </div>
 
               <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/80 bg-white/92 p-4 shadow-xl backdrop-blur sm:hidden">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-fajar-700">
                   Lokasi dipilih
                 </p>
                 <p className="mt-1 text-sm font-bold">
@@ -194,10 +194,10 @@ export function VillageMapSection() {
             </div>
 
             <aside className="hidden border-l border-slate-100 p-7 sm:block">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-fajar-700">
                 Lokasi dipilih
               </p>
-              <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+              <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-xl bg-fajar-100 text-fajar-700">
                 <Icon name="pin" size={23} />
               </div>
               <h4 className="mt-5 text-lg font-bold leading-snug text-slate-900">
@@ -233,7 +233,7 @@ export function VillageMapSection() {
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedMarker.name + " Desa Fajar Baru")}`}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-8 flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition hover:bg-emerald-700"
+                className="mt-8 flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition hover:bg-fajar-700"
               >
                 Buka petunjuk arah <Icon name="arrow" size={17} />
               </a>
