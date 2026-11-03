@@ -53,7 +53,13 @@ src/
   components/               # Komponen UI bersama
   lib/supabase/             # Klien Supabase browser dan server
 docs/konteks/               # PRD, SKPL, arsitektur, dan panduan tim
+docs/design/                # Wireframe, palet warna, token, dan handoff UI/UX
+public/brand/               # Aset logo (mark, horizontal, monokrom, putih)
 ```
+
+## Desain dan aset merek
+
+Deliverable Fase 1 (wireframe halaman publik mobile, login/dashboard admin desktop, palet hijau-biru, dan logo) tersedia di [`docs/design/`](./docs/design/). Mulai dari [`docs/design/README.md`](./docs/design/README.md) dan [`docs/design/fase-1-handoff.md`](./docs/design/fase-1-handoff.md).
 
 ## Pekerjaan lanjutan
 

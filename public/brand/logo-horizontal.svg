@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" width="360" height="96" role="img" aria-labelledby="logoHorizontalTitle logoHorizontalDesc">
+  <title id="logoHorizontalTitle">Desa Fajar Baru — Pusat Informasi</title>
+  <desc id="logoHorizontalDesc">Logo horizontal dengan lambang perisai dan nama Desa Fajar Baru.</desc>
+  <defs>
+    <linearGradient id="fajarHorizontalGradient" x1="7" y1="5" x2="42" y2="41" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981" />
+      <stop offset="1" stop-color="#0E7490" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(8 16) scale(1.3333)">
+    <path d="M24 4 7 11v12c0 10.5 6.8 17.2 17 21 10.2-3.8 17-10.5 17-21V11L24 4Z" fill="url(#fajarHorizontalGradient)" />
+    <path d="M13 30c5-7 9-10 11-14 3 6 7 9 12 14H13Z" fill="#FFFFFF" fill-opacity=".95" />
+    <path d="M14 31h20M18 35h12" stroke="#064E3B" stroke-width="2" stroke-linecap="round" />
+    <path d="M16 22c3-1 5-3 6-6-4 0-7 2-8 5l2 1ZM32 22c-3-1-5-3-6-6 4 0 7 2 8 5l-2 1Z" fill="#A7F3D0" />
+  </g>
+  <text x="88" y="47" font-family="Manrope, 'DM Sans', Arial, sans-serif" font-size="24" font-weight="800" letter-spacing="-0.6" fill="#0F172A">Desa Fajar Baru</text>
+  <text x="89" y="68" font-family="'DM Sans', Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="2.8" fill="#047857">PUSAT INFORMASI</text>
+</svg>

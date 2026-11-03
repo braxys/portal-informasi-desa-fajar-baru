@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Logo Desa Fajar Baru</title>
+  <desc id="logoDesc">Perisai hijau-biru dengan lanskap sawah dan daun sebagai lambang potensi serta pelayanan desa.</desc>
+  <defs>
+    <linearGradient id="fajarMarkGradient" x1="7" y1="5" x2="42" y2="41" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981" />
+      <stop offset="1" stop-color="#0E7490" />
+    </linearGradient>
+  </defs>
+  <path d="M24 4 7 11v12c0 10.5 6.8 17.2 17 21 10.2-3.8 17-10.5 17-21V11L24 4Z" fill="url(#fajarMarkGradient)" />
+  <path d="M13 30c5-7 9-10 11-14 3 6 7 9 12 14H13Z" fill="#FFFFFF" fill-opacity=".95" />
+  <path d="M14 31h20M18 35h12" stroke="#064E3B" stroke-width="2" stroke-linecap="round" />
+  <path d="M16 22c3-1 5-3 6-6-4 0-7 2-8 5l2 1ZM32 22c-3-1-5-3-6-6 4 0 7 2 8 5l-2 1Z" fill="#A7F3D0" />
+</svg>
