@@ -1,0 +1,65 @@
+# Portal Informasi Desa Fajar Baru
+
+Kerangka awal aplikasi link aggregator untuk Desa Fajar Baru, Jati Agung, Lampung Selatan. Repo ini menyiapkan struktur dan tooling agar tim dapat melanjutkan implementasi sesuai dokumen kebutuhan; fitur produk belum selesai.
+
+## Stack
+
+- Next.js App Router dan React
+- TypeScript dengan strict mode
+- Tailwind CSS
+- Supabase (`@supabase/ssr` dan `@supabase/supabase-js`)
+- Target deployment: Vercel
+
+## Persiapan lokal
+
+Prasyarat: Node.js LTS (20.9 atau lebih baru) dan npm.
+
+```bash
+npm install
+Copy-Item .env.example .env.local
+```
+
+Isi `.env.local` dengan URL project dan publishable/anon key Supabase:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://<project-id>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable-or-anon-key>
+```
+
+Jalankan server pengembangan:
+
+```bash
+npm run dev
+```
+
+Buka `http://localhost:3000`. Perintah validasi yang tersedia:
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Jangan commit `.env.local` atau mengirim kredensial melalui chat. Gunakan pengelola rahasia yang disepakati tim; nilai `NEXT_PUBLIC_*` tersedia di browser, sehingga database tetap wajib dilindungi dengan kebijakan Supabase Row Level Security (RLS).
+
+## Struktur awal
+
+```text
+src/
+  app/
+    (public)/page.tsx       # Halaman publik awal (/)
+    admin/login/page.tsx    # Kerangka halaman login
+    admin/dashboard/page.tsx
+  components/               # Komponen UI bersama
+  lib/supabase/             # Klien Supabase browser dan server
+docs/konteks/               # PRD, SKPL, arsitektur, dan panduan tim
+```
+
+## Pekerjaan lanjutan
+
+1. Tinjau dan finalkan wireframe, palet warna, serta konten bersama UI/UX.
+2. Sepakati skema tabel, kebijakan RLS, dan akun admin sebelum menghubungkan Supabase.
+3. Implementasikan daftar tautan publik, autentikasi, proteksi dashboard, serta CRUD.
+4. Tambahkan pengujian dan verifikasi metrik performa sebelum deployment.
+
+Lihat dokumen proyek di [`docs/konteks/`](./docs/konteks/), terutama PRD, SKPL, rencana arsitektur, panduan setup, dan Git SOP.
