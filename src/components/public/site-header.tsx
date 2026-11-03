@@ -19,7 +19,7 @@ export function SiteHeader() {
             <div className="text-sm font-bold leading-tight tracking-[-0.01em] text-slate-900 sm:text-base">
               Desa Fajar Baru
             </div>
-            <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-700">
+            <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-fajar-700">
               Pusat Informasi
             </div>
           </div>
@@ -43,7 +43,7 @@ export function SiteHeader() {
 
         <a
           href="#layanan"
-          className="hidden items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 md:flex"
+          className="hidden items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fajar-700 md:flex"
         >
           Akses Layanan <Icon name="arrow" size={17} />
         </a>

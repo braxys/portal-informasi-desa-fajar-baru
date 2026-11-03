@@ -54,7 +54,7 @@ export function ServicesSection() {
 
         <div className="mt-5 flex flex-col justify-between gap-6 rounded-[1.75rem] bg-slate-950 p-6 text-white sm:flex-row sm:items-center sm:p-8">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-fajar-500">
               Media Sosial Resmi
             </p>
             <h3 className="mt-2 text-xl font-bold tracking-tight">
@@ -68,7 +68,7 @@ export function ServicesSection() {
                 href={social.href}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold transition hover:border-emerald-400 hover:bg-emerald-500/20"
+                className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold transition hover:border-fajar-500 hover:bg-fajar-500/20"
               >
                 <Icon name={social.icon} size={18} /> {social.label}
               </a>
