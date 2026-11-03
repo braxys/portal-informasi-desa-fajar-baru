@@ -122,7 +122,7 @@ export function VillageLogo({ priority = false }: { priority?: boolean }) {
   return (
     <div className="village-logo">
       <Image
-        src="/brand/logo-lampung-selatan.jpeg"
+        src="/brand/logo-lampung-selatan.png"
         alt="Lambang Kabupaten Lampung Selatan"
         width={1070}
         height={1470}
