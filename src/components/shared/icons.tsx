@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 export type IconName = "arrow" | "briefcase" | "building" | "chevron" | "clipboard" | "clock" | "instagram" | "mail" | "map" | "menu" | "phone" | "pin" | "shield" | "tiktok" | "users" | "youtube" | "x"
@@ -117,43 +118,18 @@ export function Icon({
   return <svg {...common}>{paths[name]}</svg>
 }
 
-export function VillageLogo() {
+export function VillageLogo({ priority = false }: { priority?: boolean }) {
   return (
-    <div className="village-logo" aria-label="Lambang Desa Fajar Baru">
-      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <path
-          d="M24 4 7 11v12c0 10.5 6.8 17.2 17 21 10.2-3.8 17-10.5 17-21V11L24 4Z"
-          fill="url(#logo-gradient)"
-        />
-        <path
-          d="M13 30c5-7 9-10 11-14 3 6 7 9 12 14H13Z"
-          fill="white"
-          fillOpacity=".95"
-        />
-        <path
-          d="M14 31h20M18 35h12"
-          stroke="#064E3B"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <path
-          d="M16 22c3-1 5-3 6-6-4 0-7 2-8 5l2 1ZM32 22c-3-1-5-3-6-6 4 0 7 2 8 5l-2 1Z"
-          fill="#A7F3D0"
-        />
-        <defs>
-          <linearGradient
-            id="logo-gradient"
-            x1="7"
-            y1="5"
-            x2="42"
-            y2="41"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#10B981" />
-            <stop offset="1" stopColor="#0E7490" />
-          </linearGradient>
-        </defs>
-      </svg>
+    <div className="village-logo">
+      <Image
+        src="/brand/logo-lampung-selatan.jpeg"
+        alt="Lambang Kabupaten Lampung Selatan"
+        width={1070}
+        height={1470}
+        priority={priority}
+        sizes="48px"
+        className="h-full w-full object-contain"
+      />
     </div>
   )
 }

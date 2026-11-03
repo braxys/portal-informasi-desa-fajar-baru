@@ -118,7 +118,8 @@ File: [`admin-dashboard-desktop.svg`](./admin-dashboard-desktop.svg)
 
 ## 5. Yang belum diputuskan
 
-- File logo resmi desa dan versi lambang resmi (jika ada).
+- Simbol logo pada wireframe masih placeholder; aset final ada di `public/brand/logo-lampung-selatan.jpeg`.
+- Versi SVG/AI resmi Lambang Lampung Selatan (jika ada) agar lebih tajam.
 - Foto asli Desa Fajar Baru untuk hero.
 - Daftar kategori final: `bumdes`, `layanan`, `medsos`, `informasi`, `survei`.
 - Nama akun admin dan alur reset kata sandi.
@@ -133,4 +134,4 @@ File: [`admin-dashboard-desktop.svg`](./admin-dashboard-desktop.svg)
 - [x] Ukuran target sentuh dan breakpoint ditentukan.
 - [x] Palet dan logo tersedia untuk frontend.
 - [ ] Review bersama PM dan frontend.
-- [ ] Ganti aset logo kerja dengan logo resmi desa.
+- [x] Logo resmi Lampung Selatan sudah dipasang di header dan footer.

@@ -113,24 +113,22 @@ Aturan:
 
 ## 6. Logo
 
-Logo kerja terdiri dari perisai (pelayanan dan perlindungan), lanskap sawah/perbukitan (potensi desa), dan daun (pertumbuhan). Gradasi hijau-biru menghubungkan potensi desa dengan layanan digital.
+Logo resmi yang digunakan pada antarmuka adalah **Lambang Kabupaten Lampung Selatan**. Lambang ini mewakili konteks administratif kabupaten, sedangkan nama **Desa Fajar Baru** tetap ditampilkan sebagai teks di samping logo.
 
-### Varian file
+### File aset
 
 | File | Latar | Pemakaian |
 | --- | --- | --- |
-| `public/brand/logo-mark.svg` | Terang | Ikon aplikasi, avatar, favicon sementara |
-| `public/brand/logo-horizontal.svg` | Terang | Header, footer, dokumen resmi |
-| `public/brand/logo-monochrome.svg` | Terang | Cetak satu warna, dokumen hitam-putih |
-| `public/brand/logo-white.svg` | Gelap | Footer gelap, stiker, panel berwarna |
+| `public/brand/logo-lampung-selatan.jpeg` | Terang, latar putih | Header, footer, dokumen, materi sosialisasi |
 
 ### Aturan penggunaan
 
 - Ruang kosong minimum di sekeliling logo: **½ tinggi logo**.
-- Ukuran minimum logo horizontal: **120px** lebar di layar, **30mm** di cetak.
-- Jangan memutar, meregangkan, memberi bayangan berlebihan, atau mengganti warna di luar varian resmi.
-- Jangan menaruh logo di atas foto yang ramai tanpa lapisan gelap/terang.
-- **Status aset:** logo ini adalah aset kerja yang diturunkan dari lambang pada fondasi UI. Jika Pemerintah Desa memiliki file logo resmi (AI/SVG/PNG resolusi tinggi), ganti file di `public/brand/` tanpa mengubah nama agar seluruh aplikasi ikut memperbarui.
+- Ukuran minimum di layar: **40px tinggi**; di cetak: **20mm tinggi**.
+- Gunakan `object-fit: contain`; jangan memotong perisai, pita, atau teks di dalam lambang.
+- Jangan mengubah warna, memutar, atau meregangkan lambang.
+- Di atas latar gelap, tempatkan logo di dalam kontainer putih dengan radius 8px agar latar putih bawaan gambar menyatu.
+- **Status aset:** file resmi berasal dari `Logo Lampung Selatan.jpeg` (1070×1470 px). Jika sudah tersedia versi SVG/AI resmi, ganti file di `public/brand/` dan perbarui dokumen ini.
 
 ## 7. Ikonografi
 

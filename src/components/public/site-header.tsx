@@ -14,7 +14,7 @@ export function SiteHeader() {
           className="flex items-center gap-3"
           aria-label="Kembali ke beranda"
         >
-          <VillageLogo />
+          <VillageLogo priority />
           <div>
             <div className="text-sm font-bold leading-tight tracking-[-0.01em] text-slate-900 sm:text-base">
               Desa Fajar Baru

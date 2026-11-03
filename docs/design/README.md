@@ -11,11 +11,11 @@ Folder ini berisi deliverable UI/UX **Fase 1** untuk Portal Informasi Desa Fajar
 | Wireframe dashboard admin (desktop) | Selesai | [`wireframes/admin-dashboard-desktop.svg`](./wireframes/admin-dashboard-desktop.svg) |
 | Palet warna hijau-biru (hex) | Selesai | [`brand-guidelines.md`](./brand-guidelines.md) |
 | Token warna siap pakai | Selesai | [`color-tokens.css`](./color-tokens.css) |
-| Aset logo desa | Selesai (aset kerja) | [`public/brand/`](../../public/brand/) |
+| Aset logo resmi | Selesai | [`public/brand/logo-lampung-selatan.jpeg`](../../public/brand/logo-lampung-selatan.jpeg) |
 | Set ikon tautan | Fase 2 | — |
 | Stiker QR siap cetak | Fase 4 | — |
 
-> Logo di `public/brand/` adalah **aset kerja** yang diturunkan dari lambang pada fondasi UI. Ganti dengan file resmi desa jika sudah tersedia, tanpa mengubah nama file.
+> Logo yang dipakai adalah **Lambang Kabupaten Lampung Selatan** sesuai aset resmi yang diberikan. Nama Desa Fajar Baru tetap tampil sebagai teks di samping logo.
 
 ## Isi folder
 
@@ -73,4 +73,4 @@ Detail lengkap, kontras, dan aturan pemakaian ada di [`brand-guidelines.md`](./b
 - [ ] Fokus keyboard terlihat pada tombol, tautan, dan input.
 - [ ] Ada state loading, kosong, error, dan sukses untuk form admin.
 - [ ] Wireframe diuji pada lebar 360px, 390px, 430px, dan 1440px.
-- [ ] Logo resmi desa (jika ada) sudah menggantikan aset kerja.
+- [x] Logo resmi Lampung Selatan sudah dipasang di header, footer, dan aset merek.

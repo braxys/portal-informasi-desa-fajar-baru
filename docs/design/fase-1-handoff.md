@@ -9,7 +9,7 @@ Dokumen ini memetakan pekerjaan Fase 1 pada checklist Notion ke deliverable di r
 | Buat wireframe kasar halaman Publik (HP) | Arief (UI/UX) | Selesai | [`wireframes/public-mobile.svg`](./wireframes/public-mobile.svg) |
 | Buat wireframe kasar halaman Admin (Desktop) | Arief (UI/UX) | Selesai | [`wireframes/admin-login-desktop.svg`](./wireframes/admin-login-desktop.svg), [`wireframes/admin-dashboard-desktop.svg`](./wireframes/admin-dashboard-desktop.svg) |
 | Tentukan palet warna pasti (hex) gradasi hijau-biru | Arief (UI/UX) | Selesai | [`brand-guidelines.md`](./brand-guidelines.md) |
-| Sediakan aset logo desa | Arief (UI/UX) | Selesai (aset kerja) | [`public/brand/`](../../public/brand/) |
+| Sediakan aset logo desa | Arief (UI/UX) | Selesai (Lambang Lampung Selatan) | [`public/brand/logo-lampung-selatan.jpeg`](../../public/brand/logo-lampung-selatan.jpeg) |
 
 Di luar cakupan Fase 1:
 
@@ -20,7 +20,7 @@ Di luar cakupan Fase 1:
 
 ## 2. Keputusan desain yang sudah dikunci
 
-1. **Arah warna:** hijau desa `#047857` dan biru layanan `#0E7490` sebagai gradasi aksi utama. Hijau terang `#10B981` hanya untuk dekorasi.
+1. **Arah warna:** hijau desa `#047857` dan biru layanan `#0E7490` sebagai gradasi aksi utama. Hijau terang `#10B981` hanya untuk dekorasi. Warna logo mengikuti Lambang Lampung Selatan dan tidak diubah.
 2. **Tipografi:** Manrope untuk judul, DM Sans untuk body. Keduanya sudah dipakai fondasi UI di branch `development`.
 3. **Nuansa halaman:** terang, lapang, dan tenang. Latar `#F7F9F7`, kartu putih, border `#E7EEEA`.
 4. **Mobile-first:** gutter 20px, target sentuh minimal 44px, tombol utama selebar layar pada mobile.
@@ -41,7 +41,7 @@ Di luar cakupan Fase 1:
 ### UI/UX (lanjutan)
 
 - Review wireframe bersama PM dan frontend.
-- Ganti aset logo kerja dengan logo resmi desa bila sudah diperoleh.
+- Logo resmi Lampung Selatan sudah dipasang; jika ada versi SVG/AI resmi, ganti aset JPEG agar lebih tajam.
 - Buat set ikon tautan (BUMDes, website, Instagram, TikTok, YouTube, survei) pada Fase 2.
 - Buat desain stiker QR dan materi sosialisasi pada Fase 4.
 
@@ -53,7 +53,7 @@ Di luar cakupan Fase 1:
 
 ## 4. Pertanyaan terbuka
 
-1. Apakah Pemerintah Desa sudah memiliki file logo resmi (SVG/AI/PNG transparan)?
+1. Apakah tersedia versi SVG/AI resmi Lambang Lampung Selatan agar logo lebih tajam di semua ukuran?
 2. Apakah ada foto asli desa yang boleh dipakai untuk hero?
 3. Siapa pemilik akun admin dan bagaimana prosedur reset kata sandi?
 4. Apakah peta pada Fase 1 hanya placeholder, atau sudah perlu menampilkan titik fasilitas nyata?

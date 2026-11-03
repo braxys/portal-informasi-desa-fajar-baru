@@ -54,7 +54,7 @@ src/
   lib/supabase/             # Klien Supabase browser dan server
 docs/konteks/               # PRD, SKPL, arsitektur, dan panduan tim
 docs/design/                # Wireframe, palet warna, token, dan handoff UI/UX
-public/brand/               # Aset logo (mark, horizontal, monokrom, putih)
+public/brand/               # Aset logo resmi (Lambang Lampung Selatan)
 ```
 
 ## Desain dan aset merek
