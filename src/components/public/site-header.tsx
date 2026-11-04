@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Icon, VillageLogo } from "@/components/shared/icons";
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
@@ -35,7 +37,11 @@ export function SiteHeader() {
             ["Peta Desa", "/peta"],
             ["Kontak", "/kontak"],
           ].map(([label, href]) => (
-            <a key={label} href={href} className="nav-link">
+            <a
+              key={label}
+              href={href}
+              className={`nav-link ${pathname === href ? "active" : ""}`}
+            >
               {label}
             </a>
           ))}
@@ -73,7 +79,9 @@ export function SiteHeader() {
               key={label}
               href={href}
               onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-between border-b border-slate-100 py-3.5 text-sm font-semibold last:border-0"
+              className={`flex items-center justify-between border-b border-slate-100 py-3.5 text-sm font-semibold last:border-0 ${
+                pathname === href ? "text-fajar-700" : ""
+              }`}
             >
               {label} <Icon name="chevron" size={18} />
             </a>
