@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "db:migrate": "node backend/migrate.mjs"
+    "db:migrate": "node --env-file=.env.local backend/migrate.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",

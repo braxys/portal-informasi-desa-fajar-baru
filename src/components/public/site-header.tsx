@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Icon, VillageLogo } from "@/components/shared/icons";
 
 export function SiteHeader() {
@@ -9,7 +10,7 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
-        <a
+        <Link
           href="/"
           className="flex items-center gap-3"
           aria-label="Kembali ke beranda"
@@ -23,7 +24,7 @@ export function SiteHeader() {
               Pusat Informasi
             </div>
           </div>
-        </a>
+        </Link>
 
         <nav
           className="hidden items-center gap-8 md:flex"
@@ -35,18 +36,18 @@ export function SiteHeader() {
             ["Peta Desa", "/peta"],
             ["Kontak", "/kontak"],
           ].map(([label, href]) => (
-            <a key={label} href={href} className="nav-link">
+            <Link key={label} href={href} className="nav-link">
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
 
-        <a
+        <Link
           href="/layanan"
           className="hidden items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fajar-700 md:flex"
         >
           Akses Layanan <Icon name="arrow" size={17} />
-        </a>
+        </Link>
 
         <button
           type="button"
@@ -69,14 +70,14 @@ export function SiteHeader() {
             ["Peta Desa", "/peta"],
             ["Kontak", "/kontak"],
           ].map(([label, href]) => (
-            <a
+            <Link
               key={label}
               href={href}
               onClick={() => setMenuOpen(false)}
               className="flex items-center justify-between border-b border-slate-100 py-3.5 text-sm font-semibold last:border-0"
             >
               {label} <Icon name="chevron" size={18} />
-            </a>
+            </Link>
           ))}
         </nav>
       )}
