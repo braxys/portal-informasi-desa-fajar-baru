@@ -49,16 +49,16 @@ export function SiteFooter() {
               className="mt-5 grid gap-3 text-sm text-slate-400"
               aria-label="Navigasi footer"
             >
-              <a className="footer-link" href="#beranda">
+              <a className="footer-link" href="/">
                 Beranda
               </a>
-              <a className="footer-link" href="#layanan">
+              <a className="footer-link" href="/layanan">
                 Layanan publik
               </a>
-              <a className="footer-link" href="#peta">
+              <a className="footer-link" href="/peta">
                 Peta desa
               </a>
-              <a className="footer-link" href="#kontak">
+              <a className="footer-link" href="/kontak">
                 Hubungi kami
               </a>
             </nav>

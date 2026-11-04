@@ -10,7 +10,7 @@ export function SiteHeader() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
         <a
-          href="#beranda"
+          href="/"
           className="flex items-center gap-3"
           aria-label="Kembali ke beranda"
         >
@@ -30,10 +30,10 @@ export function SiteHeader() {
           aria-label="Navigasi utama"
         >
           {[
-            ["Beranda", "#beranda"],
-            ["Layanan", "#layanan"],
-            ["Peta Desa", "#peta"],
-            ["Kontak", "#kontak"],
+            ["Beranda", "/"],
+            ["Layanan", "/layanan"],
+            ["Peta Desa", "/peta"],
+            ["Kontak", "/kontak"],
           ].map(([label, href]) => (
             <a key={label} href={href} className="nav-link">
               {label}
@@ -42,7 +42,7 @@ export function SiteHeader() {
         </nav>
 
         <a
-          href="#layanan"
+          href="/layanan"
           className="hidden items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fajar-700 md:flex"
         >
           Akses Layanan <Icon name="arrow" size={17} />
@@ -64,10 +64,10 @@ export function SiteHeader() {
           aria-label="Navigasi mobile"
         >
           {[
-            ["Beranda", "#beranda"],
-            ["Layanan", "#layanan"],
-            ["Peta Desa", "#peta"],
-            ["Kontak", "#kontak"],
+            ["Beranda", "/"],
+            ["Layanan", "/layanan"],
+            ["Peta Desa", "/peta"],
+            ["Kontak", "/kontak"],
           ].map(([label, href]) => (
             <a
               key={label}
