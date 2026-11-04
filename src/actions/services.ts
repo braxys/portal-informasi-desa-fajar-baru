@@ -65,7 +65,7 @@ export async function getServices(): Promise<ServiceItem[]> {
 /**
  * Mengambil link media sosial dari database
  */
-export async function getSocials(): Promise<{ label: string; icon: string; href: string }[]> {
+export async function getSocials(): Promise<{ id: string; label: string; icon: string; href: string }[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -81,6 +81,7 @@ export async function getSocials(): Promise<{ label: string; icon: string; href:
   }
 
   return ((data as Link[]) || []).map((link) => ({
+    id: link.id,
     label: link.title,
     icon: ICON_MAP[link.icon || "link"] || "link",
     href: link.url,

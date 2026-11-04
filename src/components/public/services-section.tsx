@@ -69,7 +69,7 @@ export async function ServicesSection() {
             <div className="flex flex-wrap gap-3">
               {socials.map((social) => (
                 <a
-                  key={social.label}
+                  key={social.id}
                   href={social.href}
                   target="_blank"
                   rel="noreferrer"
