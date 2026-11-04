@@ -1,6 +1,7 @@
 import { getAllLinksAdmin } from "@/actions/links";
+import { getAllMarkersAdmin } from "@/actions/markers";
 import { getCurrentUser, logoutAction } from "@/actions/auth";
-import { LinksManager } from "@/components/admin/links-manager";
+import { DashboardTabs } from "@/components/admin/dashboard-tabs";
 import { redirect } from "next/navigation";
 
 export const metadata = {
@@ -11,7 +12,10 @@ export default async function AdminDashboardPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/admin/login");
 
-  const links = await getAllLinksAdmin();
+  const [links, markers] = await Promise.all([
+    getAllLinksAdmin(),
+    getAllMarkersAdmin(),
+  ]);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -45,7 +49,7 @@ export default async function AdminDashboardPage() {
 
       {/* Content */}
       <main className="mx-auto max-w-6xl px-5 py-8">
-        <LinksManager initialLinks={links} />
+        <DashboardTabs links={links} markers={markers} />
       </main>
     </div>
   );
