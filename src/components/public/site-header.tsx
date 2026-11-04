@@ -10,6 +10,7 @@ export function SiteHeader() {
     ["Beranda", "#beranda"],
     ["Layanan", "#layanan"],
     ["Peta Desa", "#peta"],
+    ["Wisata Desa", "#wisata"],
     ["Kontak", "#kontak"],
   ];
 
@@ -33,7 +34,7 @@ export function SiteHeader() {
         </Link>
 
         <nav
-          className="hidden items-center gap-8 md:flex"
+          className="hidden items-center gap-8 lg:flex"
           aria-label="Navigasi utama"
         >
           {sections.map(([label, href]) => (
@@ -47,7 +48,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/admin/login"
             className="rounded-full px-4 py-2.5 text-sm font-semibold text-slate-500 transition hover:text-slate-900"
@@ -64,7 +65,7 @@ export function SiteHeader() {
 
         <button
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 md:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 lg:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
@@ -74,7 +75,7 @@ export function SiteHeader() {
       </div>
       {menuOpen && (
         <nav
-          className="border-t border-slate-100 bg-white px-5 py-4 shadow-xl md:hidden"
+          className="border-t border-slate-100 bg-white px-5 py-4 shadow-xl lg:hidden"
           aria-label="Navigasi mobile"
         >
           {sections.map(([label, href]) => (

@@ -39,6 +39,8 @@ npm run db:migrate
 
 Migrasi seed aman dijalankan ulang dan proses berhenti jika suatu migrasi gagal. Tinjau perubahan SQL dan pastikan backup tersedia sebelum menjalankan pada database produksi.
 
+Wisata desa memakai tabel `links` yang sudah ada dan kategori `wisata`; tidak membutuhkan tabel, bucket Storage, atau migrasi tambahan. Admin mengisi nama dan lokasi wisata serta URL gambar publik dari Dashboard. Admin perlu memakai penyedia gambar publik yang dipercaya; upload file langsung tidak tersedia pada alur ini.
+
 Jalankan server pengembangan:
 
 ```bash

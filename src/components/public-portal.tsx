@@ -4,6 +4,8 @@ import { SiteFooter } from "@/components/public/site-footer";
 import { SiteHeader } from "@/components/public/site-header";
 import { ContactSection } from "@/components/public/contact-section";
 import { VillageMapSection } from "@/components/public/village-map-section";
+import { MusicControl } from "@/components/public/music-control";
+import { TourismSection } from "@/components/public/tourism-section";
 
 export function PublicPortal() {
   return (
@@ -13,9 +15,11 @@ export function PublicPortal() {
         <HeroSection />
         <ServicesSection />
         <VillageMapSection />
+        <TourismSection />
         <ContactSection />
       </main>
       <SiteFooter />
+      <MusicControl />
     </div>
   );
 }
