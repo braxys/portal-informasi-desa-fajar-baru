@@ -1,16 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Icon } from "@/components/shared/icons";
-import { markers, type MarkerType } from "@/components/public/data";
+import type { Marker, MarkerJenisInfo } from "@/types/database";
 
-export function VillageMapSection() {
-  const [mapFilter, setMapFilter] = useState<"semua" | MarkerType>("semua");
-  const [selectedMarker, setSelectedMarker] = useState(markers[0]);
+// Koordinat bounding box Desa Fajar Baru untuk konversi lat/lng → posisi peta
+const BOUNDS = {
+  latMin: -5.3050,
+  latMax: -5.2990,
+  lngMin: 105.2310,
+  lngMax: 105.2380,
+};
+
+function latLngToXY(lat: number, lng: number): { x: number; y: number } {
+  const x = ((lng - BOUNDS.lngMin) / (BOUNDS.lngMax - BOUNDS.lngMin)) * 100;
+  const y = ((BOUNDS.latMax - lat) / (BOUNDS.latMax - BOUNDS.latMin)) * 100;
+  return {
+    x: Math.max(5, Math.min(95, x)),
+    y: Math.max(5, Math.min(95, y)),
+  };
+}
+
+interface VillageMapSectionProps {
+  markers: Marker[];
+}
+
+export function VillageMapSection({ markers }: VillageMapSectionProps) {
+  const [mapFilter, setMapFilter] = useState<"semua" | MarkerJenisInfo>("semua");
+  const [selectedId, setSelectedId] = useState<string | null>(markers[0]?.id || null);
   const [zoom, setZoom] = useState(1);
-  const visibleMarkers = markers.filter(
-    (marker) => mapFilter === "semua" || marker.type === mapFilter,
+
+  const visibleMarkers = useMemo(
+    () =>
+      markers.filter(
+        (m) => mapFilter === "semua" || m.jenis_info === mapFilter,
+      ),
+    [markers, mapFilter],
   );
+
+  const selectedMarker = useMemo(
+    () => markers.find((m) => m.id === selectedId) || markers[0],
+    [markers, selectedId],
+  );
+
+  if (!selectedMarker) {
+    return (
+      <section id="peta" className="bg-[#eef4f1] py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 text-center sm:px-8 lg:px-10">
+          <p className="section-kicker">Jelajahi Wilayah</p>
+          <h2 className="section-title mx-auto">Peta interaktif desa.</h2>
+          <p className="mt-5 text-slate-500">Belum ada lokasi tersedia.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="peta" className="bg-[#eef4f1] py-20 sm:py-28">
@@ -50,15 +93,12 @@ export function VillageMapSection() {
                   key={value}
                   type="button"
                   onClick={() => {
-                    const filter = value as "semua" | MarkerType;
+                    const filter = value as "semua" | MarkerJenisInfo;
                     setMapFilter(filter);
-                    const firstVisibleMarker = markers.find(
-                      (marker) =>
-                        filter === "semua" || marker.type === filter,
+                    const first = markers.find(
+                      (m) => filter === "semua" || m.jenis_info === filter,
                     );
-                    if (firstVisibleMarker) {
-                      setSelectedMarker(firstVisibleMarker);
-                    }
+                    if (first) setSelectedId(first.id);
                   }}
                   className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-bold transition ${
                     mapFilter === value
@@ -133,32 +173,29 @@ export function VillageMapSection() {
                     fontSize="13"
                     fontWeight="600"
                   >
-                    <text x="348" y="285">
-                      Jl. Fajar Utama
-                    </text>
-                    <text x="686" y="260">
-                      Jl. Pembangunan
-                    </text>
-                    <text x="83" y="410">
-                      Area Persawahan
-                    </text>
+                    <text x="348" y="285">Jl. Fajar Utama</text>
+                    <text x="686" y="260">Jl. Pembangunan</text>
+                    <text x="83" y="410">Area Persawahan</text>
                   </g>
                 </svg>
 
-                {visibleMarkers.map((marker) => (
-                  <button
-                    key={marker.id}
-                    type="button"
-                    onClick={() => setSelectedMarker(marker)}
-                    className={`map-marker ${
-                      selectedMarker.id === marker.id ? "is-active" : ""
-                    }`}
-                    style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
-                    aria-label={`Pilih ${marker.name}`}
-                  >
-                    <Icon name="pin" size={22} />
-                  </button>
-                ))}
+                {visibleMarkers.map((marker) => {
+                  const pos = latLngToXY(marker.latitude, marker.longitude);
+                  return (
+                    <button
+                      key={marker.id}
+                      type="button"
+                      onClick={() => setSelectedId(marker.id)}
+                      className={`map-marker ${
+                        selectedMarker.id === marker.id ? "is-active" : ""
+                      }`}
+                      style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                      aria-label={`Pilih ${marker.name}`}
+                    >
+                      <Icon name="pin" size={22} />
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="absolute left-4 top-4 flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg sm:left-6 sm:top-6">
@@ -188,7 +225,7 @@ export function VillageMapSection() {
                   {selectedMarker.name}
                 </p>
                 <p className="mt-1 text-xs text-slate-500">
-                  {selectedMarker.detail}
+                  {selectedMarker.keterangan}
                 </p>
               </div>
             </div>
@@ -204,7 +241,7 @@ export function VillageMapSection() {
                 {selectedMarker.name}
               </h4>
               <p className="mt-3 text-sm leading-6 text-slate-500">
-                {selectedMarker.detail}
+                {selectedMarker.keterangan}
               </p>
               <div className="my-6 h-px bg-slate-100" />
               <div className="space-y-4 text-sm">
@@ -224,13 +261,13 @@ export function VillageMapSection() {
                   <div>
                     <p className="font-semibold text-slate-800">Kategori</p>
                     <p className="mt-1 text-xs capitalize text-slate-500">
-                      {selectedMarker.type}
+                      {selectedMarker.jenis_info}
                     </p>
                   </div>
                 </div>
               </div>
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedMarker.name + " Desa Fajar Baru")}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${selectedMarker.latitude},${selectedMarker.longitude}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-8 flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition hover:bg-fajar-700"
