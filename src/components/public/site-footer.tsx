@@ -50,18 +50,6 @@ export function SiteFooter() {
               className="mt-5 grid gap-3 text-sm text-slate-400"
               aria-label="Navigasi footer"
             >
-<<<<<<< HEAD
-              <a className="footer-link" href="/">
-                Beranda
-              </a>
-              <a className="footer-link" href="/layanan">
-                Layanan publik
-              </a>
-              <a className="footer-link" href="/peta">
-                Peta desa
-              </a>
-              <a className="footer-link" href="/kontak">
-=======
               <Link className="footer-link" href="/">
                 Beranda
               </Link>
@@ -72,7 +60,6 @@ export function SiteFooter() {
                 Peta desa
               </Link>
               <Link className="footer-link" href="/kontak">
->>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
                 Hubungi kami
               </Link>
             </nav>
