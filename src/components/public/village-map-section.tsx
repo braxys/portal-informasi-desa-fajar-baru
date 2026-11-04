@@ -13,7 +13,10 @@ export function VillageMapSection() {
   );
 
   return (
-    <section id="peta" className="bg-[#eef4f1] py-20 sm:py-28">
+    <section
+      id="peta"
+      className="scroll-mt-20 bg-[#eef4f1] py-20 sm:py-28"
+    >
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <div className="text-center">
           <p className="section-kicker">Jelajahi Wilayah</p>

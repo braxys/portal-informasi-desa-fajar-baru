@@ -1,15 +1,5 @@
-import { ServicesSection } from "@/components/public/services-section";
-import { SiteHeader } from "@/components/public/site-header";
-import { SiteFooter } from "@/components/public/site-footer";
+import { redirect } from "next/navigation";
 
-export default async function LayananPage() {
-  return (
-    <div className="min-h-screen overflow-hidden bg-[#f7f9f7] text-slate-900">
-      <SiteHeader />
-      <main>
-        <ServicesSection />
-      </main>
-      <SiteFooter />
-    </div>
-  );
+export default function LayananPage() {
+  redirect("/#layanan");
 }

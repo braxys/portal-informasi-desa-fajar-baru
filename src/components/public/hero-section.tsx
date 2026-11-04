@@ -3,7 +3,7 @@ import { Icon } from "@/components/shared/icons";
 
 export function HeroSection() {
   return (
-    <section id="beranda" className="relative pt-20">
+    <section id="beranda" className="relative scroll-mt-20 pt-20">
       <div className="hero-grid absolute inset-0 top-20 opacity-60" />
       <div className="relative mx-auto grid min-h-[700px] max-w-7xl items-center gap-10 px-5 py-14 sm:px-8 md:py-20 lg:grid-cols-[1.02fr_.98fr] lg:px-10">
         <div className="relative z-10">
@@ -21,10 +21,10 @@ export function HeroSection() {
             transparan.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a href="/layanan" className="primary-button">
+            <a href="#layanan" className="primary-button">
               Jelajahi layanan <Icon name="arrow" size={19} />
             </a>
-            <a href="/peta" className="secondary-button">
+            <a href="#peta" className="secondary-button">
               <Icon name="map" size={19} /> Lihat peta desa
             </a>
           </div>

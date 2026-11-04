@@ -5,7 +5,10 @@ export async function ServicesSection() {
   const [services, socials] = await Promise.all([getServices(), getSocials()]);
 
   return (
-    <section id="layanan" className="relative bg-white py-20 sm:py-28">
+    <section
+      id="layanan"
+      className="relative scroll-mt-20 bg-white py-20 sm:py-28"
+    >
       <div id="informasi" className="absolute -top-20" />
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
