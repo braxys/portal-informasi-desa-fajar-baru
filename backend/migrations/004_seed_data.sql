@@ -4,7 +4,9 @@
 -- ==============================================================================
 
 INSERT INTO public.links (title, description, url, category, icon, is_active, is_featured, display_order)
-VALUES
+SELECT seed.title, seed.description, seed.url, seed.category, seed.icon,
+       seed.is_active, seed.is_featured, seed.display_order
+FROM (VALUES
 (
     'Pendaftaran Pengurus BUMDes Fajar Baru',
     'Formulir open recruitment pengurus Badan Usaha Milik Desa Fajar Baru.',
@@ -44,5 +46,10 @@ VALUES
     true,
     false,
     4
-)
-ON CONFLICT DO NOTHING;
+)) AS seed(title, description, url, category, icon, is_active, is_featured, display_order)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM public.links AS existing
+    WHERE existing.title = seed.title
+      AND existing.url = seed.url
+);
