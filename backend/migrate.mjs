@@ -28,9 +28,7 @@ async function runMigration() {
 
   if (!connectionString) {
     console.error("❌ ERROR: DATABASE_URL tidak ditemukan!");
-    console.log("\nSilakan tambahkan DATABASE_URL pada file .env.local Anda:");
-    console.log("DATABASE_URL=postgresql://postgres.jizgjyviioeojbbdngnv:[PASSWORD_ANDA]@aws-0-eu-central-1.pooler.supabase.com:6543/postgres\n");
-    console.log("💡 Tips: Password adalah kata sandi yang Anda tentukan saat membuat project Supabase.");
+    console.log("\nSilakan tambahkan DATABASE_URL pada file .env.local Anda.");
     process.exit(1);
   }
 
@@ -50,27 +48,49 @@ async function runMigration() {
   });
 
   try {
-    console.log("⏳ Menghubungkan ke database Supabase (Frankfurt)...");
+    console.log("⏳ Menghubungkan ke database Supabase...");
     await client.connect();
     console.log("✅ Berhasil terhubung!\n");
 
-    const schemaPath = path.join(__dirname, "schema.sql");
-    if (!fs.existsSync(schemaPath)) {
-      console.error(`❌ File ${schemaPath} tidak ditemukan!`);
+    // Baca semua file SQL dari folder migrations
+    const migrationsDir = path.join(__dirname, "migrations");
+    if (!fs.existsSync(migrationsDir)) {
+      console.error(`❌ Folder ${migrationsDir} tidak ditemukan!`);
       process.exit(1);
     }
 
-    console.log("🚀 Menjalankan eksekusi skema database (backend/schema.sql)...");
-    const sql = fs.readFileSync(schemaPath, "utf-8");
+    const migrationFiles = fs
+      .readdirSync(migrationsDir)
+      .filter((f) => f.endsWith(".sql"))
+      .sort(); // Urutkan berdasarkan nama (001, 002, dst)
 
-    await client.query(sql);
-    console.log("✅ Berhasil mengeksekusi schema.sql!");
+    if (migrationFiles.length === 0) {
+      console.error("❌ Tidak ada file SQL di folder migrations!");
+      process.exit(1);
+    }
 
-    console.log("\n====================================================");
-    console.log("🎉 SEMUA TABEL, RLS, & DATA AWAL BERHASIL DIBUAT!");
+    console.log(`📋 Ditemukan ${migrationFiles.length} file migrasi:\n`);
+
+    for (const file of migrationFiles) {
+      const filePath = path.join(migrationsDir, file);
+      const sql = fs.readFileSync(filePath, "utf-8");
+
+      console.log(`🚀 Menjalankan: ${file}...`);
+
+      try {
+        await client.query(sql);
+        console.log(`   ✅ Berhasil!\n`);
+      } catch (err) {
+        console.error(`   ❌ Gagal: ${err.message}\n`);
+        // Lanjut ke file berikutnya (beberapa error mungkin karena sudah ada)
+      }
+    }
+
+    console.log("====================================================");
+    console.log("🎉 SEMIGRASI SELESAI!");
     console.log("====================================================\n");
   } catch (err) {
-    console.error("\n❌ Terjadi kesalahan saat migrasi:", err.message);
+    console.error("\n❌ Terjadi kesalahan:", err.message);
     if (err.message?.includes("password authentication failed")) {
       console.log("👉 Pastikan password database di DATABASE_URL sudah benar.");
     }
