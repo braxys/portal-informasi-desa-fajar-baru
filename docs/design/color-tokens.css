@@ -1,0 +1,123 @@
+/**
+ * Design tokens — Portal Informasi Desa Fajar Baru
+ * Fase 1 / handoff UI-UX
+ *
+ * Cara pakai pada Fase 2:
+ * 1. Salin blok `:root` ke `src/app/globals.css`, atau import file ini.
+ * 2. Ganti nilai hex inline di komponen dengan `var(--...)`.
+ * 3. Jangan mengubah nama token tanpa memperbarui brand-guidelines.md.
+ */
+
+:root {
+  /* ===== Brand: hijau desa ===== */
+  --color-fajar-50: #ecfdf5;
+  --color-fajar-100: #d1fae5;
+  --color-fajar-200: #a7f3d0;
+  --color-fajar-500: #10b981;
+  --color-fajar-600: #059669;
+  --color-fajar-700: #047857;
+  --color-fajar-800: #065f46;
+  --color-fajar-900: #064e3b;
+
+  /* ===== Brand: biru layanan ===== */
+  --color-telaga-50: #ecfeff;
+  --color-telaga-100: #cffafe;
+  --color-telaga-500: #06b6d4;
+  --color-telaga-600: #0891b2;
+  --color-telaga-700: #0e7490;
+  --color-telaga-800: #155e75;
+  --color-telaga-900: #164e63;
+
+  /* ===== Netral ===== */
+  --color-white: #ffffff;
+  --color-canvas: #f7f9f7;
+  --color-border: #e7eeea;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  /* ===== Semantik ===== */
+  --color-success: var(--color-fajar-700);
+  --color-warning: #b45309;
+  --color-danger: #b91c1c;
+  --color-info: var(--color-telaga-700);
+  --color-focus-ring: var(--color-telaga-700);
+
+  /* ===== Gradasi ===== */
+  --gradient-primary: linear-gradient(110deg, #047857 0%, #0e7490 100%);
+  --gradient-decorative: linear-gradient(135deg, #10b981 0%, #0e7490 100%);
+  --gradient-text: linear-gradient(105deg, #047857 10%, #0891b2 90%);
+  --gradient-canvas: radial-gradient(
+      ellipse at top left,
+      rgb(134 239 172 / 35%),
+      transparent 48%
+    ),
+    linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+
+  /* ===== Tipografi ===== */
+  --font-heading: "Manrope", "DM Sans", Arial, sans-serif;
+  --font-body: "DM Sans", Arial, sans-serif;
+  --font-size-kicker: 0.75rem;
+  --font-size-body-sm: 0.875rem;
+  --font-size-body: 1rem;
+  --line-height-body: 1.75;
+
+  /* ===== Bentuk ===== */
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-card: 1.75rem;
+  --radius-pill: 999px;
+
+  /* ===== Bayangan ===== */
+  --shadow-card: 0 28px 55px -35px rgb(15 67 58 / 0.45);
+  --shadow-button: 0 14px 30px -12px rgb(5 150 105 / 0.65);
+
+  /* ===== Gerak ===== */
+  --duration-fast: 160ms;
+  --duration-base: 240ms;
+  --ease-standard: ease;
+  --ease-out: ease-out;
+
+  /* ===== Layout ===== */
+  --container-max: 80rem; /* 1280px */
+  --page-gutter-mobile: 1.25rem; /* 20px */
+  --page-gutter-tablet: 2rem; /* 32px */
+  --page-gutter-desktop: 2.5rem; /* 40px */
+  --touch-target-min: 44px;
+}
+
+/* Tailwind CSS v4 theme bridge, imported by src/app/portal.css */
+@theme {
+  --color-fajar-50: #ecfdf5;
+  --color-fajar-100: #d1fae5;
+  --color-fajar-200: #a7f3d0;
+  --color-fajar-500: #10b981;
+  --color-fajar-600: #059669;
+  --color-fajar-700: #047857;
+  --color-fajar-800: #065f46;
+  --color-fajar-900: #064e3b;
+
+  --color-telaga-50: #ecfeff;
+  --color-telaga-100: #cffafe;
+  --color-telaga-500: #06b6d4;
+  --color-telaga-600: #0891b2;
+  --color-telaga-700: #0e7490;
+  --color-telaga-800: #155e75;
+  --color-telaga-900: #164e63;
+
+  --color-canvas: #f7f9f7;
+  --color-line: #e7eeea;
+
+  --font-heading: "Manrope", "DM Sans", Arial, sans-serif;
+  --font-body: "DM Sans", Arial, sans-serif;
+
+  --radius-card: 1.75rem;
+  --shadow-card: 0 28px 55px -35px rgb(15 67 58 / 0.45);
+}

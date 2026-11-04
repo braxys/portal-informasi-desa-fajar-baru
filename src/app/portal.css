@@ -1,0 +1,309 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+@import '../../docs/design/color-tokens.css';
+@import 'tailwindcss';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-width: 320px;
+    background: #f7f9f7;
+    color: #0f172a;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: 'Manrope', sans-serif;
+  }
+
+  a,
+  button {
+    outline-offset: 4px;
+  }
+
+  ::selection {
+    background: #a7f3d0;
+    color: #064e3b;
+  }
+}
+
+@layer components {
+  .village-logo {
+    display: flex;
+    width: 48px;
+    height: 60px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+
+  .village-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .nav-link {
+    position: relative;
+    padding: 0.5rem 0;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 180ms ease;
+  }
+
+  .nav-link::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #10b981, #0891b2);
+    content: '';
+    opacity: 0;
+    transform: scaleX(0.5);
+    transition: 180ms ease;
+  }
+
+  .nav-link:hover {
+    color: #047857;
+  }
+
+  .nav-link:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .primary-button,
+  .secondary-button {
+    display: inline-flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    border-radius: 999px;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  }
+
+  .primary-button {
+    background: linear-gradient(110deg, #059669, #0e7490);
+    color: white;
+    box-shadow: 0 14px 30px -12px rgb(5 150 105 / 0.65);
+  }
+
+  .primary-button:hover {
+    box-shadow: 0 18px 36px -12px rgb(5 150 105 / 0.75);
+    transform: translateY(-2px);
+  }
+
+  .secondary-button {
+    border: 1px solid #dbe4df;
+    background: rgb(255 255 255 / 0.75);
+    color: #334155;
+    backdrop-filter: blur(10px);
+  }
+
+  .secondary-button:hover {
+    background: white;
+    transform: translateY(-2px);
+  }
+
+  .section-kicker {
+    color: #047857;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    margin-top: 0.75rem;
+    max-width: 650px;
+    color: #0f172a;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.12;
+  }
+
+  .service-card {
+    position: relative;
+    min-height: 310px;
+    overflow: hidden;
+    border: 1px solid #e7eeea;
+    border-radius: 1.75rem;
+    padding: 1.75rem;
+    background: #f8faf9;
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+  }
+
+  .service-card::before {
+    position: absolute;
+    top: -80px;
+    right: -70px;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    content: '';
+    opacity: 0.14;
+    filter: blur(2px);
+    transition: transform 350ms ease, opacity 350ms ease;
+  }
+
+  .service-card:hover {
+    border-color: #cbded3;
+    box-shadow: 0 28px 55px -35px rgb(15 67 58 / 0.45);
+    transform: translateY(-5px);
+  }
+
+  .service-card:hover::before {
+    opacity: 0.22;
+    transform: scale(1.18);
+  }
+
+  .service-emerald::before {
+    background: #34d399;
+  }
+
+  .service-blue::before {
+    background: #38bdf8;
+  }
+
+  .service-teal::before {
+    background: #2dd4bf;
+  }
+
+  .service-sky::before {
+    background: #60a5fa;
+  }
+
+  .service-icon {
+    position: relative;
+    display: flex;
+    width: 54px;
+    height: 54px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(255 255 255 / 0.8);
+    border-radius: 1rem;
+    background: white;
+    color: #047857;
+    box-shadow: 0 12px 24px -16px rgb(15 23 42 / 0.5);
+  }
+
+  .map-marker {
+    position: absolute;
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid white;
+    border-radius: 999px;
+    background: #0f766e;
+    color: white;
+    box-shadow: 0 8px 20px rgb(15 23 42 / 0.25);
+    transform: translate(-50%, -50%) scale(calc(1 / var(--map-zoom, 1)));
+    transition: background 160ms ease, box-shadow 160ms ease;
+  }
+
+  .map-marker:hover,
+  .map-marker.is-active {
+    background: #ef4444;
+    box-shadow: 0 0 0 7px rgb(239 68 68 / 0.18), 0 8px 20px rgb(15 23 42 / 0.25);
+  }
+
+  .map-control {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    color: #334155;
+    font-size: 1.5rem;
+    font-weight: 500;
+    transition: background 160ms ease;
+  }
+
+  .map-control:hover {
+    background: #f1f5f9;
+  }
+
+  .footer-title {
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .footer-link {
+    width: fit-content;
+    transition: color 160ms ease, transform 160ms ease;
+  }
+
+  .footer-link:hover {
+    color: white;
+    transform: translateX(3px);
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(105deg, #059669 10%, #0891b2 90%);
+    background-clip: text;
+    color: transparent;
+    -webkit-background-clip: text;
+  }
+
+  .hero-grid {
+    background-image:
+      linear-gradient(rgb(15 118 110 / 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(15 118 110 / 0.055) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, black, transparent 92%);
+  }
+
+  .map-canvas {
+    background-color: #e8eee9;
+    background-image: radial-gradient(circle at center, rgb(255 255 255 / 0.6) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+}
+
+@media (max-width: 639px) {
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+  }
+
+  .service-card {
+    min-height: 285px;
+    border-radius: 1.5rem;
+    padding: 1.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
