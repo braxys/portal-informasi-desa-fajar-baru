@@ -1,5 +1,5 @@
 -- ==============================================================================
--- MIGRASI 004: SEED DATA (Data Awal Desa Fajar Baru)
+-- MIGRASI 005: SEED DATA (Data Awal Desa Fajar Baru)
 -- Tanggal: 2026-11-04
 -- ==============================================================================
 
@@ -45,4 +45,4 @@ VALUES
     false,
     4
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT ON CONSTRAINT uq_links_title_url DO NOTHING;

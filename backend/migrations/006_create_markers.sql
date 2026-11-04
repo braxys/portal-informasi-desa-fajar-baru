@@ -76,4 +76,4 @@ VALUES
     true,
     3
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT ON CONSTRAINT uq_markers_name_coords DO NOTHING;
