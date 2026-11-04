@@ -3,6 +3,30 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { isAdminUser } from "@/lib/supabase/auth";
+
+const DEFAULT_ADMIN_REDIRECT = "/admin/dashboard";
+
+function getSafeAdminRedirect(value: FormDataEntryValue | null): string {
+  if (typeof value !== "string") {
+    return DEFAULT_ADMIN_REDIRECT;
+  }
+
+  try {
+    const destination = new URL(value, "http://localhost");
+    if (
+      destination.origin !== "http://localhost" ||
+      !destination.pathname.startsWith("/admin/") ||
+      destination.pathname === "/admin/login"
+    ) {
+      return DEFAULT_ADMIN_REDIRECT;
+    }
+
+    return `${destination.pathname}${destination.search}${destination.hash}`;
+  } catch {
+    return DEFAULT_ADMIN_REDIRECT;
+  }
+}
 
 export interface AuthActionResult {
   success: boolean;
@@ -15,7 +39,7 @@ export interface AuthActionResult {
 export async function loginAction(formData: FormData): Promise<AuthActionResult> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const redirectTo = (formData.get("redirect") as string) || "/admin/dashboard";
+  const redirectTo = getSafeAdminRedirect(formData.get("redirect"));
 
   if (!email || !password) {
     return { success: false, error: "Email dan kata sandi wajib diisi." };
@@ -23,15 +47,19 @@ export async function loginAction(formData: FormData): Promise<AuthActionResult>
 
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
+  if (error || !isAdminUser(data.user)) {
+    if (!error) {
+      await supabase.auth.signOut();
+    }
+
     return {
       success: false,
-      error: error.message === "Invalid login credentials"
+      error: error?.message === "Invalid login credentials" || !error
         ? "Email atau kata sandi salah. Silakan coba lagi."
         : error.message,
     };

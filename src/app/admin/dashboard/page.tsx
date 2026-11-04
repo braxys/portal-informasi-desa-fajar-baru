@@ -2,6 +2,7 @@ import { getAllLinksAdmin } from "@/actions/links";
 import { getCurrentUser, logoutAction } from "@/actions/auth";
 import { LinksManager } from "@/components/admin/links-manager";
 import { redirect } from "next/navigation";
+import { isAdminUser } from "@/lib/supabase/auth";
 
 export const metadata = {
   title: "Dashboard Admin | Desa Fajar Baru",
@@ -9,7 +10,7 @@ export const metadata = {
 
 export default async function AdminDashboardPage() {
   const user = await getCurrentUser();
-  if (!user) redirect("/admin/login");
+  if (!user || !isAdminUser(user)) redirect("/admin/login");
 
   const links = await getAllLinksAdmin();
 

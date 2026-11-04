@@ -10,6 +10,15 @@ export interface ActionResult<T = unknown> {
   error?: string;
 }
 
+function isHttpUrl(value: string): boolean {
+  try {
+    const protocol = new URL(value).protocol;
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Mengambil seluruh tautan aktif untuk halaman publik
  * Diurutkan berdasarkan display_order ASC
@@ -71,10 +80,7 @@ export async function createLinkAction(formData: FormData): Promise<ActionResult
     return { success: false, error: "Judul dan URL tautan wajib diisi." };
   }
 
-  // Validasi format URL sederhana
-  try {
-    new URL(url);
-  } catch {
+  if (!isHttpUrl(url)) {
     return { success: false, error: "Format URL tidak valid. Pastikan menyertakan http:// atau https://" };
   }
 
@@ -125,6 +131,10 @@ export async function updateLinkAction(
 
   if (!title || !url) {
     return { success: false, error: "Judul dan URL tautan tidak boleh kosong." };
+  }
+
+  if (!isHttpUrl(url)) {
+    return { success: false, error: "Format URL tidak valid. Pastikan menyertakan http:// atau https://" };
   }
 
   const payload: UpdateLink = {
