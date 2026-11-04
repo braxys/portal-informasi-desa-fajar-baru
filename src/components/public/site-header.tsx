@@ -47,12 +47,20 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <a
-          href="/layanan"
-          className="hidden items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fajar-700 md:flex"
-        >
-          Akses Layanan <Icon name="arrow" size={17} />
-        </a>
+        <div className="hidden items-center gap-3 md:flex">
+          <a
+            href="/admin/login"
+            className="rounded-full px-4 py-2.5 text-sm font-semibold text-slate-500 transition hover:text-slate-900"
+          >
+            Admin
+          </a>
+          <a
+            href="/layanan"
+            className="flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fajar-700"
+          >
+            Akses Layanan <Icon name="arrow" size={17} />
+          </a>
+        </div>
 
         <button
           type="button"
@@ -86,6 +94,13 @@ export function SiteHeader() {
               {label} <Icon name="chevron" size={18} />
             </a>
           ))}
+          <a
+            href="/admin/login"
+            onClick={() => setMenuOpen(false)}
+            className="mt-2 flex items-center justify-center rounded-xl bg-slate-900 py-3 text-sm font-bold text-white"
+          >
+            Login Admin
+          </a>
         </nav>
       )}
     </header>
