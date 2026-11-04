@@ -84,6 +84,15 @@
     transform: scaleX(1);
   }
 
+  .nav-link.active {
+    color: #047857;
+  }
+
+  .nav-link.active::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
   .primary-button,
   .secondary-button {
     display: inline-flex;

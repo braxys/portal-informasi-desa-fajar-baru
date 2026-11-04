@@ -21,10 +21,10 @@ export function HeroSection() {
             transparan.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a href="#layanan" className="primary-button">
+            <a href="/layanan" className="primary-button">
               Jelajahi layanan <Icon name="arrow" size={19} />
             </a>
-            <a href="#peta" className="secondary-button">
+            <a href="/peta" className="secondary-button">
               <Icon name="map" size={19} /> Lihat peta desa
             </a>
           </div>

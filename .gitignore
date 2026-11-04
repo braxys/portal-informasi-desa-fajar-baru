@@ -5,7 +5,7 @@
 /build
 /coverage
 *.tsbuildinfo
-/docs/konteks
+docs/
 
 # Local environment variables (keep the example template tracked)
 .env*
