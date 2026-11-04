@@ -32,6 +32,7 @@ export interface TrafficLog {
 
 export type NewTrafficLog = Omit<TrafficLog, "id" | "created_at">;
 
+<<<<<<< HEAD
 export type MarkerJenisInfo = "kantor" | "fasilitas" | "layanan";
 
 export interface Marker {
@@ -50,6 +51,8 @@ export interface Marker {
 export type NewMarker = Omit<Marker, "id" | "created_at" | "updated_at">;
 export type UpdateMarker = Partial<NewMarker>;
 
+=======
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
 export interface AnalyticsSummary {
   totalPageViews: number;
   totalQrScans: number;
@@ -78,6 +81,7 @@ export interface Database {
         };
         Update: Partial<Omit<TrafficLog, "id">>;
       };
+<<<<<<< HEAD
       markers: {
         Row: Marker;
         Insert: Omit<Marker, "id" | "created_at" | "updated_at"> & {
@@ -87,6 +91,8 @@ export interface Database {
         };
         Update: Partial<Omit<Marker, "id">>;
       };
+=======
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
     };
     Functions: {
       increment_link_click: {

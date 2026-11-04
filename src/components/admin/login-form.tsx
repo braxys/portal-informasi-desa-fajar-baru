@@ -9,7 +9,10 @@ export function LoginForm() {
   const redirect = searchParams.get("redirect") || "/admin/dashboard";
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+<<<<<<< HEAD
   const [showPassword, setShowPassword] = useState(false);
+=======
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,15 +32,20 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
+<<<<<<< HEAD
         <div
           role="alert"
           className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700"
         >
+=======
+        <div className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
           {error}
         </div>
       )}
 
       <div>
+<<<<<<< HEAD
         <label
           htmlFor="admin-email"
           className="mb-2 block text-xs font-bold text-slate-800"
@@ -137,11 +145,39 @@ export function LoginForm() {
             </svg>
           </button>
         </div>
+=======
+        <label className="mb-1.5 block text-sm font-bold text-slate-700">
+          Email
+        </label>
+        <input
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          className="w-full rounded-xl border border-slate-200 px-4 py-3.5 text-sm focus:border-fajar-500 focus:outline-none"
+          placeholder="admin@desa.id"
+        />
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-sm font-bold text-slate-700">
+          Password
+        </label>
+        <input
+          name="password"
+          type="password"
+          required
+          autoComplete="current-password"
+          className="w-full rounded-xl border border-slate-200 px-4 py-3.5 text-sm focus:border-fajar-500 focus:outline-none"
+          placeholder="••••••••"
+        />
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
       </div>
 
       <button
         type="submit"
         disabled={isPending}
+<<<<<<< HEAD
         className="flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#059669] to-[#0891b2] px-4 py-3 text-sm font-bold text-white shadow-[0_12px_24px_-12px_rgba(5,150,105,.7)] transition hover:brightness-105 hover:shadow-[0_16px_30px_-12px_rgba(5,150,105,.75)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-telaga-700 disabled:cursor-wait disabled:opacity-60"
       >
         {isPending ? "Memeriksa akun..." : "Masuk ke Dashboard"}
@@ -157,6 +193,11 @@ export function LoginForm() {
             <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
+=======
+        className="w-full rounded-xl bg-slate-900 py-3.5 text-sm font-bold text-white transition hover:bg-fajar-700 disabled:opacity-50"
+      >
+        {isPending ? "Masuk..." : "Masuk ke Dashboard"}
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
       </button>
     </form>
   );

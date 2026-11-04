@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 import Link from "next/link";
 import { Suspense } from "react";
 import { Icon } from "@/components/shared/icons";
+=======
+import { Suspense } from "react";
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
 import { LoginForm } from "@/components/admin/login-form";
 
 export const metadata = {
@@ -90,6 +94,7 @@ function VillageLandscape() {
 
 export default function AdminLoginPage() {
   return (
+<<<<<<< HEAD
     <main className="min-h-dvh bg-[#edf3f0] p-3 sm:p-4 lg:p-5">
       <div className="mx-auto grid min-h-[calc(100dvh-24px)] max-w-[1600px] grid-cols-1 overflow-hidden rounded-[24px] border border-white/80 bg-white shadow-[0_28px_90px_-42px_rgba(15,67,58,.38)] sm:rounded-[30px] lg:min-h-[calc(100dvh-40px)] lg:grid-cols-[1.2fr_1fr]">
         <section
@@ -223,5 +228,33 @@ export default function AdminLoginPage() {
         </section>
       </div>
     </main>
+=======
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+      <div className="w-full max-w-md">
+        <div className="rounded-2xl bg-white p-8 shadow-[0_24px_70px_-30px_rgba(15,67,58,.3)]">
+          {/* Logo & Title */}
+          <div className="mb-8 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 text-xl font-bold text-white">
+              DF
+            </div>
+            <h1 className="text-xl font-bold text-slate-900">
+              Dashboard Admin
+            </h1>
+            <p className="mt-1.5 text-sm text-slate-500">
+              Masuk untuk mengelola portal Desa Fajar Baru
+            </p>
+          </div>
+
+          <Suspense>
+            <LoginForm />
+          </Suspense>
+        </div>
+
+        <p className="mt-6 text-center text-xs text-slate-400">
+          © 2025 Pemerintah Desa Fajar Baru
+        </p>
+      </div>
+    </div>
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
   );
 }

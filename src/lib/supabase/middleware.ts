@@ -1,5 +1,9 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+<<<<<<< HEAD
+=======
+import { isAdminUser } from "@/lib/supabase/auth";
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -39,17 +43,27 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isLoginPage = pathname === "/admin/login";
   const isAdminRoute = pathname.startsWith("/admin");
+<<<<<<< HEAD
 
   // 1. Proteksi Admin: Jika belum login dan mengakses area admin selain login
   if (isAdminRoute && !isLoginPage && !user) {
+=======
+  const isAdmin = isAdminUser(user);
+
+  if (isAdminRoute && !isLoginPage && !isAdmin) {
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/admin/login";
     redirectUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
+<<<<<<< HEAD
   // 2. Jika sudah login dan membuka halaman login, arahkan ke dashboard
   if (isLoginPage && user) {
+=======
+  if (isLoginPage && isAdmin) {
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/admin/dashboard";
     return NextResponse.redirect(redirectUrl);

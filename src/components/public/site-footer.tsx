@@ -1,4 +1,5 @@
 import { Icon, VillageLogo } from "@/components/shared/icons";
+import Link from "next/link";
 
 export function SiteFooter() {
   return (
@@ -49,6 +50,7 @@ export function SiteFooter() {
               className="mt-5 grid gap-3 text-sm text-slate-400"
               aria-label="Navigasi footer"
             >
+<<<<<<< HEAD
               <a className="footer-link" href="/">
                 Beranda
               </a>
@@ -59,8 +61,20 @@ export function SiteFooter() {
                 Peta desa
               </a>
               <a className="footer-link" href="/kontak">
+=======
+              <Link className="footer-link" href="/">
+                Beranda
+              </Link>
+              <Link className="footer-link" href="/layanan">
+                Layanan publik
+              </Link>
+              <Link className="footer-link" href="/peta">
+                Peta desa
+              </Link>
+              <Link className="footer-link" href="/kontak">
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
                 Hubungi kami
-              </a>
+              </Link>
             </nav>
           </div>
         </div>

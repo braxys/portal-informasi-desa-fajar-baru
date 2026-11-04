@@ -1,8 +1,15 @@
 import { getAllLinksAdmin } from "@/actions/links";
+<<<<<<< HEAD
 import { getAllMarkersAdmin } from "@/actions/markers";
 import { getCurrentUser, logoutAction } from "@/actions/auth";
 import { DashboardTabs } from "@/components/admin/dashboard-tabs";
 import { redirect } from "next/navigation";
+=======
+import { getCurrentUser, logoutAction } from "@/actions/auth";
+import { LinksManager } from "@/components/admin/links-manager";
+import { redirect } from "next/navigation";
+import { isAdminUser } from "@/lib/supabase/auth";
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
 
 export const metadata = {
   title: "Dashboard Admin | Desa Fajar Baru",
@@ -10,12 +17,18 @@ export const metadata = {
 
 export default async function AdminDashboardPage() {
   const user = await getCurrentUser();
+<<<<<<< HEAD
   if (!user) redirect("/admin/login");
 
   const [links, markers] = await Promise.all([
     getAllLinksAdmin(),
     getAllMarkersAdmin(),
   ]);
+=======
+  if (!user || !isAdminUser(user)) redirect("/admin/login");
+
+  const links = await getAllLinksAdmin();
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -49,7 +62,11 @@ export default async function AdminDashboardPage() {
 
       {/* Content */}
       <main className="mx-auto max-w-6xl px-5 py-8">
+<<<<<<< HEAD
         <DashboardTabs links={links} markers={markers} />
+=======
+        <LinksManager initialLinks={links} />
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
       </main>
     </div>
   );

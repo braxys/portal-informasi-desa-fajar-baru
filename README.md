@@ -24,7 +24,20 @@ Isi `.env.local` dengan URL project dan publishable/anon key Supabase:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://<project-id>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable-or-anon-key>
+DATABASE_URL=<direct-postgres-connection-string>
 ```
+
+`DATABASE_URL` hanya digunakan saat menjalankan migrasi dari lingkungan tepercaya. Jangan gunakan atau simpan URL database maupun service-role key sebagai variabel `NEXT_PUBLIC_*`.
+
+Setelah membuat akun admin di Supabase Auth, tetapkan `app_metadata.role` menjadi `admin` menggunakan Supabase Auth Admin API dari lingkungan tepercaya. Jangan gunakan `user_metadata` untuk role karena dapat diubah oleh pemilik akun. Akun tanpa role admin tidak dapat mengakses dashboard atau mengelola data.
+
+Jalankan migrasi database dengan:
+
+```bash
+npm run db:migrate
+```
+
+Migrasi seed aman dijalankan ulang dan proses berhenti jika suatu migrasi gagal. Tinjau perubahan SQL dan pastikan backup tersedia sebelum menjalankan pada database produksi.
 
 Jalankan server pengembangan:
 

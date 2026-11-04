@@ -10,6 +10,18 @@ export interface ActionResult<T = unknown> {
   error?: string;
 }
 
+<<<<<<< HEAD
+=======
+function isHttpUrl(value: string): boolean {
+  try {
+    const protocol = new URL(value).protocol;
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
 /**
  * Mengambil seluruh tautan aktif untuk halaman publik
  * Diurutkan berdasarkan display_order ASC
@@ -71,10 +83,14 @@ export async function createLinkAction(formData: FormData): Promise<ActionResult
     return { success: false, error: "Judul dan URL tautan wajib diisi." };
   }
 
+<<<<<<< HEAD
   // Validasi format URL sederhana
   try {
     new URL(url);
   } catch {
+=======
+  if (!isHttpUrl(url)) {
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
     return { success: false, error: "Format URL tidak valid. Pastikan menyertakan http:// atau https://" };
   }
 
@@ -127,6 +143,13 @@ export async function updateLinkAction(
     return { success: false, error: "Judul dan URL tautan tidak boleh kosong." };
   }
 
+<<<<<<< HEAD
+=======
+  if (!isHttpUrl(url)) {
+    return { success: false, error: "Format URL tidak valid. Pastikan menyertakan http:// atau https://" };
+  }
+
+>>>>>>> 637b5e9a5f8666de6ef3342f5e11b6f08d3ff692
   const payload: UpdateLink = {
     title,
     url,
