@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function SiteFooter() {
   return (
-    <footer id="kontak" className="bg-slate-950 text-white">
+    <footer id="kontak" className="scroll-mt-20 bg-slate-950 text-white">
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-10">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.2fr_.8fr_.8fr]">
           <div>
@@ -59,7 +59,7 @@ export function SiteFooter() {
               <Link className="footer-link" href="/peta">
                 Peta desa
               </Link>
-              <Link className="footer-link" href="/kontak">
+              <Link className="footer-link" href="/#kontak">
                 Hubungi kami
               </Link>
             </nav>

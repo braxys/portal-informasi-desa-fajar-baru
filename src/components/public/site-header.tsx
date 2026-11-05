@@ -10,7 +10,7 @@ export function SiteHeader() {
     ["Beranda", "/#beranda"],
     ["Layanan", "/#layanan"],
     ["Peta Desa", "/#peta"],
-    ["Kontak", "/kontak"],
+    ["Kontak", "/#kontak"],
   ];
 
   return (
