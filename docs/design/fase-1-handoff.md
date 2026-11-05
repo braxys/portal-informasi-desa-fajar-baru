@@ -9,11 +9,11 @@ Dokumen ini memetakan pekerjaan Fase 1 pada checklist Notion ke deliverable di r
 | Buat wireframe kasar halaman Publik (HP) | Arief (UI/UX) | Selesai | [`wireframes/public-mobile.svg`](./wireframes/public-mobile.svg) |
 | Buat wireframe kasar halaman Admin (Desktop) | Arief (UI/UX) | Selesai | [`wireframes/admin-login-desktop.svg`](./wireframes/admin-login-desktop.svg), [`wireframes/admin-dashboard-desktop.svg`](./wireframes/admin-dashboard-desktop.svg) |
 | Tentukan palet warna pasti (hex) gradasi hijau-biru | Arief (UI/UX) | Selesai | [`brand-guidelines.md`](./brand-guidelines.md) |
-| Sediakan aset logo desa | Arief (UI/UX) | Selesai (Lambang Lampung Selatan) | [`public/brand/logo-lampung-selatan.jpeg`](../../public/brand/logo-lampung-selatan.jpeg) |
+| Sediakan aset logo desa | Arief (UI/UX) | Selesai (Lambang Lampung Selatan) | [`public/brand/logo-lampung-selatan.png`](../../public/brand/logo-lampung-selatan.png) |
 
 Di luar cakupan Fase 1:
 
-- Set ikon SVG untuk tombol tautan → Fase 2.
+- Set ikon SVG untuk tombol tautan → di luar cakupan Fase 1; asetnya kini tersedia di [`public/icons/`](../../public/icons/).
 - Desain stiker QR fisik siap cetak → Fase 4.
 - Implementasi komponen React, autentikasi, dan CRUD → Fase 2–3.
 - Setup project dan tabel Supabase → sudah dikerjakan backend di branch `main`.
@@ -34,15 +34,15 @@ Di luar cakupan Fase 1:
 
 - Pindahkan token [`color-tokens.css`](./color-tokens.css) ke `src/app/globals.css` atau `portal.css`.
 - Ganti warna inline di komponen dengan token.
-- Buat komponen `ServiceCard` yang memakai ikon SVG dari set Fase 2.
+- Buat komponen `ServiceCard` yang memakai ikon SVG dari [`public/icons/`](../../public/icons/).
 - Sambungkan halaman publik ke data Supabase dengan fallback data demo saat `.env.local` belum tersedia.
 - Pastikan ukuran target sentuh, fokus keyboard, dan state loading/error sesuai wireframe.
 
 ### UI/UX (lanjutan)
 
 - Review wireframe bersama PM dan frontend.
-- Logo resmi Lampung Selatan sudah dipasang; jika ada versi SVG/AI resmi, ganti aset JPEG agar lebih tajam.
-- Buat set ikon tautan (BUMDes, website, Instagram, TikTok, YouTube, survei) pada Fase 2.
+- Logo resmi Lampung Selatan sudah dipasang; jika ada versi SVG/AI resmi, ganti aset PNG agar lebih tajam.
+- Set ikon tautan (BUMDes, website, Instagram, TikTok, YouTube, survei) tersedia di [`public/icons/`](../../public/icons/).
 - Buat desain stiker QR dan materi sosialisasi pada Fase 4.
 
 ### Backend
