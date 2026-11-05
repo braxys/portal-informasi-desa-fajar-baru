@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-type LinkCategory = "BUMDes" | "Layanan" | "Media sosial" | "Informasi" | "Survei";
+type LinkCategory = "Layanan" | "Media sosial" | "Informasi" | "Survei" | "Umum";
 
 type DashboardLink = {
   id: number;
@@ -20,7 +20,7 @@ const demoLinks: DashboardLink[] = [
     id: 1,
     title: "Pendaftaran BUMDes",
     url: "https://example.com/pendaftaran-bumdes",
-    category: "BUMDes",
+    category: "Umum",
     isActive: true,
     order: 1,
     clicks: 428,
@@ -64,11 +64,11 @@ const demoLinks: DashboardLink[] = [
 ];
 
 const categories: LinkCategory[] = [
-  "BUMDes",
   "Layanan",
   "Media sosial",
   "Informasi",
   "Survei",
+  "Umum",
 ];
 
 function SearchIcon() {

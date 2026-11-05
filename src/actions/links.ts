@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { getLinkCategoryIcon, isLinkCategory } from "@/lib/link-categories";
 import type { Link, LinkCategory, NewLink, UpdateLink } from "@/types/database";
 
 export interface ActionResult<T = unknown> {
@@ -70,8 +71,12 @@ export async function createLinkAction(formData: FormData): Promise<ActionResult
   const title = (formData.get("title") as string)?.trim();
   const url = (formData.get("url") as string)?.trim();
   const description = (formData.get("description") as string)?.trim() || null;
-  const category = ((formData.get("category") as string) || "informasi") as LinkCategory;
-  const icon = (formData.get("icon") as string)?.trim() || "link";
+  const categoryValue = (formData.get("category") as string) || "informasi";
+  if (!isLinkCategory(categoryValue)) {
+    return { success: false, error: "Kategori link tidak valid." };
+  }
+  const category: LinkCategory = categoryValue;
+  const icon = getLinkCategoryIcon(category);
   const is_featured = formData.get("is_featured") === "true" || formData.get("is_featured") === "on";
   const is_active = formData.get("is_active") === "true" || formData.get("is_active") === "on";
   const display_order = Number(formData.get("display_order")) || 0;
@@ -123,8 +128,12 @@ export async function updateLinkAction(
   const title = (formData.get("title") as string)?.trim();
   const url = (formData.get("url") as string)?.trim();
   const description = (formData.get("description") as string)?.trim() || null;
-  const category = ((formData.get("category") as string) || "informasi") as LinkCategory;
-  const icon = (formData.get("icon") as string)?.trim() || "link";
+  const categoryValue = (formData.get("category") as string) || "informasi";
+  if (!isLinkCategory(categoryValue)) {
+    return { success: false, error: "Kategori link tidak valid." };
+  }
+  const category: LinkCategory = categoryValue;
+  const icon = getLinkCategoryIcon(category);
   const is_featured = formData.get("is_featured") === "true" || formData.get("is_featured") === "on";
   const is_active = formData.get("is_active") === "true" || formData.get("is_active") === "on";
   const display_order = Number(formData.get("display_order")) || 0;

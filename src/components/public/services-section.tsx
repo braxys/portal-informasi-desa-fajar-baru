@@ -35,7 +35,7 @@ export async function ServicesSection() {
             >
               <div className="flex items-start justify-between gap-5">
                 <div className="service-icon">
-                  <Icon name={service.icon as never} size={25} />
+                  <Icon name={service.icon} size={25} />
                 </div>
                 <span className="rounded-full border border-slate-200 bg-white/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
                   {service.label}
@@ -78,7 +78,7 @@ export async function ServicesSection() {
                   rel="noreferrer"
                   className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold transition hover:border-fajar-500 hover:bg-fajar-500/20"
                 >
-                  <Icon name={social.icon as never} size={18} /> {social.label}
+                  <Icon name={social.icon} size={18} /> {social.label}
                 </a>
               ))}
             </div>

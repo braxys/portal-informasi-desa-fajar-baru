@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-export type IconName = "arrow" | "briefcase" | "building" | "chevron" | "clipboard" | "clock" | "instagram" | "mail" | "map" | "menu" | "phone" | "pin" | "shield" | "tiktok" | "users" | "youtube" | "x"
+export type IconName = "arrow" | "briefcase" | "building" | "chevron" | "clipboard" | "clock" | "instagram" | "link" | "mail" | "map" | "menu" | "phone" | "pin" | "share" | "shield" | "tiktok" | "users" | "youtube" | "x"
 
 export function Icon({
   name,
@@ -60,6 +60,12 @@ export function Icon({
         <circle cx="17.5" cy="6.5" r=".6" fill="currentColor" stroke="none" />
       </>
     ),
+    link: (
+      <>
+        <path d="M10 13.5a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
+        <path d="M14 10.5a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 19.6l1.1-1.1" />
+      </>
+    ),
     mail: (
       <>
         <rect x="3" y="5" width="18" height="14" rx="2" />
@@ -84,6 +90,14 @@ export function Icon({
       <>
         <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
         <circle cx="12" cy="10" r="2.5" />
+      </>
+    ),
+    share: (
+      <>
+        <circle cx="18" cy="5" r="3" />
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="19" r="3" />
+        <path d="m8.6 10.7 6.8-4.4m-6.8 7 6.8 4.4" />
       </>
     ),
     shield: (

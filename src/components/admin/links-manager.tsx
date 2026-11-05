@@ -2,6 +2,13 @@
 
 import { useState, useTransition } from "react";
 import type { Link, LinkCategory } from "@/types/database";
+import { Icon } from "@/components/shared/icons";
+import {
+  getLinkCategoryIcon,
+  getLinkCategoryLabel,
+  LINK_CATEGORIES,
+  normalizeLinkCategory,
+} from "@/lib/link-categories";
 import {
   createLinkAction,
   updateLinkAction,
@@ -13,21 +20,12 @@ interface LinksManagerProps {
   initialLinks: Link[];
 }
 
-const CATEGORIES: { value: LinkCategory; label: string }[] = [
-  { value: "bumdes", label: "BUMDes" },
-  { value: "layanan", label: "Layanan" },
-  { value: "medsos", label: "Media Sosial" },
-  { value: "informasi", label: "Informasi" },
-  { value: "survei", label: "Survei" },
-  { value: "general", label: "Umum" },
-];
-
 const EMPTY_FORM = {
   title: "",
   url: "",
   description: "",
   category: "informasi" as LinkCategory,
-  icon: "link",
+  icon: getLinkCategoryIcon("informasi"),
   is_featured: false,
   is_active: true,
   display_order: 0,
@@ -53,8 +51,8 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
       title: link.title,
       url: link.url,
       description: link.description || "",
-      category: link.category,
-      icon: link.icon || "link",
+      category: normalizeLinkCategory(link.category),
+      icon: getLinkCategoryIcon(link.category),
       is_featured: link.is_featured,
       is_active: link.is_active,
       display_order: link.display_order,
@@ -73,6 +71,13 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
     const { name, value, type } = e.target;
     if (type === "checkbox") {
       setForm((f) => ({ ...f, [name]: (e.target as HTMLInputElement).checked }));
+    } else if (name === "category") {
+      const category = normalizeLinkCategory(value);
+      setForm((f) => ({
+        ...f,
+        category,
+        icon: getLinkCategoryIcon(category),
+      }));
     } else {
       setForm((f) => ({ ...f, [name]: value }));
     }
@@ -189,7 +194,7 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
                   </td>
                   <td className="px-5 py-4">
                     <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-600">
-                      {link.category}
+                      {getLinkCategoryLabel(link.category)}
                     </span>
                   </td>
                   <td className="px-5 py-4">
@@ -320,12 +325,18 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
                     onChange={handleChange}
                     className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-fajar-500 focus:outline-none"
                   >
-                    {CATEGORIES.map((c) => (
+                    {LINK_CATEGORIES.map((c) => (
                       <option key={c.value} value={c.value}>
                         {c.label}
                       </option>
                     ))}
                   </select>
+                  <div className="mt-2 flex items-center gap-2 text-xs font-medium text-slate-500">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-fajar-50 text-fajar-700">
+                      <Icon name={getLinkCategoryIcon(form.category)} size={18} />
+                    </span>
+                    Ikon otomatis berdasarkan kategori
+                  </div>
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-bold text-slate-700">Urutan</label>

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.links (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     url TEXT NOT NULL,
-    category VARCHAR(50) NOT NULL DEFAULT 'informasi', -- 'bumdes', 'layanan', 'medsos', 'informasi', 'survei'
+    category VARCHAR(50) NOT NULL DEFAULT 'informasi', -- 'layanan', 'medsos', 'informasi', 'survei', 'general'
     icon VARCHAR(50) DEFAULT 'link',                   -- Nama icon / identifier UI
     is_active BOOLEAN NOT NULL DEFAULT true,           -- Toggle tampil di publik
     is_featured BOOLEAN NOT NULL DEFAULT false,        -- Sorotan utama (misal: Oprec BUMDes)
@@ -135,8 +135,8 @@ VALUES
     'Pendaftaran Pengurus BUMDes Fajar Baru',
     'Formulir open recruitment pengurus Badan Usaha Milik Desa Fajar Baru.',
     'https://forms.google.com',
-    'bumdes',
-    'users',
+    'general',
+    'link',
     true,
     true,
     1

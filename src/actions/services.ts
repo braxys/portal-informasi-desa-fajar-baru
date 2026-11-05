@@ -1,6 +1,12 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import {
+  getLinkCategoryIcon,
+  getLinkCategoryLabel,
+  normalizeLinkCategory,
+} from "@/lib/link-categories";
+import type { IconName } from "@/components/shared/icons";
 import type { Link, LinkCategory } from "@/types/database";
 
 export interface ServiceItem {
@@ -8,29 +14,17 @@ export interface ServiceItem {
   title: string;
   label: string;
   description: string;
-  icon: string;
+  icon: IconName;
   href: string;
   accent: string;
 }
 
 const ACCENT_MAP: Record<LinkCategory, string> = {
-  bumdes: "emerald",
   layanan: "blue",
   medsos: "teal",
   informasi: "sky",
   survei: "teal",
   general: "sky",
-};
-
-const ICON_MAP: Record<string, string> = {
-  users: "briefcase",
-  globe: "building",
-  shield: "shield",
-  "clipboard-list": "clipboard",
-  link: "link",
-  instagram: "instagram",
-  tiktok: "tiktok",
-  youtube: "youtube",
 };
 
 /**
@@ -43,7 +37,7 @@ export async function getServices(): Promise<ServiceItem[]> {
     .from("links")
     .select("*")
     .eq("is_active", true)
-    .in("category", ["bumdes", "layanan", "survei", "informasi"])
+    .in("category", ["bumdes", "layanan", "survei", "informasi", "general"])
     .order("display_order", { ascending: true });
 
   if (error) {
@@ -54,18 +48,18 @@ export async function getServices(): Promise<ServiceItem[]> {
   return ((data as Link[]) || []).map((link) => ({
     id: link.id,
     title: link.title,
-    label: link.category.toUpperCase(),
+    label: getLinkCategoryLabel(link.category),
     description: link.description || "",
-    icon: ICON_MAP[link.icon || "link"] || "link",
+    icon: getLinkCategoryIcon(link.category),
     href: link.url,
-    accent: ACCENT_MAP[link.category] || "sky",
+    accent: ACCENT_MAP[normalizeLinkCategory(link.category)],
   }));
 }
 
 /**
  * Mengambil link media sosial dari database
  */
-export async function getSocials(): Promise<{ id: string; label: string; icon: string; href: string }[]> {
+export async function getSocials(): Promise<{ id: string; label: string; icon: IconName; href: string }[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -83,7 +77,7 @@ export async function getSocials(): Promise<{ id: string; label: string; icon: s
   return ((data as Link[]) || []).map((link) => ({
     id: link.id,
     label: link.title,
-    icon: ICON_MAP[link.icon || "link"] || "link",
+    icon: getLinkCategoryIcon(link.category),
     href: link.url,
   }));
 }

@@ -1,4 +1,4 @@
-export type LinkCategory = "bumdes" | "layanan" | "medsos" | "informasi" | "survei" | "general";
+export type LinkCategory = "layanan" | "medsos" | "informasi" | "survei" | "general";
 
 export interface Link {
   id: string;
