@@ -1,4 +1,4 @@
-export type LinkCategory = "bumdes" | "layanan" | "medsos" | "informasi" | "survei" | "general" | "wisata";
+export type LinkCategory = "bumdes" | "layanan" | "medsos" | "informasi" | "survei" | "general";
 
 export interface Link {
   id: string;
@@ -32,6 +32,24 @@ export interface TrafficLog {
 
 export type NewTrafficLog = Omit<TrafficLog, "id" | "created_at">;
 
+export type MarkerJenisInfo = "kantor" | "fasilitas" | "layanan";
+
+export interface Marker {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  keterangan: string | null;
+  jenis_info: MarkerJenisInfo;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type NewMarker = Omit<Marker, "id" | "created_at" | "updated_at">;
+export type UpdateMarker = Partial<NewMarker>;
+
 export interface AnalyticsSummary {
   totalPageViews: number;
   totalQrScans: number;
@@ -59,6 +77,15 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<TrafficLog, "id">>;
+      };
+      markers: {
+        Row: Marker;
+        Insert: Omit<Marker, "id" | "created_at" | "updated_at"> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<Marker, "id">>;
       };
     };
     Functions: {

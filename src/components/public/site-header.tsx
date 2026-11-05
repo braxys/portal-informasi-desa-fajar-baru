@@ -7,11 +7,10 @@ import { Icon, VillageLogo } from "@/components/shared/icons";
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const sections = [
-    ["Beranda", "#beranda"],
-    ["Layanan", "#layanan"],
-    ["Peta Desa", "#peta"],
-    ["Wisata Desa", "#wisata"],
-    ["Kontak", "#kontak"],
+    ["Beranda", "/#beranda"],
+    ["Layanan", "/#layanan"],
+    ["Peta Desa", "/#peta"],
+    ["Kontak", "/kontak"],
   ];
 
   return (
@@ -56,7 +55,7 @@ export function SiteHeader() {
             Admin
           </Link>
           <Link
-            href="#layanan"
+            href="/#layanan"
             className="flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fajar-700"
           >
             Akses Layanan <Icon name="arrow" size={17} />

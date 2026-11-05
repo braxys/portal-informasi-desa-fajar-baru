@@ -19,38 +19,6 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
-function isHttpsUrl(value: string): boolean {
-  try {
-    return new URL(value).protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
-function getTextField(formData: FormData, name: string): string {
-  const value = formData.get(name);
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function getTourismDetails(
-  formData: FormData,
-): { error: string } | { location: string; description: string } {
-  const imageUrl = getTextField(formData, "image_url");
-  const location = getTextField(formData, "url");
-
-  if (!location || location.length > 500) {
-    return { error: "Lokasi wisata wajib diisi (maksimal 500 karakter)." };
-  }
-  if (!imageUrl || imageUrl.length > 2048 || !isHttpsUrl(imageUrl)) {
-    return { error: "Masukkan URL gambar publik HTTPS yang valid." };
-  }
-
-  return {
-    location,
-    description: JSON.stringify({ imageUrl }),
-  };
-}
-
 /**
  * Mengambil seluruh tautan aktif untuk halaman publik
  * Diurutkan berdasarkan display_order ASC
@@ -99,18 +67,11 @@ export async function getAllLinksAdmin(): Promise<Link[]> {
 export async function createLinkAction(formData: FormData): Promise<ActionResult<Link>> {
   const supabase = await createClient();
 
-  const title = getTextField(formData, "title");
+  const title = (formData.get("title") as string)?.trim();
+  const url = (formData.get("url") as string)?.trim();
+  const description = (formData.get("description") as string)?.trim() || null;
   const category = ((formData.get("category") as string) || "informasi") as LinkCategory;
-  const tourismDetails = category === "wisata" ? getTourismDetails(formData) : null;
-  if (tourismDetails && "error" in tourismDetails) {
-    return { success: false, error: tourismDetails.error };
-  }
-  const description = tourismDetails
-    ? tourismDetails.description
-    : getTextField(formData, "description") || null;
-  const submittedUrl = getTextField(formData, "url");
-  const url = tourismDetails ? tourismDetails.location : submittedUrl;
-  const icon = getTextField(formData, "icon") || "link";
+  const icon = (formData.get("icon") as string)?.trim() || "link";
   const is_featured = formData.get("is_featured") === "true" || formData.get("is_featured") === "on";
   const is_active = formData.get("is_active") === "true" || formData.get("is_active") === "on";
   const display_order = Number(formData.get("display_order")) || 0;
@@ -119,7 +80,7 @@ export async function createLinkAction(formData: FormData): Promise<ActionResult
     return { success: false, error: "Judul dan URL tautan wajib diisi." };
   }
 
-  if (category !== "wisata" && !isHttpUrl(url)) {
+  if (!isHttpUrl(url)) {
     return { success: false, error: "Format URL tidak valid. Pastikan menyertakan http:// atau https://" };
   }
 
@@ -159,18 +120,11 @@ export async function updateLinkAction(
 ): Promise<ActionResult<Link>> {
   const supabase = await createClient();
 
-  const title = getTextField(formData, "title");
+  const title = (formData.get("title") as string)?.trim();
+  const url = (formData.get("url") as string)?.trim();
+  const description = (formData.get("description") as string)?.trim() || null;
   const category = ((formData.get("category") as string) || "informasi") as LinkCategory;
-  const tourismDetails = category === "wisata" ? getTourismDetails(formData) : null;
-  if (tourismDetails && "error" in tourismDetails) {
-    return { success: false, error: tourismDetails.error };
-  }
-  const description = tourismDetails
-    ? tourismDetails.description
-    : getTextField(formData, "description") || null;
-  const submittedUrl = getTextField(formData, "url");
-  const url = tourismDetails ? tourismDetails.location : submittedUrl;
-  const icon = getTextField(formData, "icon") || "link";
+  const icon = (formData.get("icon") as string)?.trim() || "link";
   const is_featured = formData.get("is_featured") === "true" || formData.get("is_featured") === "on";
   const is_active = formData.get("is_active") === "true" || formData.get("is_active") === "on";
   const display_order = Number(formData.get("display_order")) || 0;
@@ -179,7 +133,7 @@ export async function updateLinkAction(
     return { success: false, error: "Judul dan URL tautan tidak boleh kosong." };
   }
 
-  if (category !== "wisata" && !isHttpUrl(url)) {
+  if (!isHttpUrl(url)) {
     return { success: false, error: "Format URL tidak valid. Pastikan menyertakan http:// atau https://" };
   }
 

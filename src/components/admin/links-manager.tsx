@@ -20,14 +20,12 @@ const CATEGORIES: { value: LinkCategory; label: string }[] = [
   { value: "informasi", label: "Informasi" },
   { value: "survei", label: "Survei" },
   { value: "general", label: "Umum" },
-  { value: "wisata", label: "Wisata Desa" },
 ];
 
 const EMPTY_FORM = {
   title: "",
   url: "",
   description: "",
-  image_url: "",
   category: "informasi" as LinkCategory,
   icon: "link",
   is_featured: false,
@@ -50,29 +48,11 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
   }
 
   function openEdit(link: Link) {
-    let imageUrl = "";
-    if (link.category === "wisata" && link.description) {
-      try {
-        const details: unknown = JSON.parse(link.description);
-        if (
-          typeof details === "object" &&
-          details !== null &&
-          "imageUrl" in details &&
-          typeof details.imageUrl === "string"
-        ) {
-          imageUrl = details.imageUrl;
-        }
-      } catch {
-        imageUrl = "";
-      }
-    }
-
     setEditingLink(link);
     setForm({
       title: link.title,
       url: link.url,
-      description: link.category === "wisata" ? "" : link.description || "",
-      image_url: imageUrl,
+      description: link.description || "",
       category: link.category,
       icon: link.icon || "link",
       is_featured: link.is_featured,
@@ -101,13 +81,7 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const formData = new FormData();
-    const formValues = { ...form };
-    if (form.category === "wisata") {
-      formValues.description = "";
-    } else {
-      formValues.image_url = "";
-    }
-    Object.entries(formValues).forEach(([key, value]) => {
+    Object.entries(form).forEach(([key, value]) => {
       formData.append(key, String(value));
     });
 
@@ -310,39 +284,19 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
 
               <div>
                 <label className="mb-1.5 block text-sm font-bold text-slate-700">
-                  {form.category === "wisata" ? "Lokasi wisata" : "URL"}{" "}
-                  <span className="text-red-500">*</span>
+                  URL <span className="text-red-500">*</span>
                 </label>
                 <input
                   name="url"
                   value={form.url}
                   onChange={handleChange}
                   required
-                  type={form.category === "wisata" ? "text" : "url"}
+                  type="url"
                   className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-fajar-500 focus:outline-none"
-                  placeholder={form.category === "wisata" ? "Alamat atau patokan lokasi wisata" : "https://..."}
+                  placeholder="https://..."
                 />
               </div>
 
-              {form.category === "wisata" ? (
-                <div>
-                  <label className="mb-1.5 block text-sm font-bold text-slate-700">
-                    URL gambar publik <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    name="image_url"
-                    value={form.image_url}
-                    onChange={handleChange}
-                    required
-                    type="url"
-                    className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-fajar-500 focus:outline-none"
-                    placeholder="https://..."
-                  />
-                  <p className="mt-1 text-xs font-normal text-slate-500">
-                    Tempel tautan gambar publik. Upload langsung dari komputer tidak tersedia.
-                  </p>
-                </div>
-              ) : (
               <div>
                 <label className="mb-1.5 block text-sm font-bold text-slate-700">
                   Deskripsi
@@ -356,7 +310,6 @@ export function LinksManager({ initialLinks }: LinksManagerProps) {
                   placeholder="Deskripsi singkat..."
                 />
               </div>
-              )}
 
               <div className="grid grid-cols-2 gap-4">
                 <div>

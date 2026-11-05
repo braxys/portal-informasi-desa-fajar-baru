@@ -1,46 +1,129 @@
 import { Client } from "pg";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const envLocalPath = path.join(__dirname, "..", ".env.local");
-if (fs.existsSync(envLocalPath) && typeof process.loadEnvFile === "function") {
-  process.loadEnvFile(envLocalPath);
+const args = process.argv.slice(2);
+if (args.some((arg) => arg !== "--apply") || args.length > 1) {
+  throw new Error("Usage: node backend/clean-duplicates.mjs [--apply]");
+}
+
+const applyChanges = args.includes("--apply");
+const connectionString =
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.DIRECT_URL;
+
+if (!connectionString) {
+  throw new Error("DATABASE_URL tidak ditemukan. Tambahkan ke file .env.local.");
 }
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
+  connectionString,
+  ssl: { rejectUnauthorized: true },
 });
 
-async function clean() {
+async function cleanDuplicates() {
   await client.connect();
 
-  const check = await client.query(
-    "SELECT title, COUNT(*) as count FROM links GROUP BY title HAVING COUNT(*) > 1"
-  );
-  console.log("Data duplikat:", check.rows);
+  try {
+    if (!applyChanges) {
+      const { rows: duplicateLinks } = await client.query(`
+        SELECT title, url, COUNT(*)::integer AS count
+        FROM public.links
+        GROUP BY title, url
+        HAVING COUNT(*) > 1
+        ORDER BY title, url
+      `);
+      const { rows: duplicateMarkers } = await client.query(`
+        SELECT name, latitude, longitude, COUNT(*)::integer AS count
+        FROM public.markers
+        GROUP BY name, latitude, longitude
+        HAVING COUNT(*) > 1
+        ORDER BY name, latitude, longitude
+      `);
 
-  const del = await client.query(
-    `DELETE FROM links WHERE id IN (
-      SELECT id FROM (
-        SELECT id, ROW_NUMBER() OVER (PARTITION BY title, url ORDER BY created_at) as rn
-        FROM links
-      ) t WHERE t.rn > 1
-    )`
-  );
-  console.log("Jumlah terhapus:", del.rowCount);
+      console.log("Duplikat tautan yang ditemukan:", duplicateLinks);
+      console.log("Duplikat marker yang ditemukan:", duplicateMarkers);
+      console.log(
+        "Mode pemeriksaan saja. Tinjau hasilnya; gunakan --apply untuk menghapus duplikat.",
+      );
+      return;
+    }
 
-  const remaining = await client.query(
-    "SELECT title, category, display_order FROM links ORDER BY display_order"
-  );
-  console.log("Sisa data:", remaining.rows);
+    await client.query("BEGIN");
+    await client.query(
+      "LOCK TABLE public.links, public.traffic_logs, public.markers IN SHARE ROW EXCLUSIVE MODE",
+    );
+    await client.query(`
+      WITH ranked_links AS (
+        SELECT
+          id,
+          FIRST_VALUE(id) OVER (
+            PARTITION BY title, url
+            ORDER BY created_at, id
+          ) AS retained_id,
+          ROW_NUMBER() OVER (
+            PARTITION BY title, url
+            ORDER BY created_at, id
+          ) AS duplicate_number
+        FROM public.links
+      )
+      UPDATE public.traffic_logs AS logs
+      SET link_id = ranked_links.retained_id
+      FROM ranked_links
+      WHERE ranked_links.duplicate_number > 1
+        AND logs.link_id = ranked_links.id
+    `);
 
-  await client.end();
+    const { rowCount } = await client.query(`
+      WITH ranked_links AS (
+        SELECT
+          id,
+          ROW_NUMBER() OVER (
+            PARTITION BY title, url
+            ORDER BY created_at, id
+          ) AS duplicate_number
+        FROM public.links
+      )
+      DELETE FROM public.links AS links
+      USING ranked_links
+      WHERE links.id = ranked_links.id
+        AND ranked_links.duplicate_number > 1
+    `);
+    const { rowCount: removedMarkers } = await client.query(`
+      WITH ranked_markers AS (
+        SELECT
+          id,
+          ROW_NUMBER() OVER (
+            PARTITION BY name, latitude, longitude
+            ORDER BY created_at, id
+          ) AS duplicate_number
+        FROM public.markers
+      )
+      DELETE FROM public.markers AS markers
+      USING ranked_markers
+      WHERE markers.id = ranked_markers.id
+        AND ranked_markers.duplicate_number > 1
+    `);
+
+    await client.query("COMMIT");
+    console.log(
+      `Duplikat tautan dihapus: ${rowCount}; duplikat marker dihapus: ${removedMarkers}. Log tetap tertaut.`,
+    );
+  } catch (error) {
+    try {
+      await client.query("ROLLBACK");
+    } catch (rollbackError) {
+      throw new AggregateError(
+        [error, rollbackError],
+        "Pembersihan duplikat gagal dan transaksi tidak dapat di-rollback.",
+      );
+    }
+    throw error;
+  } finally {
+    await client.end();
+  }
 }
 
-clean().catch((e) => {
-  console.error(e.message);
-  process.exit(1);
+cleanDuplicates().catch((error) => {
+  console.error("Pembersihan duplikat gagal:", error);
+  process.exitCode = 1;
 });

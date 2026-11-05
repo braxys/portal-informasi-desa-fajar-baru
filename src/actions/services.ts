@@ -20,7 +20,6 @@ const ACCENT_MAP: Record<LinkCategory, string> = {
   informasi: "sky",
   survei: "teal",
   general: "sky",
-  wisata: "sky",
 };
 
 const ICON_MAP: Record<string, string> = {
