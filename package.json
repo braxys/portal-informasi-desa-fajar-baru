@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "db:clean-duplicates": "node --env-file=.env.local backend/clean-duplicates.mjs",
-    "db:migrate": "node --env-file=.env.local backend/migrate.mjs"
+    "db:migrate": "node --env-file=.env.local backend/migrate.mjs",
+    "db:set-admin": "node --env-file=.env.local backend/set-admin.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",

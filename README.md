@@ -31,6 +31,14 @@ DATABASE_URL=<direct-postgres-connection-string>
 
 Setelah membuat akun admin di Supabase Auth, tetapkan `app_metadata.role` menjadi `admin` menggunakan Supabase Auth Admin API dari lingkungan tepercaya. Jangan gunakan `user_metadata` untuk role karena dapat diubah oleh pemilik akun. Akun tanpa role admin tidak dapat mengakses dashboard atau mengelola data.
 
+Untuk menetapkan role admin ke akun yang sudah terdaftar, jalankan:
+
+```bash
+npm run db:set-admin
+# Atau tentukan email tertentu:
+npm run db:set-admin -- email@desa.id
+```
+
 Jalankan migrasi database dengan:
 
 ```bash
