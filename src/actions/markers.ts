@@ -2,12 +2,80 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import type { Marker, MarkerJenisInfo, NewMarker, UpdateMarker } from "@/types/database";
+import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
 
 export interface ActionResult<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
+}
+
+function isMarkerJenisInfo(value: string): value is MarkerJenisInfo {
+  return value === "kantor" || value === "fasilitas" || value === "layanan";
+}
+
+function getMarkerPayload(
+  formData: FormData,
+): { error: string } | { payload: NewMarker } {
+  const nameValue = formData.get("name");
+  const latitudeValue = formData.get("latitude");
+  const longitudeValue = formData.get("longitude");
+  const jenisInfoValue = formData.get("jenis_info");
+  const displayOrderValue = formData.get("display_order");
+
+  const name = typeof nameValue === "string" ? nameValue.trim() : "";
+  const latitudeText = typeof latitudeValue === "string" ? latitudeValue.trim() : "";
+  const longitudeText = typeof longitudeValue === "string" ? longitudeValue.trim() : "";
+  const jenisInfo =
+    typeof jenisInfoValue === "string" ? jenisInfoValue : "fasilitas";
+  const displayOrderText =
+    typeof displayOrderValue === "string" ? displayOrderValue.trim() : "";
+
+  if (!name || name.length > 255) {
+    return { error: "Nama lokasi wajib diisi (maksimal 255 karakter)." };
+  }
+
+  if (!latitudeText || !longitudeText) {
+    return { error: "Latitude dan longitude wajib diisi." };
+  }
+
+  const latitude = Number(latitudeText);
+  const longitude = Number(longitudeText);
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    return { error: "Latitude dan longitude harus berupa angka yang valid." };
+  }
+  if (latitude < -90 || latitude > 90) {
+    return { error: "Latitude harus antara -90 dan 90." };
+  }
+  if (longitude < -180 || longitude > 180) {
+    return { error: "Longitude harus antara -180 dan 180." };
+  }
+  if (!isMarkerJenisInfo(jenisInfo)) {
+    return { error: "Jenis lokasi tidak valid." };
+  }
+
+  const displayOrder = displayOrderText ? Number(displayOrderText) : 0;
+  if (!Number.isSafeInteger(displayOrder) || displayOrder < 0) {
+    return { error: "Urutan harus berupa bilangan bulat nonnegatif." };
+  }
+
+  const keteranganValue = formData.get("keterangan");
+  const keterangan =
+    typeof keteranganValue === "string" ? keteranganValue.trim() || null : null;
+
+  return {
+    payload: {
+      name,
+      latitude,
+      longitude,
+      keterangan,
+      jenis_info: jenisInfo,
+      is_active:
+        formData.get("is_active") === "true" ||
+        formData.get("is_active") === "on",
+      display_order: displayOrder,
+    },
+  };
 }
 
 /**
@@ -54,44 +122,12 @@ export async function getAllMarkersAdmin(): Promise<Marker[]> {
  */
 export async function createMarkerAction(formData: FormData): Promise<ActionResult<Marker>> {
   const supabase = await createClient();
-
-  const name = (formData.get("name") as string)?.trim();
-  const latitude = parseFloat(formData.get("latitude") as string);
-  const longitude = parseFloat(formData.get("longitude") as string);
-  const keterangan = (formData.get("keterangan") as string)?.trim() || null;
-  const jenis_info = ((formData.get("jenis_info") as string) || "fasilitas") as MarkerJenisInfo;
-  const is_active = formData.get("is_active") === "true" || formData.get("is_active") === "on";
-  const display_order = Number(formData.get("display_order")) || 0;
-
-  if (!name) {
-    return { success: false, error: "Nama lokasi wajib diisi." };
-  }
-
-  if (isNaN(latitude) || isNaN(longitude)) {
-    return { success: false, error: "Latitude dan longitude harus angka." };
-  }
-
-  if (latitude < -90 || latitude > 90) {
-    return { success: false, error: "Latitude harus antara -90 dan 90." };
-  }
-
-  if (longitude < -180 || longitude > 180) {
-    return { success: false, error: "Longitude harus antara -180 dan 180." };
-  }
-
-  const payload: NewMarker = {
-    name,
-    latitude,
-    longitude,
-    keterangan,
-    jenis_info,
-    is_active,
-    display_order,
-  };
+  const result = getMarkerPayload(formData);
+  if ("error" in result) return { success: false, error: result.error };
 
   const { data, error } = await supabase
     .from("markers")
-    .insert([payload])
+    .insert([result.payload])
     .select()
     .single();
 
@@ -113,36 +149,12 @@ export async function updateMarkerAction(
   formData: FormData
 ): Promise<ActionResult<Marker>> {
   const supabase = await createClient();
-
-  const name = (formData.get("name") as string)?.trim();
-  const latitude = parseFloat(formData.get("latitude") as string);
-  const longitude = parseFloat(formData.get("longitude") as string);
-  const keterangan = (formData.get("keterangan") as string)?.trim() || null;
-  const jenis_info = ((formData.get("jenis_info") as string) || "fasilitas") as MarkerJenisInfo;
-  const is_active = formData.get("is_active") === "true" || formData.get("is_active") === "on";
-  const display_order = Number(formData.get("display_order")) || 0;
-
-  if (!name) {
-    return { success: false, error: "Nama lokasi wajib diisi." };
-  }
-
-  if (isNaN(latitude) || isNaN(longitude)) {
-    return { success: false, error: "Latitude dan longitude harus angka." };
-  }
-
-  const payload: UpdateMarker = {
-    name,
-    latitude,
-    longitude,
-    keterangan,
-    jenis_info,
-    is_active,
-    display_order,
-  };
+  const result = getMarkerPayload(formData);
+  if ("error" in result) return { success: false, error: result.error };
 
   const { data, error } = await supabase
     .from("markers")
-    .update(payload)
+    .update(result.payload)
     .eq("id", id)
     .select()
     .single();
