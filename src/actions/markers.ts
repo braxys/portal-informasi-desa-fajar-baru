@@ -135,7 +135,7 @@ export async function createMarkerAction(formData: FormData): Promise<ActionResu
     return { success: false, error: error.message };
   }
 
-  revalidatePath("/peta");
+  revalidatePath("/");
   revalidatePath("/admin/dashboard");
 
   return { success: true, data: data as Marker };
@@ -163,7 +163,7 @@ export async function updateMarkerAction(
     return { success: false, error: error.message };
   }
 
-  revalidatePath("/peta");
+  revalidatePath("/");
   revalidatePath("/admin/dashboard");
 
   return { success: true, data: data as Marker };
@@ -181,7 +181,7 @@ export async function deleteMarkerAction(id: string): Promise<ActionResult> {
     return { success: false, error: error.message };
   }
 
-  revalidatePath("/peta");
+  revalidatePath("/");
   revalidatePath("/admin/dashboard");
 
   return { success: true };
@@ -205,7 +205,7 @@ export async function toggleMarkerStatusAction(
     return { success: false, error: error.message };
   }
 
-  revalidatePath("/peta");
+  revalidatePath("/");
   revalidatePath("/admin/dashboard");
 
   return { success: true };
