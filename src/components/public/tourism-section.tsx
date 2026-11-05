@@ -13,9 +13,7 @@ function getImageUrl(description: string | null): string | null {
       typeof details.imageUrl === "string"
     ) {
       const imageUrl = new URL(details.imageUrl);
-      return imageUrl.protocol === "http:" || imageUrl.protocol === "https:"
-        ? imageUrl.toString()
-        : null;
+      return imageUrl.protocol === "https:" ? imageUrl.toString() : null;
     }
   } catch {
     return null;

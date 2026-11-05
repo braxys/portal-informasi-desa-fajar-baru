@@ -19,6 +19,14 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
+function isHttpsUrl(value: string): boolean {
+  try {
+    return new URL(value).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function getTextField(formData: FormData, name: string): string {
   const value = formData.get(name);
   return typeof value === "string" ? value.trim() : "";
@@ -33,8 +41,8 @@ function getTourismDetails(
   if (!location || location.length > 500) {
     return { error: "Lokasi wisata wajib diisi (maksimal 500 karakter)." };
   }
-  if (!imageUrl || imageUrl.length > 2048 || !isHttpUrl(imageUrl)) {
-    return { error: "Masukkan URL gambar publik yang valid (http:// atau https://)." };
+  if (!imageUrl || imageUrl.length > 2048 || !isHttpsUrl(imageUrl)) {
+    return { error: "Masukkan URL gambar publik HTTPS yang valid." };
   }
 
   return {

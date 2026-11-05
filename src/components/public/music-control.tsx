@@ -1,26 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export function MusicControl() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.play().catch((error: unknown) => {
-      if (error instanceof DOMException && error.name === "NotAllowedError") {
-        setMessage("Tekan tombol untuk memutar musik.");
-        return;
-      }
-
-      console.error("Gagal memutar musik:", error);
-      setMessage("Musik tidak dapat diputar.");
-    });
-  }, []);
 
   async function toggleMusic() {
     const audio = audioRef.current;
