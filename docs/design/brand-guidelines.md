@@ -119,7 +119,7 @@ Logo resmi yang digunakan pada antarmuka adalah **Lambang Kabupaten Lampung Sela
 
 | File | Latar | Pemakaian |
 | --- | --- | --- |
-| `public/brand/logo-lampung-selatan.jpeg` | Terang, latar putih | Header, footer, dokumen, materi sosialisasi |
+| `public/brand/logo-lampung-selatan.png` | Terang, latar putih | Header, footer, dokumen, materi sosialisasi |
 
 ### Aturan penggunaan
 
