@@ -25,15 +25,23 @@ async function cleanDuplicates() {
 
   try {
     if (!applyChanges) {
-      const { rows } = await client.query(`
+      const { rows: duplicateLinks } = await client.query(`
         SELECT title, url, COUNT(*)::integer AS count
         FROM public.links
         GROUP BY title, url
         HAVING COUNT(*) > 1
         ORDER BY title, url
       `);
+      const { rows: duplicateMarkers } = await client.query(`
+        SELECT name, latitude, longitude, COUNT(*)::integer AS count
+        FROM public.markers
+        GROUP BY name, latitude, longitude
+        HAVING COUNT(*) > 1
+        ORDER BY name, latitude, longitude
+      `);
 
-      console.log("Duplikat tautan yang ditemukan:", rows);
+      console.log("Duplikat tautan yang ditemukan:", duplicateLinks);
+      console.log("Duplikat marker yang ditemukan:", duplicateMarkers);
       console.log(
         "Mode pemeriksaan saja. Tinjau hasilnya; gunakan --apply untuk menghapus duplikat.",
       );
@@ -42,7 +50,7 @@ async function cleanDuplicates() {
 
     await client.query("BEGIN");
     await client.query(
-      "LOCK TABLE public.links, public.traffic_logs IN SHARE ROW EXCLUSIVE MODE",
+      "LOCK TABLE public.links, public.traffic_logs, public.markers IN SHARE ROW EXCLUSIVE MODE",
     );
     await client.query(`
       WITH ranked_links AS (
@@ -80,9 +88,26 @@ async function cleanDuplicates() {
       WHERE links.id = ranked_links.id
         AND ranked_links.duplicate_number > 1
     `);
+    const { rowCount: removedMarkers } = await client.query(`
+      WITH ranked_markers AS (
+        SELECT
+          id,
+          ROW_NUMBER() OVER (
+            PARTITION BY name, latitude, longitude
+            ORDER BY created_at, id
+          ) AS duplicate_number
+        FROM public.markers
+      )
+      DELETE FROM public.markers AS markers
+      USING ranked_markers
+      WHERE markers.id = ranked_markers.id
+        AND ranked_markers.duplicate_number > 1
+    `);
 
     await client.query("COMMIT");
-    console.log(`Duplikat tautan dihapus: ${rowCount}. Log tetap tertaut.`);
+    console.log(
+      `Duplikat tautan dihapus: ${rowCount}; duplikat marker dihapus: ${removedMarkers}. Log tetap tertaut.`,
+    );
   } catch (error) {
     try {
       await client.query("ROLLBACK");

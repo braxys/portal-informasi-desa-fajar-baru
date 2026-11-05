@@ -39,13 +39,13 @@ npm run db:migrate
 
 Migrasi seed aman dijalankan ulang dan proses berhenti jika suatu migrasi gagal. Tinjau perubahan SQL dan pastikan backup tersedia sebelum menjalankan pada database produksi.
 
-Jika migrasi unique constraint berhenti karena tautan duplikat, periksa dulu baris yang akan dibersihkan:
+Jika migrasi unique constraint berhenti karena tautan atau marker duplikat, periksa dulu baris yang akan dibersihkan:
 
 ```bash
 npm run db:clean-duplicates
 ```
 
-Perintah tersebut hanya menampilkan duplikat. Setelah meninjau hasil dan membuat backup, jalankan `npm run db:clean-duplicates -- --apply` untuk mempertahankan tautan tertua, memindahkan log terkait ke tautan yang dipertahankan, dan menghapus salinannya. Setelah itu jalankan kembali `npm run db:migrate`.
+Perintah tersebut hanya menampilkan duplikat. Setelah meninjau hasil dan membuat backup, jalankan `npm run db:clean-duplicates -- --apply` untuk mempertahankan record tertua, memindahkan log terkait ke tautan yang dipertahankan, dan menghapus salinannya. Setelah itu jalankan kembali `npm run db:migrate`.
 
 Jalankan server pengembangan:
 
