@@ -2,6 +2,27 @@
 @import '../../docs/design/color-tokens.css';
 @import 'tailwindcss';
 
+.leaflet-container {
+  z-index: 0;
+  font-family: inherit;
+}
+
+.village-map-pin {
+  border: 0;
+  background: transparent;
+}
+
+.village-map-pin span {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 4px solid white;
+  border-radius: 50% 50% 50% 0;
+  background: #0f766e;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 0.35);
+  transform: rotate(-45deg);
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

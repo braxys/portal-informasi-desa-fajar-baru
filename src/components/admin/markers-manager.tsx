@@ -124,6 +124,8 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
         setMarkers((prev) =>
           prev.map((m) => (m.id === marker.id ? { ...m, is_active: !m.is_active } : m))
         );
+      } else {
+        setMessage({ type: "error", text: result.error || "Gagal mengubah status." });
       }
     });
   }
@@ -198,6 +200,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                   </td>
                   <td className="px-5 py-4">
                     <button
+                      type="button"
                       onClick={() => handleToggle(marker)}
                       disabled={isPending}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
@@ -215,6 +218,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                   <td className="px-5 py-4">
                     <div className="flex justify-end gap-2">
                       <button
+                        type="button"
                         onClick={() => openEdit(marker)}
                         disabled={isPending}
                         className="rounded-lg bg-blue-50 px-3 py-2 text-xs font-bold text-blue-600 transition hover:bg-blue-100 disabled:opacity-50"
@@ -222,6 +226,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                         Edit
                       </button>
                       <button
+                        type="button"
                         onClick={() => handleDelete(marker)}
                         disabled={isPending}
                         className="rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
