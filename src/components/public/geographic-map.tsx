@@ -6,7 +6,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Marker } from "@/types/database";
 
-const center: [number, number] = [-5.3258997, 105.2834308];
+const center: [number, number] = [-5.3436945, 105.2680212];
 
 function FitMarkers({ markers }: { markers: Marker[] }) {
   const map = useMap();
