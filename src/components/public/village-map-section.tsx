@@ -37,7 +37,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
           <p className="section-kicker">Jelajahi Wilayah</p>
           <h2 className="section-title mx-auto">Peta interaktif desa.</h2>
           <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-slate-500 sm:text-base">
-            Peta geografis Desa Fajar Baru. Data lokasi ditampilkan setelah diverifikasi.
+            Peta geografis dengan garis batas perkiraan. Garis ini didigitalkan dari screenshot dan belum diverifikasi sebagai batas resmi.
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
             </aside>
           </div>
         </div>
-        <p className="mt-5 text-center text-xs text-slate-500">Peta © <a className="underline" href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>. Lokasi desa merupakan pusat indikatif; bukan batas administrasi.</p>
+        <p className="mt-5 text-center text-xs text-slate-500">Garis merah putus-putus menunjukkan batas perkiraan dari screenshot, bukan batas resmi. Peta © <a className="underline" href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>
       </div>
     </section>
   );
