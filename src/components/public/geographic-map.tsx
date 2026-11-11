@@ -70,7 +70,7 @@ export function GeographicMap({ markers, onSelect }: {
             <strong>{marker.name}</strong><br />
             <span>{marker.jenis_info}</span>
             {marker.keterangan && <><br />{marker.keterangan}</>}
-            <br /><a href={`https://www.google.com/maps/search/?api=1&query=${marker.latitude},${marker.longitude}`} target="_blank" rel="noreferrer">Buka di Google Maps</a>
+            <br /><a href={marker.jenis_info === "kantor" ? "https://maps.app.goo.gl/Xc7RmVGfKvzirQsc7" : `https://www.google.com/maps/search/?api=1&query=${marker.latitude},${marker.longitude}`} target="_blank" rel="noreferrer">Buka di Google Maps</a>
           </Popup>
         </LeafletMarker>
       ))}

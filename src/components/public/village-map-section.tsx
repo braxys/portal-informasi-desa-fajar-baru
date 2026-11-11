@@ -29,6 +29,11 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
     [markers, mapFilter],
   );
   const selectedMarker = visibleMarkers.find((marker) => marker.id === selectedId) ?? visibleMarkers[0];
+  const selectedMarkerUrl = selectedMarker?.jenis_info === "kantor"
+    ? "https://maps.app.goo.gl/Xc7RmVGfKvzirQsc7"
+    : selectedMarker
+      ? `https://www.google.com/maps/search/?api=1&query=${selectedMarker.latitude},${selectedMarker.longitude}`
+      : null;
 
   return (
     <section id="peta" className="scroll-mt-20 bg-[#eef4f1] py-20 sm:py-28">
@@ -71,7 +76,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                 <h4 className="mt-5 text-lg font-bold leading-snug text-slate-900">{selectedMarker.name}</h4>
                 {selectedMarker.keterangan && <p className="mt-3 text-sm leading-6 text-slate-500">{selectedMarker.keterangan}</p>}
                 <p className="mt-4 text-sm capitalize text-slate-600">Kategori: {selectedMarker.jenis_info}</p>
-                <a href={`https://www.google.com/maps/search/?api=1&query=${selectedMarker.latitude},${selectedMarker.longitude}`} target="_blank" rel="noreferrer" className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition hover:bg-fajar-700">
+                <a href={selectedMarkerUrl!} target="_blank" rel="noreferrer" className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition hover:bg-fajar-700">
                   Buka di Google Maps <Icon name="arrow" size={17} />
                 </a>
               </> : <p className="py-8 text-sm text-slate-500">Belum ada lokasi tersedia.</p>}
