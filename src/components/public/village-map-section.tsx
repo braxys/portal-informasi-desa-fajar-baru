@@ -26,16 +26,9 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
   const [mapFilter, setMapFilter] = useState<"semua" | MarkerJenisInfo>("semua");
   const [copiedCoords, setCopiedCoords] = useState(false);
 
-  // Jika data database kurang dari 2, lengkapi dengan titik patokan resmi Fajar Baru
+  // Jika data database kosong, fallback ke titik patokan resmi Fajar Baru
   const enrichedMarkers = useMemo(() => {
     if (!markers || markers.length === 0) return DEFAULT_MARKERS;
-    if (markers.length === 1) {
-      const existingNames = new Set(markers.map((m) => m.name.toLowerCase()));
-      const extra = DEFAULT_MARKERS.filter(
-        (m) => !existingNames.has(m.name.toLowerCase())
-      );
-      return [...markers, ...extra];
-    }
     return markers;
   }, [markers]);
 

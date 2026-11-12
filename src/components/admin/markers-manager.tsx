@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from "react";
 import type { Marker, MarkerJenisInfo } from "@/types/database";
-import { DEFAULT_MARKERS } from "@/lib/default-markers";
 import {
   createMarkerAction,
   updateMarkerAction,
@@ -32,9 +31,7 @@ const EMPTY_FORM = {
 };
 
 export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
-  const [markers, setMarkers] = useState<Marker[]>(
-    initialMarkers && initialMarkers.length > 0 ? initialMarkers : DEFAULT_MARKERS
-  );
+  const [markers, setMarkers] = useState<Marker[]>(initialMarkers || []);
   const [isPending, startTransition] = useTransition();
   const [modal, setModal] = useState<"add" | "edit" | null>(null);
   const [editingMarker, setEditingMarker] = useState<Marker | null>(null);
