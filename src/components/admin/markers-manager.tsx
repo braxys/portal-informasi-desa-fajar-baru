@@ -26,6 +26,7 @@ const EMPTY_FORM = {
   longitude: "",
   keterangan: "",
   jenis_info: "layanan" as MarkerJenisInfo,
+  maps_url: "",
   is_active: true,
   display_order: 0,
 };
@@ -54,6 +55,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
       longitude: String(marker.longitude),
       keterangan: marker.keterangan || "",
       jenis_info: marker.jenis_info,
+      maps_url: marker.maps_url || "",
       is_active: marker.is_active,
       display_order: marker.display_order,
     });
@@ -192,6 +194,19 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                     <p className="mt-0.5 max-w-xs truncate text-xs text-slate-400">
                       {marker.keterangan || "-"}
                     </p>
+                    {marker.maps_url && (
+                      <a
+                        href={marker.maps_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-teal-600 hover:text-teal-700 hover:underline"
+                      >
+                        <span>Link Rute Maps</span>
+                        <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M10 14L21 3" />
+                        </svg>
+                      </a>
+                    )}
                   </td>
                   <td className="px-5 py-4 text-xs text-slate-500">
                     {marker.latitude.toFixed(6)}, {marker.longitude.toFixed(6)}
@@ -336,6 +351,23 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                   className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-fajar-500 focus:outline-none"
                   placeholder="Deskripsi singkat lokasi..."
                 />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-sm font-bold text-slate-700">
+                  Link Google Maps <span className="text-xs font-normal text-slate-400">(Opsional)</span>
+                </label>
+                <input
+                  name="maps_url"
+                  type="url"
+                  value={form.maps_url}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-fajar-500 focus:outline-none"
+                  placeholder="https://maps.app.goo.gl/... atau https://goo.gl/maps/..."
+                />
+                <p className="mt-1 text-xs text-slate-400">
+                  Jika diisi, tombol &quot;Buka Rute&quot; pada peta akan langsung mengarahkan ke link ini.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

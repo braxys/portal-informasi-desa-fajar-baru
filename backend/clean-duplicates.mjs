@@ -17,7 +17,7 @@ if (!connectionString) {
 
 const client = new Client({
   connectionString,
-  ssl: { rejectUnauthorized: true },
+  ssl: { rejectUnauthorized: false },
 });
 
 async function cleanDuplicates() {

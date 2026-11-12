@@ -41,6 +41,7 @@ export interface Marker {
   longitude: number;
   keterangan: string | null;
   jenis_info: MarkerJenisInfo;
+  maps_url: string | null;
   is_active: boolean;
   display_order: number;
   created_at: string;

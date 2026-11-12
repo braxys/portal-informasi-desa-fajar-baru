@@ -15,6 +15,15 @@ function isMarkerJenisInfo(value: string): value is MarkerJenisInfo {
   return value === "kantor" || value === "layanan" || value === "pendidikan";
 }
 
+function isHttpUrl(value: string): boolean {
+  try {
+    const protocol = new URL(value).protocol;
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function getMarkerPayload(
   formData: FormData,
 ): { error: string } | { payload: NewMarker } {
@@ -64,6 +73,19 @@ function getMarkerPayload(
   const keterangan =
     typeof keteranganValue === "string" ? keteranganValue.trim() || null : null;
 
+  const mapsUrlValue = formData.get("maps_url");
+  let mapsUrl =
+    typeof mapsUrlValue === "string" ? mapsUrlValue.trim() || null : null;
+
+  if (mapsUrl) {
+    if (!/^https?:\/\//i.test(mapsUrl)) {
+      mapsUrl = `https://${mapsUrl}`;
+    }
+    if (!isHttpUrl(mapsUrl)) {
+      return { error: "Format link Google Maps tidak valid." };
+    }
+  }
+
   return {
     payload: {
       name,
@@ -71,6 +93,7 @@ function getMarkerPayload(
       longitude,
       keterangan,
       jenis_info: jenisInfo,
+      maps_url: mapsUrl,
       is_active:
         formData.get("is_active") === "true" ||
         formData.get("is_active") === "on",
@@ -132,6 +155,7 @@ export async function getAllMarkersAdmin(): Promise<Marker[]> {
         longitude: m.longitude,
         keterangan: m.keterangan,
         jenis_info: m.jenis_info,
+        maps_url: m.maps_url,
         is_active: m.is_active,
         display_order: m.display_order,
       }));
@@ -163,6 +187,7 @@ export async function getAllMarkersAdmin(): Promise<Marker[]> {
         longitude: m.longitude,
         keterangan: m.keterangan,
         jenis_info: m.jenis_info,
+        maps_url: m.maps_url,
         is_active: m.is_active,
         display_order: m.display_order,
       }));

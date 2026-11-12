@@ -48,11 +48,13 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
 
   const selectedMarker = visibleMarkers.find((marker) => marker.id === selectedId) ?? visibleMarkers[0];
 
-  const selectedMarkerUrl = selectedMarker?.jenis_info === "kantor"
-    ? "https://maps.app.goo.gl/Xc7RmVGfKvzirQsc7"
-    : selectedMarker
-      ? `https://www.google.com/maps/search/?api=1&query=${selectedMarker.latitude},${selectedMarker.longitude}`
-      : null;
+  const selectedMarkerUrl = selectedMarker?.maps_url
+    ? selectedMarker.maps_url
+    : selectedMarker?.jenis_info === "kantor"
+      ? "https://maps.app.goo.gl/Xc7RmVGfKvzirQsc7"
+      : selectedMarker
+        ? `https://www.google.com/maps/search/?api=1&query=${selectedMarker.latitude},${selectedMarker.longitude}`
+        : null;
 
   const handleCopyCoords = () => {
     if (!selectedMarker) return;
