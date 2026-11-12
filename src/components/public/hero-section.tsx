@@ -12,13 +12,13 @@ export function HeroSection() {
             Portal Terpadu Masyarakat
           </div>
           <h1 className="max-w-2xl text-[3.25rem] font-bold leading-[1.03] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.65rem]">
-            Informasi desa,{" "}
+            Desa Fajar Baru,{" "}
             <span className="gradient-text">lebih dekat</span> untuk semua.
           </h1>
           <p className="mt-7 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
-            Satu pintu untuk mengakses informasi, layanan publik, dan
-            partisipasi warga Desa Fajar Baru dengan cepat, mudah, dan
-            transparan.
+            Satu pintu portal resmi untuk mengakses informasi, peta wilayah,
+            layanan publik, dan partisipasi warga Desa Fajar Baru, Jati Agung,
+            Lampung Selatan dengan cepat, mudah, dan transparan.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a href="#layanan" className="primary-button">
