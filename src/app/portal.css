@@ -2,6 +2,306 @@
 @import '../../docs/design/color-tokens.css';
 @import 'tailwindcss';
 
+.leaflet-container {
+  z-index: 0;
+  font-family: inherit;
+}
+
+.custom-leaflet-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Animations */
+@keyframes marker-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@keyframes radar-ping {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* 1. Modern Pin Style */
+.pin-modern {
+  position: relative;
+  width: 38px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: bottom center;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.pin-modern:hover {
+  transform: translateY(-3px) scale(1.08);
+}
+
+.pin-modern.is-selected {
+  transform: translateY(-5px) scale(1.18);
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.35));
+}
+
+.pin-modern .pin-head {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  border: 2.5px solid white;
+  z-index: 2;
+  position: relative;
+}
+
+.pin-modern .pin-tip {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  margin-top: -3px;
+  z-index: 1;
+}
+
+.pin-modern .pin-pulse-ring {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+}
+
+.pin-modern.is-selected .pin-pulse-ring {
+  opacity: 1;
+  animation: marker-pulse 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.pin-modern .pin-shadow {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 14px;
+  height: 5px;
+  margin-left: -7px;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 50%;
+  filter: blur(1.5px);
+  z-index: 0;
+}
+
+/* Category Color Variations - Modern Pin */
+.pin-modern.category-kantor .pin-head {
+  background: linear-gradient(135deg, #0f766e, #047857);
+}
+.pin-modern.category-kantor .pin-tip {
+  border-top: 11px solid #047857;
+}
+.pin-modern.category-kantor .pin-pulse-ring {
+  border: 3px solid #10b981;
+}
+
+.pin-modern.category-layanan .pin-head {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+}
+.pin-modern.category-layanan .pin-tip {
+  border-top: 11px solid #f59e0b;
+}
+.pin-modern.category-layanan .pin-pulse-ring {
+  border: 3px solid #f59e0b;
+}
+
+.pin-modern.category-pendidikan .pin-head {
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+}
+.pin-modern.category-pendidikan .pin-tip {
+  border-top: 11px solid #f43f5e;
+}
+.pin-modern.category-pendidikan .pin-pulse-ring {
+  border: 3px solid #fb7185;
+}
+
+/* 2. Floating Badge Style */
+.pin-badge {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: bottom center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pin-badge:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.pin-badge.is-selected {
+  transform: translateY(-4px) scale(1.12);
+  z-index: 50;
+}
+
+.pin-badge .badge-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  background: #ffffff;
+  border-radius: 9999px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  transition: all 0.2s ease;
+}
+
+.pin-badge .badge-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.pin-badge .badge-pointer {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #e2e8f0;
+  margin-top: -1px;
+}
+
+.pin-badge.is-selected .badge-box {
+  color: white;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+}
+
+.pin-badge.category-kantor .badge-icon { background: #0f766e; }
+.pin-badge.category-kantor.is-selected .badge-box { background: #0f766e; border-color: #0f766e; }
+.pin-badge.category-kantor.is-selected .badge-pointer { border-top-color: #0f766e; }
+
+.pin-badge.category-layanan .badge-icon { background: #d97706; }
+.pin-badge.category-layanan.is-selected .badge-box { background: #d97706; border-color: #d97706; }
+.pin-badge.category-layanan.is-selected .badge-pointer { border-top-color: #d97706; }
+
+.pin-badge.category-pendidikan .badge-icon { background: #e11d48; }
+.pin-badge.category-pendidikan.is-selected .badge-box { background: #e11d48; border-color: #e11d48; }
+.pin-badge.category-pendidikan.is-selected .badge-pointer { border-top-color: #e11d48; }
+
+/* 3. Radar Dot Style */
+.pin-radar {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pin-radar .radar-core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.pin-radar.is-selected .radar-core {
+  transform: scale(1.3);
+}
+
+.pin-radar .radar-wave {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: radar-ping 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  z-index: 1;
+}
+
+.pin-radar.category-kantor .radar-core { background: #0f766e; }
+.pin-radar.category-kantor .radar-wave { border: 2.5px solid #10b981; }
+
+.pin-radar.category-layanan .radar-core { background: #d97706; }
+.pin-radar.category-layanan .radar-wave { border: 2.5px solid #f59e0b; }
+
+.pin-radar.category-pendidikan .radar-core { background: #e11d48; }
+.pin-radar.category-pendidikan .radar-wave { border: 2.5px solid #fb7185; }
+
+/* Leaflet Modern Popup Customization */
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.25) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip {
+  background: white !important;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.1) !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  top: 12px !important;
+  right: 12px !important;
+  color: #64748b !important;
+  width: 24px !important;
+  height: 24px !important;
+  font-size: 16px !important;
+  line-height: 22px !important;
+  text-align: center !important;
+  background: #f1f5f9 !important;
+  border-radius: 50% !important;
+  border: none !important;
+  transition: all 0.15s ease !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

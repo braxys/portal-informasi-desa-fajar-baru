@@ -7,29 +7,20 @@ INSERT INTO public.markers (name, latitude, longitude, keterangan, jenis_info, i
 VALUES
 (
     'Balai Desa Fajar Baru',
-    -5.3025000,
-    105.2347000,
-    'Pusat pelayanan administrasi masyarakat',
+    -5.3436945,
+    105.2680212,
+    'Pusat pelayanan administrasi kependudukan, perizinan, dan pemerintahan Desa Fajar Baru.',
     'kantor',
     true,
     1
 ),
 (
-    'Puskesdes',
-    -5.3018000,
-    105.2365000,
-    'Fasilitas kesehatan tingkat desa',
-    'fasilitas',
+    'SDN 1 Fajar Baru',
+    -5.3439045,
+    105.2682266,
+    'Fasilitas pendidikan dasar negeri formal untuk siswa-siswi warga Fajar Baru.',
+    'pendidikan',
     true,
     2
-),
-(
-    'Posko Pelayanan',
-    -5.3032000,
-    105.2330000,
-    'Titik informasi dan layanan warga',
-    'layanan',
-    true,
-    3
 )
 ON CONFLICT ON CONSTRAINT uq_markers_name_coords DO NOTHING;

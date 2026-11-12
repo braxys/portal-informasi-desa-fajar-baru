@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
+import { DEFAULT_MARKERS } from "@/lib/default-markers";
 
 export interface ActionResult<T = unknown> {
   success: boolean;
@@ -11,7 +12,16 @@ export interface ActionResult<T = unknown> {
 }
 
 function isMarkerJenisInfo(value: string): value is MarkerJenisInfo {
-  return value === "kantor" || value === "fasilitas" || value === "layanan";
+  return value === "kantor" || value === "layanan" || value === "pendidikan";
+}
+
+function isHttpUrl(value: string): boolean {
+  try {
+    const protocol = new URL(value).protocol;
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 function getMarkerPayload(
@@ -27,7 +37,7 @@ function getMarkerPayload(
   const latitudeText = typeof latitudeValue === "string" ? latitudeValue.trim() : "";
   const longitudeText = typeof longitudeValue === "string" ? longitudeValue.trim() : "";
   const jenisInfo =
-    typeof jenisInfoValue === "string" ? jenisInfoValue : "fasilitas";
+    typeof jenisInfoValue === "string" ? jenisInfoValue : "layanan";
   const displayOrderText =
     typeof displayOrderValue === "string" ? displayOrderValue.trim() : "";
 
@@ -63,6 +73,19 @@ function getMarkerPayload(
   const keterangan =
     typeof keteranganValue === "string" ? keteranganValue.trim() || null : null;
 
+  const mapsUrlValue = formData.get("maps_url");
+  let mapsUrl =
+    typeof mapsUrlValue === "string" ? mapsUrlValue.trim() || null : null;
+
+  if (mapsUrl) {
+    if (!/^https?:\/\//i.test(mapsUrl)) {
+      mapsUrl = `https://${mapsUrl}`;
+    }
+    if (!isHttpUrl(mapsUrl)) {
+      return { error: "Format link Google Maps tidak valid." };
+    }
+  }
+
   return {
     payload: {
       name,
@@ -70,6 +93,7 @@ function getMarkerPayload(
       longitude,
       keterangan,
       jenis_info: jenisInfo,
+      maps_url: mapsUrl,
       is_active:
         formData.get("is_active") === "true" ||
         formData.get("is_active") === "on",
@@ -90,12 +114,12 @@ export async function getPublicMarkers(): Promise<Marker[]> {
     .eq("is_active", true)
     .order("display_order", { ascending: true });
 
-  if (error) {
-    console.error("Gagal mengambil markers:", error.message);
-    return [];
+  if (error || !data || data.length === 0) {
+    if (error) console.error("Gagal mengambil markers:", error.message);
+    return DEFAULT_MARKERS;
   }
 
-  return (data as Marker[]) || [];
+  return data as Marker[];
 }
 
 /**
@@ -107,7 +131,8 @@ export async function getAllMarkersAdmin(): Promise<Marker[]> {
   const { data, error } = await supabase
     .from("markers")
     .select("*")
-    .order("display_order", { ascending: true });
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
 
   if (error) {
     console.error("Gagal mengambil admin markers:", error.message);

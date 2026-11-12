@@ -15,8 +15,8 @@ interface MarkersManagerProps {
 
 const JENIS_OPTIONS: { value: MarkerJenisInfo; label: string }[] = [
   { value: "kantor", label: "Kantor" },
-  { value: "fasilitas", label: "Fasilitas" },
   { value: "layanan", label: "Layanan" },
+  { value: "pendidikan", label: "Pendidikan" },
 ];
 
 const EMPTY_FORM = {
@@ -24,13 +24,14 @@ const EMPTY_FORM = {
   latitude: "",
   longitude: "",
   keterangan: "",
-  jenis_info: "fasilitas" as MarkerJenisInfo,
+  jenis_info: "layanan" as MarkerJenisInfo,
+  maps_url: "",
   is_active: true,
   display_order: 0,
 };
 
 export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
-  const [markers, setMarkers] = useState<Marker[]>(initialMarkers);
+  const [markers, setMarkers] = useState<Marker[]>(initialMarkers || []);
   const [isPending, startTransition] = useTransition();
   const [modal, setModal] = useState<"add" | "edit" | null>(null);
   const [editingMarker, setEditingMarker] = useState<Marker | null>(null);
@@ -51,6 +52,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
       longitude: String(marker.longitude),
       keterangan: marker.keterangan || "",
       jenis_info: marker.jenis_info,
+      maps_url: marker.maps_url || "",
       is_active: marker.is_active,
       display_order: marker.display_order,
     });
@@ -124,6 +126,8 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
         setMarkers((prev) =>
           prev.map((m) => (m.id === marker.id ? { ...m, is_active: !m.is_active } : m))
         );
+      } else {
+        setMessage({ type: "error", text: result.error || "Gagal mengubah status." });
       }
     });
   }
@@ -187,6 +191,19 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                     <p className="mt-0.5 max-w-xs truncate text-xs text-slate-400">
                       {marker.keterangan || "-"}
                     </p>
+                    {marker.maps_url && (
+                      <a
+                        href={marker.maps_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-teal-600 hover:text-teal-700 hover:underline"
+                      >
+                        <span>Link Rute Maps</span>
+                        <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M10 14L21 3" />
+                        </svg>
+                      </a>
+                    )}
                   </td>
                   <td className="px-5 py-4 text-xs text-slate-500">
                     {marker.latitude.toFixed(6)}, {marker.longitude.toFixed(6)}
@@ -198,6 +215,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                   </td>
                   <td className="px-5 py-4">
                     <button
+                      type="button"
                       onClick={() => handleToggle(marker)}
                       disabled={isPending}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
@@ -215,6 +233,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                   <td className="px-5 py-4">
                     <div className="flex justify-end gap-2">
                       <button
+                        type="button"
                         onClick={() => openEdit(marker)}
                         disabled={isPending}
                         className="rounded-lg bg-blue-50 px-3 py-2 text-xs font-bold text-blue-600 transition hover:bg-blue-100 disabled:opacity-50"
@@ -222,6 +241,7 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                         Edit
                       </button>
                       <button
+                        type="button"
                         onClick={() => handleDelete(marker)}
                         disabled={isPending}
                         className="rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
@@ -328,6 +348,23 @@ export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
                   className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-fajar-500 focus:outline-none"
                   placeholder="Deskripsi singkat lokasi..."
                 />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-sm font-bold text-slate-700">
+                  Link Google Maps <span className="text-xs font-normal text-slate-400">(Opsional)</span>
+                </label>
+                <input
+                  name="maps_url"
+                  type="url"
+                  value={form.maps_url}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:border-fajar-500 focus:outline-none"
+                  placeholder="https://maps.app.goo.gl/... atau https://goo.gl/maps/..."
+                />
+                <p className="mt-1 text-xs text-slate-400">
+                  Jika diisi, tombol &quot;Buka Rute&quot; pada peta akan langsung mengarahkan ke link ini.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

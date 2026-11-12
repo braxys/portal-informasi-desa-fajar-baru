@@ -31,7 +31,7 @@ async function runMigration() {
   const { Client } = pgModule.default || pgModule;
   const client = new Client({
     connectionString,
-    ssl: { rejectUnauthorized: true },
+    ssl: { rejectUnauthorized: false },
   });
   let connected = false;
 

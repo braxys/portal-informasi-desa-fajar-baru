@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-export type IconName = "arrow" | "briefcase" | "building" | "chevron" | "clipboard" | "clock" | "instagram" | "link" | "mail" | "map" | "menu" | "phone" | "pin" | "share" | "shield" | "tiktok" | "users" | "youtube" | "x"
+export type IconName = "arrow" | "briefcase" | "building" | "chevron" | "clipboard" | "clock" | "graduation" | "instagram" | "link" | "mail" | "map" | "menu" | "phone" | "pin" | "share" | "shield" | "tiktok" | "users" | "youtube" | "x"
 
 export function Icon({
   name,
@@ -51,6 +51,13 @@ export function Icon({
       <>
         <circle cx="12" cy="12" r="9" />
         <path d="M12 7v5l3 2" />
+      </>
+    ),
+    graduation: (
+      <>
+        <path d="M22 10v6" />
+        <path d="M2 10l10-5 10 5-10 5z" />
+        <path d="M6 12v5c3 3 9 3 12 0v-5" />
       </>
     ),
     instagram: (
