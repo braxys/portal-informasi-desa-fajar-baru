@@ -32,7 +32,7 @@ export interface TrafficLog {
 
 export type NewTrafficLog = Omit<TrafficLog, "id" | "created_at">;
 
-export type MarkerJenisInfo = "kantor" | "fasilitas" | "layanan";
+export type MarkerJenisInfo = "kantor" | "layanan" | "pendidikan";
 
 export interface Marker {
   id: string;

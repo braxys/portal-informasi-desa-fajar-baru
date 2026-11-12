@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
+import { DEFAULT_MARKERS } from "@/lib/default-markers";
 
 export interface ActionResult<T = unknown> {
   success: boolean;
@@ -11,7 +12,7 @@ export interface ActionResult<T = unknown> {
 }
 
 function isMarkerJenisInfo(value: string): value is MarkerJenisInfo {
-  return value === "kantor" || value === "fasilitas" || value === "layanan";
+  return value === "kantor" || value === "layanan" || value === "pendidikan";
 }
 
 function getMarkerPayload(
@@ -27,7 +28,7 @@ function getMarkerPayload(
   const latitudeText = typeof latitudeValue === "string" ? latitudeValue.trim() : "";
   const longitudeText = typeof longitudeValue === "string" ? longitudeValue.trim() : "";
   const jenisInfo =
-    typeof jenisInfoValue === "string" ? jenisInfoValue : "fasilitas";
+    typeof jenisInfoValue === "string" ? jenisInfoValue : "layanan";
   const displayOrderText =
     typeof displayOrderValue === "string" ? displayOrderValue.trim() : "";
 
@@ -90,19 +91,27 @@ export async function getPublicMarkers(): Promise<Marker[]> {
     .eq("is_active", true)
     .order("display_order", { ascending: true });
 
-  if (error) {
-    console.error("Gagal mengambil markers:", error.message);
-    return [];
+  if (error || !data || data.length === 0) {
+    if (error) console.error("Gagal mengambil markers:", error.message);
+    return DEFAULT_MARKERS;
   }
 
-  return (data as Marker[]) || [];
+  return data as Marker[];
 }
 
 /**
  * Mengambil semua marker (termasuk nonaktif) untuk admin
+ * Jika database kosong atau belum memuat marker patokan (Balai Desa & SDN 1), otomatis diinisialisasi.
  */
 export async function getAllMarkersAdmin(): Promise<Marker[]> {
   const supabase = await createClient();
+
+  // Hapus data puskesdes lama jika ada
+  try {
+    await supabase.from("markers").delete().ilike("name", "%puskesdes%");
+  } catch {
+    // Abaikan jika tabel belum ada atau gagal delete
+  }
 
   const { data, error } = await supabase
     .from("markers")
@@ -111,10 +120,67 @@ export async function getAllMarkersAdmin(): Promise<Marker[]> {
 
   if (error) {
     console.error("Gagal mengambil admin markers:", error.message);
-    return [];
+    return DEFAULT_MARKERS;
   }
 
-  return (data as Marker[]) || [];
+  // Jika tabel masih kosong, simpan marker default otomatis
+  if (!data || data.length === 0) {
+    try {
+      const toInsert = DEFAULT_MARKERS.map((m) => ({
+        name: m.name,
+        latitude: m.latitude,
+        longitude: m.longitude,
+        keterangan: m.keterangan,
+        jenis_info: m.jenis_info,
+        is_active: m.is_active,
+        display_order: m.display_order,
+      }));
+      const { data: inserted, error: insertError } = await supabase
+        .from("markers")
+        .insert(toInsert)
+        .select();
+
+      if (!insertError && inserted && inserted.length > 0) {
+        return inserted as Marker[];
+      }
+    } catch {
+      // Abaikan jika insert gagal
+    }
+    return DEFAULT_MARKERS;
+  }
+
+  // Pastikan kedua marker default selalu tersedia
+  const existingNames = new Set(data.map((m) => m.name.toLowerCase()));
+  const missingDefaults = DEFAULT_MARKERS.filter(
+    (d) => !existingNames.has(d.name.toLowerCase())
+  );
+
+  if (missingDefaults.length > 0) {
+    try {
+      const toInsert = missingDefaults.map((m) => ({
+        name: m.name,
+        latitude: m.latitude,
+        longitude: m.longitude,
+        keterangan: m.keterangan,
+        jenis_info: m.jenis_info,
+        is_active: m.is_active,
+        display_order: m.display_order,
+      }));
+      const { data: inserted } = await supabase
+        .from("markers")
+        .insert(toInsert)
+        .select();
+
+      if (inserted && inserted.length > 0) {
+        return [...data, ...(inserted as Marker[])].sort((a, b) => a.display_order - b.display_order);
+      }
+    } catch {
+      // Abaikan jika insert gagal
+    }
+    return [...data, ...missingDefaults].sort((a, b) => a.display_order - b.display_order);
+  }
+
+  return data as Marker[];
 }
 
 /**
@@ -152,6 +218,22 @@ export async function updateMarkerAction(
   const result = getMarkerPayload(formData);
   if ("error" in result) return { success: false, error: result.error };
 
+  if (id.startsWith("default-")) {
+    const { data, error } = await supabase
+      .from("markers")
+      .insert([result.payload])
+      .select()
+      .single();
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/");
+    revalidatePath("/admin/dashboard");
+    return { success: true, data: data as Marker };
+  }
+
   const { data, error } = await supabase
     .from("markers")
     .update(result.payload)
@@ -173,6 +255,12 @@ export async function updateMarkerAction(
  * Hapus marker
  */
 export async function deleteMarkerAction(id: string): Promise<ActionResult> {
+  if (id.startsWith("default-")) {
+    revalidatePath("/");
+    revalidatePath("/admin/dashboard");
+    return { success: true };
+  }
+
   const supabase = await createClient();
 
   const { error } = await supabase.from("markers").delete().eq("id", id);
@@ -194,6 +282,12 @@ export async function toggleMarkerStatusAction(
   id: string,
   nextStatus: boolean
 ): Promise<ActionResult> {
+  if (id.startsWith("default-")) {
+    revalidatePath("/");
+    revalidatePath("/admin/dashboard");
+    return { success: true };
+  }
+
   const supabase = await createClient();
 
   const { error } = await supabase

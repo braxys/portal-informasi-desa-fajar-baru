@@ -81,10 +81,10 @@ export function getCategoryLabel(jenis: MarkerJenisInfo): { label: string; badge
   switch (jenis) {
     case "kantor":
       return { label: "Kantor Pemerintahan", badgeClass: "bg-teal-50 text-teal-800 border-teal-200", colorHex: "#0f766e" };
-    case "fasilitas":
-      return { label: "Fasilitas Umum", badgeClass: "bg-indigo-50 text-indigo-800 border-indigo-200", colorHex: "#4338ca" };
     case "layanan":
       return { label: "Layanan Warga", badgeClass: "bg-amber-50 text-amber-800 border-amber-200", colorHex: "#d97706" };
+    case "pendidikan":
+      return { label: "Pendidikan", badgeClass: "bg-rose-50 text-rose-800 border-rose-200", colorHex: "#e11d48" };
     default:
       return { label: "Lokasi Desa", badgeClass: "bg-slate-50 text-slate-800 border-slate-200", colorHex: "#0f766e" };
   }
@@ -94,8 +94,8 @@ function getCategoryIconSvg(category: MarkerJenisInfo): string {
   if (category === "kantor") {
     return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 18h16M6 18v-7M10 18v-7M14 18v-7M18 18v-7M12 2l10 7H2z"/></svg>`;
   }
-  if (category === "fasilitas") {
-    return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>`;
+  if (category === "pendidikan") {
+    return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6"/><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
   }
   return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
 }
@@ -281,9 +281,9 @@ export function GeographicMap({
                   className={`flex items-center justify-between px-3.5 py-2 text-xs font-bold border-b ${
                     marker.jenis_info === "kantor"
                       ? "bg-teal-50 text-teal-800 border-teal-100"
-                      : marker.jenis_info === "fasilitas"
-                        ? "bg-indigo-50 text-indigo-800 border-indigo-100"
-                        : "bg-amber-50 text-amber-800 border-amber-100"
+                      : marker.jenis_info === "layanan"
+                        ? "bg-amber-50 text-amber-800 border-amber-100"
+                        : "bg-rose-50 text-rose-800 border-rose-100"
                   }`}
                 >
                   <span className="flex items-center gap-1.5 uppercase tracking-wider text-[10px]">
@@ -291,9 +291,9 @@ export function GeographicMap({
                       className={`inline-block w-2 h-2 rounded-full ${
                         marker.jenis_info === "kantor"
                           ? "bg-teal-600"
-                          : marker.jenis_info === "fasilitas"
-                            ? "bg-indigo-600"
-                            : "bg-amber-600"
+                          : marker.jenis_info === "layanan"
+                            ? "bg-amber-600"
+                            : "bg-rose-600"
                       }`}
                     />
                     {category.label}

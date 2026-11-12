@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { Marker, MarkerJenisInfo } from "@/types/database";
+import { DEFAULT_MARKERS } from "@/lib/default-markers";
 import {
   createMarkerAction,
   updateMarkerAction,
@@ -15,8 +16,8 @@ interface MarkersManagerProps {
 
 const JENIS_OPTIONS: { value: MarkerJenisInfo; label: string }[] = [
   { value: "kantor", label: "Kantor" },
-  { value: "fasilitas", label: "Fasilitas" },
   { value: "layanan", label: "Layanan" },
+  { value: "pendidikan", label: "Pendidikan" },
 ];
 
 const EMPTY_FORM = {
@@ -24,13 +25,15 @@ const EMPTY_FORM = {
   latitude: "",
   longitude: "",
   keterangan: "",
-  jenis_info: "fasilitas" as MarkerJenisInfo,
+  jenis_info: "layanan" as MarkerJenisInfo,
   is_active: true,
   display_order: 0,
 };
 
 export function MarkersManager({ initialMarkers }: MarkersManagerProps) {
-  const [markers, setMarkers] = useState<Marker[]>(initialMarkers);
+  const [markers, setMarkers] = useState<Marker[]>(
+    initialMarkers && initialMarkers.length > 0 ? initialMarkers : DEFAULT_MARKERS
+  );
   const [isPending, startTransition] = useTransition();
   const [modal, setModal] = useState<"add" | "edit" | null>(null);
   const [editingMarker, setEditingMarker] = useState<Marker | null>(null);

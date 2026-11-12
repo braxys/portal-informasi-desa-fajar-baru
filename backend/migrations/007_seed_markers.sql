@@ -15,21 +15,12 @@ VALUES
     1
 ),
 (
-    'Puskesdes Fajar Baru',
-    -5.3392000,
-    105.2672000,
-    'Pusat pelayanan kesehatan dasar, pemeriksaan warga, dan imunisasi desa.',
-    'fasilitas',
+    'SDN 1 Fajar Baru',
+    -5.3439045,
+    105.2682266,
+    'Fasilitas pendidikan dasar negeri formal untuk siswa-siswi warga Fajar Baru.',
+    'pendidikan',
     true,
     2
-),
-(
-    'Posyandu Lansia Sentosa',
-    -5.3468000,
-    105.2660000,
-    'Pos pelayanan terpadu kesehatan lansia dan balita warga Fajar Baru.',
-    'layanan',
-    true,
-    3
 )
 ON CONFLICT ON CONSTRAINT uq_markers_name_coords DO NOTHING;

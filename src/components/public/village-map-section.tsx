@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { Icon } from "@/components/shared/icons";
 import type { Marker, MarkerJenisInfo } from "@/types/database";
+import { DEFAULT_MARKERS } from "@/lib/default-markers";
 
 const GeographicMap = dynamic(
   () => import("@/components/public/geographic-map").then((module) => module.GeographicMap),
@@ -17,47 +18,8 @@ interface VillageMapSectionProps {
 const filters: { value: "semua" | MarkerJenisInfo; label: string }[] = [
   { value: "semua", label: "Semua Kategori" },
   { value: "kantor", label: "Kantor" },
-  { value: "fasilitas", label: "Fasilitas" },
   { value: "layanan", label: "Layanan" },
-];
-
-const DEFAULT_SUPPLEMENTAL_MARKERS: Marker[] = [
-  {
-    id: "default-kantor",
-    name: "Balai Desa Fajar Baru",
-    latitude: -5.3436945,
-    longitude: 105.2680212,
-    keterangan: "Pusat pelayanan administrasi kependudukan, surat pengantar, perizinan, dan koordinasi pemerintahan Desa Fajar Baru.",
-    jenis_info: "kantor",
-    is_active: true,
-    display_order: 1,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "default-fasilitas",
-    name: "Puskesdes Fajar Baru",
-    latitude: -5.3392,
-    longitude: 105.2672,
-    keterangan: "Pos kesehatan desa untuk pemeriksaan kesehatan umum, posyandu balita, penanganan darurat ringan, dan imunisasi warga.",
-    jenis_info: "fasilitas",
-    is_active: true,
-    display_order: 2,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "default-layanan",
-    name: "Posyandu Lansia Sentosa",
-    latitude: -5.3468,
-    longitude: 105.266,
-    keterangan: "Pos pelayanan terpadu pembinaan kesehatan lansia, cek tensi rutin, senam sehat, dan posko informasi kegiatan warga.",
-    jenis_info: "layanan",
-    is_active: true,
-    display_order: 3,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
+  { value: "pendidikan", label: "Pendidikan" },
 ];
 
 export function VillageMapSection({ markers }: VillageMapSectionProps) {
@@ -66,10 +28,10 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
 
   // Jika data database kurang dari 2, lengkapi dengan titik patokan resmi Fajar Baru
   const enrichedMarkers = useMemo(() => {
-    if (!markers || markers.length === 0) return DEFAULT_SUPPLEMENTAL_MARKERS;
+    if (!markers || markers.length === 0) return DEFAULT_MARKERS;
     if (markers.length === 1) {
       const existingNames = new Set(markers.map((m) => m.name.toLowerCase()));
-      const extra = DEFAULT_SUPPLEMENTAL_MARKERS.filter(
+      const extra = DEFAULT_MARKERS.filter(
         (m) => !existingNames.has(m.name.toLowerCase())
       );
       return [...markers, ...extra];
@@ -120,7 +82,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                 <Icon name="map" />
               </div>
               <div>
-                <h3 className="font-bold text-slate-900 text-base">Peta Fasilitas & Lokasi Desa</h3>
+                <h3 className="font-bold text-slate-900 text-base">Peta Titik & Lokasi Desa</h3>
                 <p className="text-xs text-slate-500">
                   {visibleMarkers.length} titik lokasi ditampilkan di Desa Fajar Baru
                 </p>
@@ -171,8 +133,8 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                     >
                       <span className={`w-1.5 h-1.5 rounded-full ${
                         marker.jenis_info === "kantor" ? (isCurrent ? "bg-white" : "bg-teal-600") :
-                        marker.jenis_info === "fasilitas" ? (isCurrent ? "bg-white" : "bg-indigo-600") :
-                        (isCurrent ? "bg-white" : "bg-amber-600")
+                        marker.jenis_info === "layanan" ? (isCurrent ? "bg-white" : "bg-amber-600") :
+                        (isCurrent ? "bg-white" : "bg-rose-600")
                       }`} />
                       <span>{marker.name}</span>
                     </button>
@@ -208,16 +170,16 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${
                       selectedMarker.jenis_info === "kantor"
                         ? "bg-teal-50 text-teal-800 border border-teal-200"
-                        : selectedMarker.jenis_info === "fasilitas"
-                          ? "bg-indigo-50 text-indigo-800 border border-indigo-200"
-                          : "bg-amber-50 text-amber-800 border border-amber-200"
+                        : selectedMarker.jenis_info === "layanan"
+                          ? "bg-amber-50 text-amber-800 border border-amber-200"
+                          : "bg-rose-50 text-rose-800 border border-rose-200"
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${
                         selectedMarker.jenis_info === "kantor" ? "bg-teal-600" :
-                        selectedMarker.jenis_info === "fasilitas" ? "bg-indigo-600" : "bg-amber-600"
+                        selectedMarker.jenis_info === "layanan" ? "bg-amber-600" : "bg-rose-600"
                       }`} />
                       {selectedMarker.jenis_info === "kantor" ? "Kantor Pemerintahan" :
-                       selectedMarker.jenis_info === "fasilitas" ? "Fasilitas Umum" : "Layanan Warga"}
+                       selectedMarker.jenis_info === "layanan" ? "Layanan Warga" : "Pendidikan"}
                     </span>
                     <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 border border-emerald-200">
                       Aktif
@@ -228,10 +190,10 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                   <div className="flex items-start gap-3.5">
                     <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm text-white ${
                       selectedMarker.jenis_info === "kantor" ? "bg-gradient-to-br from-teal-600 to-emerald-700" :
-                      selectedMarker.jenis_info === "fasilitas" ? "bg-gradient-to-br from-indigo-600 to-blue-700" :
-                      "bg-gradient-to-br from-amber-500 to-orange-600"
+                      selectedMarker.jenis_info === "layanan" ? "bg-gradient-to-br from-amber-500 to-orange-600" :
+                      "bg-gradient-to-br from-rose-500 to-pink-600"
                     }`}>
-                      <Icon name="pin" size={24} />
+                      <Icon name={selectedMarker.jenis_info === "pendidikan" ? "graduation" : "pin"} size={24} />
                     </div>
                     <div>
                       <h4 className="text-xl font-extrabold leading-snug text-slate-900">
