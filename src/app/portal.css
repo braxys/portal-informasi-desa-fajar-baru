@@ -420,9 +420,8 @@
 
   .secondary-button {
     border: 1px solid #dbe4df;
-    background: rgb(255 255 255 / 0.75);
+    background: #ffffff;
     color: #334155;
-    backdrop-filter: blur(10px);
   }
 
   .secondary-button:hover {
@@ -569,13 +568,6 @@
 }
 
 @layer utilities {
-  .gradient-text {
-    background: linear-gradient(105deg, #059669 10%, #0891b2 90%);
-    background-clip: text;
-    color: transparent;
-    -webkit-background-clip: text;
-  }
-
   .hero-grid {
     background-image:
       linear-gradient(rgb(15 118 110 / 0.055) 1px, transparent 1px),

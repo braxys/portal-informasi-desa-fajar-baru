@@ -97,7 +97,7 @@ export default function AdminLoginPage() {
           className="relative flex min-h-[390px] flex-col justify-between overflow-hidden p-6 text-white sm:min-h-[430px] sm:p-8 lg:min-h-[680px] lg:p-10 xl:p-12"
         >
           <VillageLandscape />
-          <div className="relative z-10 flex w-fit items-center gap-2.5 rounded-2xl border border-white/55 bg-white/90 px-3 py-2 text-slate-900 shadow-lg backdrop-blur-md">
+          <div className="relative z-10 flex w-fit items-center gap-2.5 rounded-2xl border border-white/55 bg-white px-3 py-2 text-slate-900 shadow-lg">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-700 text-xs font-extrabold tracking-tight text-white">
               DF
             </span>
@@ -112,7 +112,7 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="relative z-10 mt-12 max-w-[560px]">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.13em] text-white/95 backdrop-blur-md">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-slate-950/45 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.13em] text-white/95">
               <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_#6ee7b7]" />
               Portal terpadu masyarakat
             </div>
@@ -133,7 +133,7 @@ export default function AdminLoginPage() {
               ].map(([value, label]) => (
                 <div
                   key={label}
-                  className="rounded-2xl border border-white/15 bg-slate-950/25 px-3 py-3 backdrop-blur-md sm:px-4 sm:py-4"
+                  className="rounded-2xl border border-white/15 bg-slate-950/45 px-3 py-3 sm:px-4 sm:py-4"
                 >
                   <p className="text-sm font-extrabold sm:text-base">{value}</p>
                   <p className="mt-1 text-[9px] font-medium leading-4 text-white/75 sm:text-[10px]">

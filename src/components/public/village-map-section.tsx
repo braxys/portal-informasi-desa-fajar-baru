@@ -68,7 +68,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
           </p>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-[2rem] border border-white bg-white shadow-[0_24px_70px_-30px_rgba(15,67,58,.3)]">
+        <div className="mt-12 overflow-hidden rounded-[1.75rem] border border-white bg-white shadow-[0_24px_70px_-30px_rgba(15,67,58,.3)]">
           {/* Header Kontrol: Filter Kategori */}
           <div className="flex flex-col gap-4 border-b border-slate-100 p-5 sm:px-7 sm:flex-row sm:items-center sm:justify-between">
             {/* Title & Info */}
@@ -150,8 +150,8 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                 markerStyle="modern"
               />
               {/* Petunjuk Interaksi Melayang */}
-              <div className="absolute bottom-4 left-4 z-[500] hidden sm:flex items-center gap-2 rounded-xl bg-white/95 backdrop-blur px-3 py-1.5 text-[11px] text-slate-600 shadow-md border border-slate-200/80">
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+              <div className="absolute bottom-4 left-4 z-[500] hidden sm:flex items-center gap-2 rounded-xl bg-white px-3 py-1.5 text-[11px] text-slate-600 shadow-md border border-slate-200/80">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
                 <span>Klik marker untuk fokus & buka detail</span>
               </div>
             </div>
