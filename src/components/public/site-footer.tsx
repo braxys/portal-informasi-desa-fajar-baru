@@ -53,6 +53,9 @@ export function SiteFooter() {
               <Link className="footer-link" href="/">
                 Beranda
               </Link>
+              <Link className="footer-link" href="/#profil">
+                Profil desa
+              </Link>
               <Link className="footer-link" href="/layanan">
                 Layanan publik
               </Link>

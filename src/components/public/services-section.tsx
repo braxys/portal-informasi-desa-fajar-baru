@@ -14,11 +14,11 @@ export async function ServicesSection() {
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="section-kicker">Akses Cepat</p>
-            <h2 className="section-title">Layanan dalam satu genggaman.</h2>
+            <h2 className="section-title">Layanan warga Desa Fajar Baru.</h2>
           </div>
           <p className="max-w-md text-sm leading-7 text-slate-500 sm:text-base">
             Temukan kanal resmi dan layanan publik yang paling sering
-            dibutuhkan masyarakat.
+            dibutuhkan masyarakat Desa Fajar Baru.
           </p>
         </div>
 

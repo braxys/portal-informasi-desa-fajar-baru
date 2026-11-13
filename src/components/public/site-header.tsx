@@ -8,6 +8,7 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const sections = [
     ["Beranda", "/#beranda"],
+    ["Profil", "/#profil"],
     ["Layanan", "/#layanan"],
     ["Peta Desa", "/#peta"],
     ["Kontak", "/#kontak"],
