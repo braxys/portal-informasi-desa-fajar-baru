@@ -1,7 +1,12 @@
 import Image from "next/image";
 import { Icon } from "@/components/shared/icons";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  serviceCount: number;
+  markerCount: number;
+}
+
+export function HeroSection({ serviceCount, markerCount }: HeroSectionProps) {
   return (
     <section id="beranda" className="relative scroll-mt-20 pt-20">
       <div className="hero-grid absolute inset-0 top-20 opacity-60" />
@@ -31,27 +36,26 @@ export function HeroSection() {
           <div className="mt-11 flex flex-wrap gap-x-8 gap-y-4 border-t border-slate-200 pt-6">
             <div>
               <div className="text-2xl font-bold tracking-tight text-slate-900">
-                5+
+                {serviceCount > 0 ? serviceCount : "—"}
               </div>
               <div className="mt-1 text-xs font-medium text-slate-500">
-                Layanan digital
+                Layanan warga
               </div>
             </div>
             <div>
               <div className="text-2xl font-bold tracking-tight text-slate-900">
-                24/7
+                {markerCount > 0 ? markerCount : "—"}
               </div>
               <div className="mt-1 text-xs font-medium text-slate-500">
-                Akses informasi
+                Titik lokasi peta
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-1.5 text-sm font-bold text-fajar-700">
-                <span className="h-2 w-2 rounded-full bg-fajar-500" />{" "}
-                Aktif
+              <div className="text-2xl font-bold tracking-tight text-slate-900">
+                35365
               </div>
-              <div className="mt-2 text-xs font-medium text-slate-500">
-                Status portal
+              <div className="mt-1 text-xs font-medium text-slate-500">
+                Kode pos
               </div>
             </div>
           </div>
@@ -60,9 +64,10 @@ export function HeroSection() {
         <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
           <div className="hero-image relative aspect-[4/4.5] overflow-hidden rounded-[1.75rem] shadow-[0_30px_80px_-25px_rgba(15,67,58,.38)]">
             <Image
-              src="https://images.unsplash.com/photo-1513415756790-2ac1db1297d0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&q=85&w=1200"
-              alt="Pemandangan hijau persawahan sebagai representasi alam Desa Fajar Baru"
+              src="/images/hero-persawahan.jpg"
+              alt="Ilustrasi persawahan hijau"
               fill
+              priority
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="h-full w-full object-cover"
             />

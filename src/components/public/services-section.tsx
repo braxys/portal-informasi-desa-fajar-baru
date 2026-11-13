@@ -1,9 +1,12 @@
-import { Icon } from "@/components/shared/icons";
-import { getServices, getSocials } from "@/actions/services";
+import { Icon, type IconName } from "@/components/shared/icons";
+import type { ServiceItem } from "@/actions/services";
 
-export async function ServicesSection() {
-  const [services, socials] = await Promise.all([getServices(), getSocials()]);
+interface ServicesSectionProps {
+  services: ServiceItem[];
+  socials: { id: string; label: string; icon: IconName; href: string }[];
+}
 
+export function ServicesSection({ services, socials }: ServicesSectionProps) {
   return (
     <section
       id="layanan"

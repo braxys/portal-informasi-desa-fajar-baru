@@ -125,23 +125,6 @@ export default function AdminLoginPage() {
               Kelola layanan publik, informasi warga, dan potensi Desa Fajar
               Baru dalam satu ruang kerja yang aman.
             </p>
-            <div className="mt-7 grid max-w-[480px] grid-cols-3 gap-2 sm:gap-3">
-              {[
-                ["12", "Layanan aktif"],
-                ["24/7", "Akses informasi"],
-                ["Aman", "Data terlindungi"],
-              ].map(([value, label]) => (
-                <div
-                  key={label}
-                  className="rounded-2xl border border-white/15 bg-slate-950/45 px-3 py-3 sm:px-4 sm:py-4"
-                >
-                  <p className="text-sm font-extrabold sm:text-base">{value}</p>
-                  <p className="mt-1 text-[9px] font-medium leading-4 text-white/75 sm:text-[10px]">
-                    {label}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className="relative z-10 mt-8 flex items-center justify-between gap-3 text-[10px] font-medium text-white/80">
