@@ -95,6 +95,7 @@ const jsonLd = {
         "Pemdes Fajar Baru",
         "Pemerintahan Desa Fajar Baru Jati Agung",
       ],
+      identifier: "18.01.13.2009",
       url: siteUrl,
       logo: `${siteUrl}/brand/logo-lampung-selatan.png`,
       image: `${siteUrl}/brand/logo-lampung-selatan.png`,

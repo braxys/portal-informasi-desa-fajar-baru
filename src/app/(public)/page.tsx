@@ -1,5 +1,6 @@
 import { getPublicMarkers } from "@/actions/markers";
 import { HeroSection } from "@/components/public/hero-section";
+import { ProfileSection } from "@/components/public/profile-section";
 import { ServicesSection } from "@/components/public/services-section";
 import { SiteFooter } from "@/components/public/site-footer";
 import { SiteHeader } from "@/components/public/site-header";
@@ -13,6 +14,7 @@ export default async function HomePage() {
       <SiteHeader />
       <main>
         <HeroSection />
+        <ProfileSection />
         <ServicesSection />
         <VillageMapSection markers={markers} />
       </main>
