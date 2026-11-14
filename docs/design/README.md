@@ -12,7 +12,8 @@ Folder ini berisi deliverable UI/UX **Fase 1** untuk Portal Informasi Desa Fajar
 | Palet warna hijau-biru (hex) | Selesai | [`brand-guidelines.md`](./brand-guidelines.md) |
 | Token warna siap pakai | Selesai | [`color-tokens.css`](./color-tokens.css) |
 | Aset logo resmi | Selesai | [`public/brand/logo-lampung-selatan.png`](../../public/brand/logo-lampung-selatan.png) |
-| Set ikon tautan (SVG) | Selesai | [`public/icons/`](../../public/icons/) |
+| Set ikon tautan (SVG) | Selesai | [`src/components/shared/icons.tsx`](../../src/components/shared/icons.tsx) |
+| Ikon PWA (192/512/maskable) | Selesai | [`public/icons/`](../../public/icons/) |
 | Stiker QR siap cetak | Fase 4 | — |
 
 > Logo yang dipakai adalah **Lambang Kabupaten Lampung Selatan** sesuai aset resmi yang diberikan. Nama Desa Fajar Baru tetap tampil sebagai teks di samping logo.

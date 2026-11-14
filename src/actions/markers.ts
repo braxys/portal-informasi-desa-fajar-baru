@@ -3,26 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createPublicClient } from "@/lib/supabase/public";
-import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
 import { DEFAULT_MARKERS } from "@/lib/default-markers";
-
-export interface ActionResult<T = unknown> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
+import { isHttpUrl } from "@/lib/validation";
+import type { ActionResult } from "@/types/actions";
+import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
 
 function isMarkerJenisInfo(value: string): value is MarkerJenisInfo {
   return value === "kantor" || value === "layanan" || value === "pendidikan";
-}
-
-function isHttpUrl(value: string): boolean {
-  try {
-    const protocol = new URL(value).protocol;
-    return protocol === "http:" || protocol === "https:";
-  } catch {
-    return false;
-  }
 }
 
 function getMarkerPayload(
