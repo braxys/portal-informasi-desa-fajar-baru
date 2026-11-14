@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { dmSans, manrope } from "./fonts";
 import "./globals.css";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://fajarbaru.desa.id").replace(/\/$/, "");
@@ -27,9 +28,6 @@ export const metadata: Metadata = {
   authors: [{ name: "Pemerintah Desa Fajar Baru" }],
   creator: "Pemerintah Desa Fajar Baru",
   publisher: "Pemerintah Desa Fajar Baru",
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "id_ID",
@@ -40,10 +38,10 @@ export const metadata: Metadata = {
       "Portal resmi informasi pemerintahan, peta wilayah, dan layanan publik digital Desa Fajar Baru, Kecamatan Jati Agung, Kabupaten Lampung Selatan.",
     images: [
       {
-        url: "/brand/logo-lampung-selatan.png",
-        width: 800,
-        height: 600,
-        alt: "Logo Desa Fajar Baru, Lampung Selatan",
+        url: "/brand/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Portal Informasi Desa Fajar Baru, Kecamatan Jati Agung, Lampung Selatan",
       },
     ],
   },
@@ -52,7 +50,7 @@ export const metadata: Metadata = {
     title: "Desa Fajar Baru | Portal Informasi & Layanan Masyarakat",
     description:
       "Pusat informasi dan layanan publik digital Desa Fajar Baru, Kecamatan Jati Agung, Kabupaten Lampung Selatan.",
-    images: ["/brand/logo-lampung-selatan.png"],
+    images: ["/brand/og-image.png"],
   },
   robots: {
     index: true,
@@ -64,16 +62,6 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  icons: {
-    icon: [
-      { url: "/brand/logo-lampung-selatan.png" },
-      { url: "/brand/logo-lampung-selatan.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [
-      { url: "/brand/logo-lampung-selatan.png" },
-    ],
-    shortcut: ["/brand/logo-lampung-selatan.png"],
   },
   other: {
     "geo.region": "ID-LA",
@@ -98,7 +86,7 @@ const jsonLd = {
       identifier: "18.01.13.2009",
       url: siteUrl,
       logo: `${siteUrl}/brand/logo-lampung-selatan.png`,
-      image: `${siteUrl}/brand/logo-lampung-selatan.png`,
+      image: `${siteUrl}/brand/og-image.png`,
       description:
         "Portal resmi informasi pemerintahan, pemetaan wilayah, dan layanan publik digital Desa Fajar Baru, Kecamatan Jati Agung, Kabupaten Lampung Selatan.",
       telephone: "+6281234567890",
@@ -142,7 +130,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="id" className={`${dmSans.variable} ${manrope.variable}`}>
       <head>
         <script
           type="application/ld+json"

@@ -64,14 +64,14 @@ export function HeroSection({ serviceCount, markerCount }: HeroSectionProps) {
         <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
           <div className="hero-image relative aspect-[4/4.5] overflow-hidden rounded-[1.75rem] shadow-[0_30px_80px_-25px_rgba(15,67,58,.38)]">
             <Image
-              src="/images/hero-persawahan.jpg"
-              alt="Ilustrasi persawahan hijau"
+              src="/images/fajar-baru.jpg"
+              alt="Gapura bambu bertuliskan Fajar Baru dengan bendera desa"
               fill
               priority
               sizes="(min-width: 1024px) 50vw, 100vw"
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover object-[center_55%]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-fajar-900/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-slate-950/10" />
             <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
               <div className="rounded-2xl border border-white/25 bg-slate-950/65 p-5 text-white">
                 <div className="flex items-center gap-3">
@@ -82,8 +82,9 @@ export function HeroSection({ serviceCount, markerCount }: HeroSectionProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-fajar-100">
                       Visi Desa
                     </p>
-                    <p className="mt-1 font-semibold leading-snug">
-                      Maju, mandiri, dan melayani sepenuh hati.
+                    <p className="mt-1 text-sm font-semibold leading-snug">
+                      Terwujudnya Desa Fajar Baru yang religius, bermartabat,
+                      maju, mandiri, sehat dan sejahtera.
                     </p>
                   </div>
                 </div>
