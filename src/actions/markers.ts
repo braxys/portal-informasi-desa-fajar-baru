@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
 import { DEFAULT_MARKERS } from "@/lib/default-markers";
 
@@ -103,10 +104,13 @@ function getMarkerPayload(
 }
 
 /**
- * Mengambil semua marker aktif untuk peta publik
+ * Mengambil semua marker aktif untuk peta publik.
+ *
+ * Memakai client anon tanpa cookie agar halaman beranda bisa di-cache
+ * (ISR/statis) dan tidak dirender ulang di setiap request.
  */
 export async function getPublicMarkers(): Promise<Marker[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data, error } = await supabase
     .from("markers")
@@ -228,6 +232,34 @@ export async function toggleMarkerStatusAction(
 
   if (error) {
     return { success: false, error: error.message };
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/dashboard");
+
+  return { success: true };
+}
+
+/**
+ * Menyimpan urutan baru seluruh titik lokasi
+ */
+export async function reorderMarkersAction(
+  orderedIds: string[]
+): Promise<ActionResult> {
+  const supabase = await createClient();
+
+  const updates = orderedIds.map((id, index) =>
+    supabase.from("markers").update({ display_order: index + 1 }).eq("id", id)
+  );
+
+  const results = await Promise.all(updates);
+  const hasError = results.some((res) => res.error);
+
+  if (hasError) {
+    return {
+      success: false,
+      error: "Gagal memperbarui beberapa urutan titik lokasi.",
+    };
   }
 
   revalidatePath("/");
