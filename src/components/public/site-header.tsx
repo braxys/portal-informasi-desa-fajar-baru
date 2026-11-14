@@ -3,16 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Icon, VillageLogo } from "@/components/shared/icons";
+import { siteConfig } from "@/lib/site-config";
+
+const sections = [
+  ["Beranda", "/#beranda"],
+  ["Profil", "/#profil"],
+  ["Layanan", "/#layanan"],
+  ["Peta Desa", "/#peta"],
+  ["Kontak", "/#kontak"],
+] as const;
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const sections = [
-    ["Beranda", "/#beranda"],
-    ["Profil", "/#profil"],
-    ["Layanan", "/#layanan"],
-    ["Peta Desa", "/#peta"],
-    ["Kontak", "/#kontak"],
-  ];
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
@@ -38,13 +40,9 @@ export function SiteHeader() {
           aria-label="Navigasi utama"
         >
           {sections.map(([label, href]) => (
-            <a
-              key={label}
-              className="nav-link"
-              href={href}
-            >
+            <Link key={label} className="nav-link" href={href}>
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -79,19 +77,41 @@ export function SiteHeader() {
           aria-label="Navigasi mobile"
         >
           {sections.map(([label, href]) => (
-            <a
+            <Link
               key={label}
               href={href}
               onClick={() => setMenuOpen(false)}
               className="flex items-center justify-between border-b border-slate-100 py-3.5 text-sm font-semibold last:border-0"
             >
               {label} <Icon name="chevron" size={18} />
-            </a>
+            </Link>
           ))}
+          <div className="mt-3 flex items-center gap-3 border-t border-slate-100 pt-4">
+            <span className="text-xs font-semibold text-slate-500">
+              Media sosial
+            </span>
+            <div className="flex gap-2">
+              {siteConfig.sameAs.map((href) => (
+                <a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Kunjungi profil resmi ${new URL(href).hostname}`}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-fajar-300 hover:text-fajar-700"
+                >
+                  <Icon
+                    name={href.includes("instagram") ? "instagram" : "tiktok"}
+                    size={17}
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
           <Link
             href="/admin/login"
             onClick={() => setMenuOpen(false)}
-            className="mt-2 flex items-center justify-center rounded-xl bg-slate-900 py-3 text-sm font-bold text-white"
+            className="mt-3 flex items-center justify-center rounded-xl bg-slate-900 py-3 text-sm font-bold text-white"
           >
             Login Admin
           </Link>
