@@ -330,7 +330,7 @@ export function GeographicMap({
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-1.5 w-full rounded-xl bg-slate-900 px-3 py-2 text-xs font-bold text-white transition hover:bg-teal-700 shadow-sm"
                   >
-                    <span>Buka Rute di Google Maps</span>
+                    <span>Lihat di Google Maps</span>
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                       <path d="M5 12h14M14 7l5 5-5 5" />
                     </svg>

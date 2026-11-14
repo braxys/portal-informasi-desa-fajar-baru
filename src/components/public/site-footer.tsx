@@ -31,10 +31,10 @@ export function SiteFooter() {
                 </span>
               </div>
               <a
-                href="mailto:desafajarbaru@gmail.com"
+                href="mailto:fajarbaru.lamsel@gmail.com"
                 className="flex items-center gap-3 transition hover:text-white"
               >
-                <Icon name="mail" size={18} /> desafajarbaru@gmail.com
+                <Icon name="mail" size={18} /> fajarbaru.lamsel@gmail.com
               </a>
               <a
                 href="tel:+6281234567890"
@@ -69,7 +69,10 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-7 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2025 Pemerintah Desa Fajar Baru. Hak cipta dilindungi.</p>
+          <p>
+            © {new Date().getFullYear()} Pemerintah Desa Fajar Baru. Hak cipta
+            dilindungi.
+          </p>
           <p>Dibuat untuk pelayanan masyarakat yang lebih baik.</p>
         </div>
       </div>

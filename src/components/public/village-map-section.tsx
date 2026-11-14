@@ -64,11 +64,11 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
           <p className="section-kicker">Jelajahi Wilayah</p>
           <h2 className="section-title mx-auto">Peta wilayah Desa Fajar Baru.</h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-            Peta geografis Desa Fajar Baru dengan garis batas administrasi resmi BPS/HDX 2020. Klik marker untuk melihat penjelasan detail lokasi dan petunjuk arah.
+            Peta geografis Desa Fajar Baru dengan garis batas administrasi resmi BPS/HDX 2020. Klik marker untuk melihat penjelasan detail lokasi dan membukanya di Google Maps.
           </p>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-[2rem] border border-white bg-white shadow-[0_24px_70px_-30px_rgba(15,67,58,.3)]">
+        <div className="mt-12 overflow-hidden rounded-[1.75rem] border border-white bg-white shadow-[0_24px_70px_-30px_rgba(15,67,58,.3)]">
           {/* Header Kontrol: Filter Kategori */}
           <div className="flex flex-col gap-4 border-b border-slate-100 p-5 sm:px-7 sm:flex-row sm:items-center sm:justify-between">
             {/* Title & Info */}
@@ -150,9 +150,9 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                 markerStyle="modern"
               />
               {/* Petunjuk Interaksi Melayang */}
-              <div className="absolute bottom-4 left-4 z-[500] hidden sm:flex items-center gap-2 rounded-xl bg-white/95 backdrop-blur px-3 py-1.5 text-[11px] text-slate-600 shadow-md border border-slate-200/80">
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                <span>Klik marker untuk fokus & buka detail</span>
+              <div className="absolute bottom-4 left-4 z-[500] hidden sm:flex items-center gap-2 rounded-xl bg-white px-3 py-1.5 text-[11px] text-slate-600 shadow-md border border-slate-200/80">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
+                <span>Klik marker untuk melihat detail</span>
               </div>
             </div>
 
@@ -160,8 +160,8 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
             <aside className="border-t border-slate-100 bg-white p-5 sm:p-7 lg:border-l lg:border-t-0 flex flex-col justify-between" aria-live="polite">
               {selectedMarker ? (
                 <div className="space-y-5">
-                  {/* Status & Kategori Badge */}
-                  <div className="flex items-center justify-between">
+                  {/* Kategori Badge */}
+                  <div>
                     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${
                       selectedMarker.jenis_info === "kantor"
                         ? "bg-teal-50 text-teal-800 border border-teal-200"
@@ -175,9 +175,6 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                       }`} />
                       {selectedMarker.jenis_info === "kantor" ? "Kantor Pemerintahan" :
                        selectedMarker.jenis_info === "layanan" ? "Layanan Warga" : "Pendidikan"}
-                    </span>
-                    <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 border border-emerald-200">
-                      Aktif
                     </span>
                   </div>
 
@@ -194,16 +191,13 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                       <h4 className="text-xl font-extrabold leading-snug text-slate-900">
                         {selectedMarker.name}
                       </h4>
-                      <p className="mt-0.5 text-xs text-slate-500">
-                        Wilayah Administrasi Desa Fajar Baru
-                      </p>
                     </div>
                   </div>
 
                   {/* Keterangan / Penjelasan Detail */}
                   <div className="rounded-2xl bg-slate-50 p-4 border border-slate-100">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                      Deskripsi Layanan & Peran
+                      Keterangan
                     </p>
                     <p className="mt-1.5 text-sm leading-relaxed text-slate-700">
                       {selectedMarker.keterangan || "Tidak ada keterangan tambahan untuk lokasi ini."}
@@ -212,16 +206,8 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
 
                   {/* Spesifikasi Detail Teknis */}
                   <div className="space-y-2.5 text-xs">
-                    {/* Alamat & Kecamatan */}
-                    <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-2">
-                      <span className="text-slate-500">Kecamatan / Kab:</span>
-                      <span className="font-semibold text-slate-800 text-right">
-                        Jati Agung, Lampung Selatan
-                      </span>
-                    </div>
-
                     {/* Koordinat GPS */}
-                    <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                    <div className="flex items-center justify-between gap-2">
                       <span className="text-slate-500">Koordinat GPS:</span>
                       <div className="flex items-center gap-1.5">
                         <span className="font-mono font-semibold text-slate-800">
@@ -237,14 +223,6 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                         </button>
                       </div>
                     </div>
-
-                    {/* Status Wilayah */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-slate-500">Batas Desa:</span>
-                      <span className="font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[11px]">
-                        Dalam Area Fajar Baru
-                      </span>
-                    </div>
                   </div>
 
                   {/* Aksi Navigasi */}
@@ -255,7 +233,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                       rel="noopener noreferrer"
                       className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition hover:bg-teal-700 shadow-md"
                     >
-                      Buka Rute di Google Maps <Icon name="arrow" size={17} />
+                      Lihat di Google Maps <Icon name="arrow" size={17} />
                     </a>
                   </div>
                 </div>
@@ -265,11 +243,6 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                   <p className="mt-3 text-sm">Pilih salah satu marker pada peta untuk melihat detail lokasi.</p>
                 </div>
               )}
-
-              {/* Tips Footer */}
-              <div className="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-500 text-center">
-                Pilih marker atau nama lokasi untuk melihat rute & petunjuk arah
-              </div>
             </aside>
           </div>
         </div>

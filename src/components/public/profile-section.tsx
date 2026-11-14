@@ -18,7 +18,7 @@ export function ProfileSection() {
         </div>
 
         {/* Paragraf Semantik untuk SEO */}
-        <div className="mt-8 rounded-2xl border border-fajar-200/60 bg-white/90 p-6 shadow-sm backdrop-blur sm:p-8">
+        <div className="mt-8 rounded-2xl border border-fajar-200/60 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-base leading-relaxed text-slate-700 sm:text-lg">
             <strong>Desa Fajar Baru</strong> merupakan salah satu desa di wilayah <strong>Kecamatan Jati Agung, Kabupaten Lampung Selatan, Provinsi Lampung</strong>. Terletak di lokasi strategis yang berbatasan langsung dengan pusat Kota Bandar Lampung dan koridor pendidikan tinggi, Desa Fajar Baru terus berkembang sebagai kawasan permukiman yang dinamis, mandiri, dan berdaya saing dengan tetap mengedepankan keterbukaan informasi publik serta pelayanan masyarakat yang ramah dan inklusif.
           </p>

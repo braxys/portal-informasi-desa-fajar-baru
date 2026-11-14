@@ -7,6 +7,7 @@ import type { AnalyticsSummary, TrafficEventType } from "@/types/database";
 interface LogEventParams {
   eventType: TrafficEventType;
   linkId?: string;
+  qrCodeId?: string;
   source?: string;
 }
 
@@ -17,6 +18,7 @@ interface LogEventParams {
 export async function logTrafficEvent({
   eventType,
   linkId,
+  qrCodeId,
   source = "direct",
 }: LogEventParams): Promise<{ success: boolean }> {
   try {
@@ -29,6 +31,7 @@ export async function logTrafficEvent({
       {
         event_type: eventType,
         link_id: linkId || null,
+        qr_code_id: qrCodeId || null,
         source: source,
         user_agent: userAgent.slice(0, 500),
       },
@@ -36,12 +39,27 @@ export async function logTrafficEvent({
 
     if (insertError) {
       console.warn("Log traffic gagal:", insertError.message);
+      return { success: false };
     }
 
     // Jika berupa klik link, naikkan agregat counter di tabel links
     if (eventType === "link_click" && linkId) {
       await supabase.rpc("increment_link_click", {
         target_link_id: linkId,
+      });
+    }
+
+    // Jika berupa pindai QR, naikkan agregat counter pindai di tabel links
+    if (eventType === "qr_scan" && linkId) {
+      await supabase.rpc("increment_qr_scan", {
+        target_link_id: linkId,
+      });
+    }
+
+    // Pindai QR mandiri punya counter sendiri di tabel qr_codes
+    if (eventType === "qr_scan" && qrCodeId) {
+      await supabase.rpc("increment_qr_code_scan", {
+        target_qr_code_id: qrCodeId,
       });
     }
 
@@ -55,46 +73,56 @@ export async function logTrafficEvent({
 /**
  * Mengambil ringkasan analitik untuk Dashboard Admin Desa
  * Digunakan sebagai bukti capaian target SDGs 16.10.2 pada laporan akhir
+ *
+ * Perhitungan dilakukan lewat RPC agregasi (COUNT ... GROUP BY) di database,
+ * bukan dengan menarik seluruh baris traffic_logs ke aplikasi. Cara ini tetap
+ * akurat setelah log melewati batas 1000 baris PostgREST, dan hanya
+ * mengirimkan beberapa baris hasil agregat ke server.
  */
 export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
   const supabase = await createClient();
 
-  // 1. Ambil agregat dari traffic_logs
-  const { data: logs, error: logsError } = await supabase
-    .from("traffic_logs")
-    .select("event_type, source, link_id");
+  // 1. Ambil agregat event & sumber dari traffic_logs lewat RPC
+  const { data: summaryRows, error: summaryError } = await supabase.rpc(
+    "traffic_summary",
+  );
 
-  // 2. Ambil klik link dari tabel links
+  // 2. Ambil tautan dengan klik terbanyak langsung dari tabel links
   const { data: links, error: linksError } = await supabase
     .from("links")
     .select("id, title, click_count")
     .order("click_count", { ascending: false });
 
-  if (logsError) {
-    console.error("Gagal mengambil data logs:", logsError.message);
+  if (summaryError) {
+    console.error("Gagal mengambil agregat traffic_logs:", summaryError.message);
   }
   if (linksError) {
     console.error("Gagal mengambil data links:", linksError.message);
   }
 
-  const safeLogs = logs || [];
-  const safeLinks = links || [];
+  const safeRows = (summaryRows || []) as {
+    event_type: TrafficEventType;
+    source: string | null;
+    total: number | string;
+  }[];
 
   let totalPageViews = 0;
   let totalQrScans = 0;
   let totalLinkClicks = 0;
   const sourceBreakdown: Record<string, number> = {};
 
-  safeLogs.forEach((log) => {
-    if (log.event_type === "page_view") totalPageViews++;
-    if (log.event_type === "qr_scan") totalQrScans++;
-    if (log.event_type === "link_click") totalLinkClicks++;
+  for (const row of safeRows) {
+    const total = Number(row.total) || 0;
 
-    const src = log.source || "direct";
-    sourceBreakdown[src] = (sourceBreakdown[src] || 0) + 1;
-  });
+    if (row.event_type === "page_view") totalPageViews += total;
+    if (row.event_type === "qr_scan") totalQrScans += total;
+    if (row.event_type === "link_click") totalLinkClicks += total;
 
-  const topLinks = safeLinks.map((l) => ({
+    const src = row.source || "direct";
+    sourceBreakdown[src] = (sourceBreakdown[src] || 0) + total;
+  }
+
+  const topLinks = (links || []).map((l) => ({
     id: l.id,
     title: l.title,
     clicks: l.click_count || 0,

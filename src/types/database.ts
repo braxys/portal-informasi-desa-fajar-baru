@@ -11,12 +11,32 @@ export interface Link {
   is_featured: boolean;
   display_order: number;
   click_count: number;
+  scan_count: number;
   created_at: string;
   updated_at: string;
 }
 
-export type NewLink = Omit<Link, "id" | "click_count" | "created_at" | "updated_at">;
+export type NewLink = Omit<
+  Link,
+  "id" | "click_count" | "scan_count" | "created_at" | "updated_at"
+>;
 export type UpdateLink = Partial<NewLink>;
+
+export interface QrCode {
+  id: string;
+  title: string;
+  target_url: string;
+  is_active: boolean;
+  scan_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type NewQrCode = Omit<
+  QrCode,
+  "id" | "scan_count" | "created_at" | "updated_at"
+>;
+export type UpdateQrCode = Partial<NewQrCode>;
 
 export type TrafficEventType = "qr_scan" | "page_view" | "link_click";
 
@@ -24,6 +44,7 @@ export interface TrafficLog {
   id: string;
   event_type: TrafficEventType;
   link_id: string | null;
+  qr_code_id: string | null;
   source: string;
   user_agent: string | null;
   ip_hash: string | null;
@@ -64,8 +85,13 @@ export interface Database {
     Tables: {
       links: {
         Row: Link;
-        Insert: Omit<Link, "id" | "created_at" | "updated_at"> & {
+        Insert: Omit<
+          Link,
+          "id" | "click_count" | "scan_count" | "created_at" | "updated_at"
+        > & {
           id?: string;
+          click_count?: number;
+          scan_count?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -88,10 +114,31 @@ export interface Database {
         };
         Update: Partial<Omit<Marker, "id">>;
       };
+      qr_codes: {
+        Row: QrCode;
+        Insert: Omit<
+          QrCode,
+          "id" | "scan_count" | "created_at" | "updated_at"
+        > & {
+          id?: string;
+          scan_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<QrCode, "id">>;
+      };
     };
     Functions: {
       increment_link_click: {
         Args: { target_link_id: string };
+        Returns: void;
+      };
+      increment_qr_scan: {
+        Args: { target_link_id: string };
+        Returns: void;
+      };
+      increment_qr_code_scan: {
+        Args: { target_qr_code_id: string };
         Returns: void;
       };
     };

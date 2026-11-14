@@ -17,7 +17,7 @@ export async function createClient() {
             cookieStore.set(name, value, options);
           });
         } catch {
-          // setAll dipanggil dari Server Component (bisa diabaikan karena session di-refresh oleh middleware)
+          // setAll dipanggil dari Server Component (bisa diabaikan karena session di-refresh oleh proxy)
         }
       },
     },

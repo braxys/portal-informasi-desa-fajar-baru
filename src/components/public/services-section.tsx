@@ -1,9 +1,13 @@
-import { Icon } from "@/components/shared/icons";
-import { getServices, getSocials } from "@/actions/services";
+import { Icon, type IconName } from "@/components/shared/icons";
+import { TrackedLink } from "@/components/public/tracked-link";
+import type { ServiceItem } from "@/actions/services";
 
-export async function ServicesSection() {
-  const [services, socials] = await Promise.all([getServices(), getSocials()]);
+interface ServicesSectionProps {
+  services: ServiceItem[];
+  socials: { id: string; label: string; icon: IconName; href: string }[];
+}
 
+export function ServicesSection({ services, socials }: ServicesSectionProps) {
   return (
     <section
       id="layanan"
@@ -24,8 +28,9 @@ export async function ServicesSection() {
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           {services.map((service, index) => (
-            <a
+            <TrackedLink
               key={service.id}
+              linkId={service.id}
               href={service.href}
               target="_blank"
               rel="noopener noreferrer"
@@ -55,7 +60,7 @@ export async function ServicesSection() {
                   </span>
                 </div>
               </div>
-            </a>
+            </TrackedLink>
           ))}
         </div>
 
@@ -71,15 +76,16 @@ export async function ServicesSection() {
             </div>
             <div className="flex flex-wrap gap-3">
               {socials.map((social) => (
-                <a
+                <TrackedLink
                   key={social.id}
+                  linkId={social.id}
                   href={social.href}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold transition hover:border-fajar-500 hover:bg-fajar-500/20"
                 >
                   <Icon name={social.icon} size={18} /> {social.label}
-                </a>
+                </TrackedLink>
               ))}
             </div>
           </div>
