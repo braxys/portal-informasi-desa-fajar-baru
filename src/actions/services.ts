@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import {
   getLinkCategoryIcon,
   getLinkCategoryLabel,
@@ -31,7 +31,7 @@ const ACCENT_MAP: Record<LinkCategory, string> = {
  * Mengambil data layanan dari database untuk ditampilkan di halaman publik
  */
 export async function getServices(): Promise<ServiceItem[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data, error } = await supabase
     .from("links")
@@ -60,7 +60,7 @@ export async function getServices(): Promise<ServiceItem[]> {
  * Mengambil link media sosial dari database
  */
 export async function getSocials(): Promise<{ id: string; label: string; icon: IconName; href: string }[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data, error } = await supabase
     .from("links")
