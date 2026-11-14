@@ -383,15 +383,6 @@
     transform: scaleX(1);
   }
 
-  .nav-link.active {
-    color: #047857;
-  }
-
-  .nav-link.active::after {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-
   .primary-button,
   .secondary-button {
     display: inline-flex;
@@ -481,10 +472,6 @@
     transform: scale(1.18);
   }
 
-  .service-emerald::before {
-    background: #34d399;
-  }
-
   .service-blue::before {
     background: #38bdf8;
   }
@@ -511,44 +498,6 @@
     box-shadow: 0 12px 24px -16px rgb(15 23 42 / 0.5);
   }
 
-  .map-marker {
-    position: absolute;
-    display: flex;
-    width: 44px;
-    height: 44px;
-    align-items: center;
-    justify-content: center;
-    border: 4px solid white;
-    border-radius: 999px;
-    background: #0f766e;
-    color: white;
-    box-shadow: 0 8px 20px rgb(15 23 42 / 0.25);
-    transform: translate(-50%, -50%) scale(calc(1 / var(--map-zoom, 1)));
-    transition: background 160ms ease, box-shadow 160ms ease;
-  }
-
-  .map-marker:hover,
-  .map-marker.is-active {
-    background: #ef4444;
-    box-shadow: 0 0 0 7px rgb(239 68 68 / 0.18), 0 8px 20px rgb(15 23 42 / 0.25);
-  }
-
-  .map-control {
-    display: flex;
-    width: 42px;
-    height: 42px;
-    align-items: center;
-    justify-content: center;
-    color: #334155;
-    font-size: 1.5rem;
-    font-weight: 500;
-    transition: background 160ms ease;
-  }
-
-  .map-control:hover {
-    background: #f1f5f9;
-  }
-
   .footer-title {
     color: white;
     font-size: 0.875rem;
@@ -573,12 +522,6 @@
       linear-gradient(90deg, rgb(15 118 110 / 0.055) 1px, transparent 1px);
     background-size: 44px 44px;
     mask-image: linear-gradient(to bottom, black, transparent 92%);
-  }
-
-  .map-canvas {
-    background-color: #e8eee9;
-    background-image: radial-gradient(circle at center, rgb(255 255 255 / 0.6) 1px, transparent 1px);
-    background-size: 16px 16px;
   }
 }
 

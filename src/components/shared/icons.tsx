@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-export type IconName = "arrow" | "back" | "briefcase" | "building" | "chart" | "check" | "chevron" | "chevron-down" | "chevron-up" | "clipboard" | "clock" | "edit" | "external" | "eye" | "eye-off" | "graduation" | "instagram" | "link" | "logout" | "mail" | "map" | "menu" | "phone" | "pin" | "plus" | "qrcode" | "search" | "share" | "shield" | "tiktok" | "trash" | "users" | "youtube" | "x"
+export type IconName = "arrow" | "back" | "briefcase" | "building" | "chart" | "check" | "chevron" | "chevron-down" | "chevron-up" | "clipboard" | "clock" | "edit" | "external" | "eye" | "eye-off" | "graduation" | "instagram" | "link" | "logout" | "mail" | "map" | "menu" | "pin" | "plus" | "qrcode" | "search" | "share" | "shield" | "tiktok" | "trash" | "users" | "x"
 
 export function Icon({
   name,
@@ -134,9 +134,6 @@ export function Icon({
         <path d="M4 7h16M4 12h16M4 17h16" />
       </>
     ),
-    phone: (
-      <path d="M7.2 3H4.5A1.5 1.5 0 0 0 3 4.5C3 13.6 10.4 21 19.5 21a1.5 1.5 0 0 0 1.5-1.5v-2.7l-4-1-1.2 2.4c-2.7-1.1-4.9-3.3-6-6L12.2 11l-1-4-4 1V3Z" />
-    ),
     pin: (
       <>
         <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
@@ -185,12 +182,6 @@ export function Icon({
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" />
-      </>
-    ),
-    youtube: (
-      <>
-        <rect x="2.5" y="5" width="19" height="14" rx="4" />
-        <path d="m10 9 5 3-5 3V9Z" />
       </>
     ),
     x: (

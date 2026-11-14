@@ -2,22 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { isHttpUrl } from "@/lib/validation";
+import type { ActionResult } from "@/types/actions";
 import type { NewQrCode, QrCode } from "@/types/database";
-
-export interface ActionResult<T = unknown> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
-
-function isHttpUrl(value: string): boolean {
-  try {
-    const protocol = new URL(value).protocol;
-    return protocol === "http:" || protocol === "https:";
-  } catch {
-    return false;
-  }
-}
 
 function parseQrCodeForm(
   formData: FormData,

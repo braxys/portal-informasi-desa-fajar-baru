@@ -22,6 +22,7 @@ Rasio penggunaan warna yang disarankan: **60% netral terang, 30% hijau-biru, 10%
 | `fajar-50` | `#ECFDF5` | Latar lembut, badge, highlight |
 | `fajar-100` | `#D1FAE5` | Chip, ikon container, selection |
 | `fajar-200` | `#A7F3D0` | Border dekoratif, ring |
+| `fajar-300` | `#6EE7B7` | Border hover, aksen lembut |
 | `fajar-500` | `#10B981` | Aksen dekoratif, ilustrasi |
 | `fajar-600` | `#059669` | Gradasi dekoratif |
 | `fajar-700` | `#047857` | **Aksi utama, teks aksen, tombol** |

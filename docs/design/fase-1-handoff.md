@@ -13,7 +13,7 @@ Dokumen ini memetakan pekerjaan Fase 1 pada checklist Notion ke deliverable di r
 
 Di luar cakupan Fase 1:
 
-- Set ikon SVG untuk tombol tautan → di luar cakupan Fase 1; asetnya kini tersedia di [`public/icons/`](../../public/icons/).
+- Set ikon SVG untuk tombol tautan → di luar cakupan Fase 1; ikon kini berupa komponen di [`src/components/shared/icons.tsx`](../../src/components/shared/icons.tsx).
 - Desain stiker QR fisik siap cetak → Fase 4.
 - Implementasi komponen React, autentikasi, dan CRUD → Fase 2–3.
 - Setup project dan tabel Supabase → sudah dikerjakan backend di branch `main`.
@@ -34,7 +34,7 @@ Di luar cakupan Fase 1:
 
 - Pindahkan token [`color-tokens.css`](./color-tokens.css) ke `src/app/globals.css` atau `portal.css`.
 - Ganti warna inline di komponen dengan token.
-- Buat komponen `ServiceCard` yang memakai ikon SVG dari [`public/icons/`](../../public/icons/).
+- Buat komponen `ServiceCard` yang memakai ikon dari [`src/components/shared/icons.tsx`](../../src/components/shared/icons.tsx).
 - Sambungkan halaman publik ke data Supabase dengan fallback data demo saat `.env.local` belum tersedia.
 - Pastikan ukuran target sentuh, fokus keyboard, dan state loading/error sesuai wireframe.
 
@@ -42,7 +42,7 @@ Di luar cakupan Fase 1:
 
 - Review wireframe bersama PM dan frontend.
 - Logo resmi Lampung Selatan sudah dipasang; jika ada versi SVG/AI resmi, ganti aset PNG agar lebih tajam.
-- Set ikon tautan (BUMDes, website, Instagram, TikTok, YouTube, survei) tersedia di [`public/icons/`](../../public/icons/).
+- Ikon tautan (BUMDes, website, Instagram, TikTok, survei) tersedia sebagai komponen di [`src/components/shared/icons.tsx`](../../src/components/shared/icons.tsx).
 - Buat desain stiker QR dan materi sosialisasi pada Fase 4.
 
 ### Backend

@@ -3,44 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getLinkCategoryIcon, isLinkCategory } from "@/lib/link-categories";
+import { isHttpUrl } from "@/lib/validation";
+import type { ActionResult } from "@/types/actions";
 import type { Link, LinkCategory, NewLink, UpdateLink } from "@/types/database";
-
-export interface ActionResult<T = unknown> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
-
-function isHttpUrl(value: string): boolean {
-  try {
-    const protocol = new URL(value).protocol;
-    return protocol === "http:" || protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Mengambil seluruh tautan aktif untuk halaman publik
- * Diurutkan berdasarkan display_order ASC
- */
-export async function getPublicLinks(): Promise<Link[]> {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("links")
-    .select("*")
-    .eq("is_active", true)
-    .order("display_order", { ascending: true })
-    .order("created_at", { ascending: true });
-
-  if (error) {
-    console.error("Gagal mengambil public links:", error.message);
-    return [];
-  }
-
-  return (data as Link[]) || [];
-}
 
 /**
  * Mengambil seluruh tautan (aktif & nonaktif) untuk Dashboard Admin
