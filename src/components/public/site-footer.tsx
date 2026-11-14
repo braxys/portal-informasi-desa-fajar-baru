@@ -1,5 +1,6 @@
 import { Icon, VillageLogo } from "@/components/shared/icons";
 import Link from "next/link";
+import { siteConfig } from "@/lib/site-config";
 
 export function SiteFooter() {
   return (
@@ -24,24 +25,29 @@ export function SiteFooter() {
             <div className="mt-5 space-y-4 text-sm text-slate-400">
               <div className="flex items-start gap-3">
                 <Icon name="pin" size={18} />
-                <span>
-                  Balai Desa Fajar Baru
-                  <br />
-                  Kec. Jati Agung, Lampung Selatan
-                </span>
+                <address className="not-italic">
+                  {siteConfig.addressLines.map((line, index) => (
+                    <span key={line}>
+                      {line}
+                      {index < siteConfig.addressLines.length - 1 ? <br /> : null}
+                    </span>
+                  ))}
+                </address>
               </div>
               <a
-                href="mailto:fajarbaru.lamsel@gmail.com"
+                href={`mailto:${siteConfig.email}`}
                 className="flex items-center gap-3 transition hover:text-white"
               >
-                <Icon name="mail" size={18} /> fajarbaru.lamsel@gmail.com
+                <Icon name="mail" size={18} /> {siteConfig.email}
               </a>
-              <a
-                href="tel:+6281234567890"
-                className="flex items-center gap-3 transition hover:text-white"
-              >
-                <Icon name="phone" size={18} /> +62 812 3456 7890
-              </a>
+              <p className="flex items-start gap-3">
+                <Icon name="clock" size={18} />
+                <span>
+                  Jam layanan
+                  <br />
+                  {siteConfig.openingHours.label}
+                </span>
+              </p>
             </div>
           </div>
           <div>
@@ -56,10 +62,10 @@ export function SiteFooter() {
               <Link className="footer-link" href="/#profil">
                 Profil desa
               </Link>
-              <Link className="footer-link" href="/layanan">
+              <Link className="footer-link" href="/#layanan">
                 Layanan publik
               </Link>
-              <Link className="footer-link" href="/peta">
+              <Link className="footer-link" href="/#peta">
                 Peta desa
               </Link>
               <Link className="footer-link" href="/#kontak">

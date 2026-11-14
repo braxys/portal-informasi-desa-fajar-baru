@@ -4,7 +4,9 @@ import { Icon, VillageLogo } from "@/components/shared/icons";
 import { LoginForm } from "@/components/admin/login-form";
 
 export const metadata = {
-  title: "Login Admin | Desa Fajar Baru",
+  // Template root sudah menambahkan "| Portal Desa Fajar Baru", jadi jangan
+  // ulangi nama desa di sini agar judul tidak dobel-brand.
+  title: "Login Admin",
   robots: { index: false, follow: false },
 };
 

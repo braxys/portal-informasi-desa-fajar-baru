@@ -1,16 +1,19 @@
 import type { MetadataRoute } from "next";
+import { siteUrl } from "@/lib/site-config";
 
 export default function robots(): MetadataRoute.Robots {
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://fajarbaru.desa.id").replace(/\/$/, "");
-
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
+        // `/layanan` dan `/peta` sengaja TIDAK diblokir: keduanya redirect 308
+        // ke anchor beranda, dan bot perlu merayapi redirect itu untuk
+        // melimpahkan sinyal ke URL tujuan. Hanya rute internal yang diblokir.
         disallow: ["/admin/", "/api/", "/q/", "/qr/"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl,
   };
 }

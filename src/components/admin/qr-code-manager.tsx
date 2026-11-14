@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { Dispatch, SetStateAction } from "react";
+import Image from "next/image";
 import html2canvas from "html2canvas-pro";
 import type { Link, QrCode } from "@/types/database";
 import { Icon } from "@/components/shared/icons";
@@ -321,12 +322,14 @@ function QrPreview({
 
           <div className="flex justify-center rounded-lg border border-[#e7eeea] bg-slate-50/60 p-4">
             {qrUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
+              <Image
                 src={qrUrl}
                 alt={`QR code ${qrCode.title}`}
                 width={240}
                 height={240}
+                // QR harus tetap tajam: lewati optimizer agar tidak dikompresi
+                // ulang dan tetap bisa dipindai saat dicetak.
+                unoptimized
                 className="h-56 w-56"
               />
             ) : (
@@ -346,10 +349,12 @@ function QrPreview({
                 className="w-[280px] shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-white text-center"
               >
                 <div className="flex items-center gap-2.5 bg-fajar-900 px-3 py-3 text-left text-white">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src="/brand/logo-lampung-selatan.png"
                     alt=""
+                    width={36}
+                    height={36}
+                    aria-hidden
                     className="h-9 w-9 rounded bg-white object-contain p-0.5"
                   />
                   <div>
@@ -364,10 +369,14 @@ function QrPreview({
                 <div className="px-4 pb-4 pt-3">
                   <div className="rounded-lg border border-slate-200 bg-white p-2">
                     {qrUrl ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
+                      // `unoptimized` menjaga URL asli apa adanya: elemen ini
+                      // ditangkap html2canvas saat mengunduh bingkai QR.
+                      <Image
                         src={qrUrl}
                         alt={`QR code berbingkai ${qrCode.title}`}
+                        width={600}
+                        height={600}
+                        unoptimized
                         className="w-full"
                       />
                     ) : (

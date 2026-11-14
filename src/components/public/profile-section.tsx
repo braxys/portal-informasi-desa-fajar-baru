@@ -1,4 +1,5 @@
 import { Icon } from "@/components/shared/icons";
+import { siteConfig } from "@/lib/site-config";
 
 export function ProfileSection() {
   return (
@@ -40,19 +41,27 @@ export function ProfileSection() {
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
               <li className="flex justify-between border-b border-slate-100 pb-1.5">
                 <span className="text-slate-400">Kemendagri:</span>
-                <span className="font-semibold text-slate-800">18.01.13.2009</span>
+                <span className="font-semibold text-slate-800">
+                  {siteConfig.identifier}
+                </span>
               </li>
               <li className="flex justify-between border-b border-slate-100 pb-1.5">
                 <span className="text-slate-400">Kode Pos:</span>
-                <span className="font-semibold text-slate-800">35365</span>
+                <span className="font-semibold text-slate-800">
+                  {siteConfig.address.postalCode}
+                </span>
               </li>
               <li className="flex justify-between border-b border-slate-100 pb-1.5">
                 <span className="text-slate-400">Kecamatan:</span>
-                <span className="font-semibold text-slate-800">Jati Agung</span>
+                <span className="font-semibold text-slate-800">
+                  {siteConfig.address.addressLocality}
+                </span>
               </li>
               <li className="flex justify-between">
                 <span className="text-slate-400">Kabupaten:</span>
-                <span className="font-semibold text-slate-800">Lampung Selatan</span>
+                <span className="font-semibold text-slate-800">
+                  {siteConfig.address.addressRegion}
+                </span>
               </li>
             </ul>
           </div>
@@ -103,7 +112,7 @@ export function ProfileSection() {
               Pusat pelayanan administrasi kependudukan (KTP/KK), surat pengantar, perizinan, dan musyawarah pembangunan warga Desa Fajar Baru.
             </p>
             <div className="mt-4 pt-3 border-t border-slate-100 text-xs font-semibold text-slate-500">
-              Buka: Senin – Jumat (Jam Kerja)
+              Buka: {siteConfig.openingHours.label}
             </div>
           </div>
 

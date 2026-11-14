@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { isAdminUser } from "@/lib/supabase/auth";
 
 export const metadata = {
-  title: "Dashboard Admin | Desa Fajar Baru",
+  title: "Dashboard Admin",
   robots: { index: false, follow: false },
 };
 
