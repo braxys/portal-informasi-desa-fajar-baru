@@ -64,7 +64,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
           <p className="section-kicker">Jelajahi Wilayah</p>
           <h2 className="section-title mx-auto">Peta wilayah Desa Fajar Baru.</h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-            Peta geografis Desa Fajar Baru dengan garis batas administrasi resmi BPS/HDX 2020. Klik marker untuk melihat penjelasan detail lokasi dan petunjuk arah.
+            Peta geografis Desa Fajar Baru dengan garis batas administrasi resmi BPS/HDX 2020. Klik marker untuk melihat penjelasan detail lokasi dan membukanya di Google Maps.
           </p>
         </div>
 
@@ -233,7 +233,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                       rel="noopener noreferrer"
                       className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3.5 text-sm font-bold text-white transition hover:bg-teal-700 shadow-md"
                     >
-                      Buka Rute di Google Maps <Icon name="arrow" size={17} />
+                      Lihat di Google Maps <Icon name="arrow" size={17} />
                     </a>
                   </div>
                 </div>
