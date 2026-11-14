@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS public.links (
     is_featured BOOLEAN NOT NULL DEFAULT false,        -- Sorotan utama (misal: Oprec BUMDes)
     display_order INTEGER NOT NULL DEFAULT 0,          -- Urutan prioritas tampilan
     click_count INTEGER NOT NULL DEFAULT 0,            -- Agregat klik cepat
+    scan_count INTEGER NOT NULL DEFAULT 0,             -- Agregat pindai QR
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -42,11 +43,33 @@ CREATE TRIGGER trigger_links_updated_at
     EXECUTE FUNCTION public.handle_updated_at();
 
 
+-- 2b. TABEL: qr_codes (QR mandiri dengan pelacakan pindai)
+CREATE TABLE IF NOT EXISTS public.qr_codes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(255) NOT NULL,
+    target_url TEXT NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    scan_count INTEGER NOT NULL DEFAULT 0,             -- Agregat pindai per QR
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_qr_codes_active_created
+    ON public.qr_codes (is_active, created_at DESC);
+
+DROP TRIGGER IF EXISTS trigger_qr_codes_updated_at ON public.qr_codes;
+CREATE TRIGGER trigger_qr_codes_updated_at
+    BEFORE UPDATE ON public.qr_codes
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_updated_at();
+
+
 -- 3. TABEL: traffic_logs (Pencatatan Pindaian QR & Kunjungan untuk SDGs 16.10.2)
 CREATE TABLE IF NOT EXISTS public.traffic_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     event_type VARCHAR(50) NOT NULL,                    -- 'qr_scan', 'page_view', 'link_click'
     link_id UUID REFERENCES public.links(id) ON DELETE SET NULL,
+    qr_code_id UUID REFERENCES public.qr_codes(id) ON DELETE SET NULL,
     source VARCHAR(100) DEFAULT 'direct',              -- 'qr_poster', 'qr_balai_desa', 'web_direct', 'whatsapp'
     user_agent TEXT,
     ip_hash VARCHAR(64),                               -- Anonymized hash IP untuk metrik pengunjung unik
@@ -57,6 +80,7 @@ CREATE TABLE IF NOT EXISTS public.traffic_logs (
 CREATE INDEX IF NOT EXISTS idx_traffic_logs_created_at ON public.traffic_logs (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_traffic_logs_event_type ON public.traffic_logs (event_type);
 CREATE INDEX IF NOT EXISTS idx_traffic_logs_source ON public.traffic_logs (source);
+CREATE INDEX IF NOT EXISTS idx_traffic_logs_qr_code_id ON public.traffic_logs (qr_code_id);
 
 
 -- 4. FUNCTION ATOMIC: increment_link_click
@@ -69,10 +93,31 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- 4b. FUNCTION ATOMIC: increment_qr_scan
+CREATE OR REPLACE FUNCTION public.increment_qr_scan(target_link_id UUID)
+RETURNS void AS $$
+BEGIN
+    UPDATE public.links
+    SET scan_count = scan_count + 1
+    WHERE id = target_link_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 4c. FUNCTION ATOMIC: increment_qr_code_scan
+CREATE OR REPLACE FUNCTION public.increment_qr_code_scan(target_qr_code_id UUID)
+RETURNS void AS $$
+BEGIN
+    UPDATE public.qr_codes
+    SET scan_count = scan_count + 1
+    WHERE id = target_qr_code_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 
 -- 5. ROW LEVEL SECURITY (RLS)
 ALTER TABLE public.links ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.traffic_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.qr_codes ENABLE ROW LEVEL SECURITY;
 
 -- Kebijakan RLS untuk TABEL links:
 -- a. Publik (anonim & login) bisa membaca link yang aktif
@@ -124,6 +169,42 @@ CREATE POLICY "Anyone can insert traffic logs"
 DROP POLICY IF EXISTS "Only admin can view traffic logs" ON public.traffic_logs;
 CREATE POLICY "Only admin can view traffic logs"
     ON public.traffic_logs FOR SELECT
+    TO authenticated
+    USING ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+
+
+-- Kebijakan RLS untuk TABEL qr_codes:
+-- a. Publik hanya boleh membaca QR aktif (dipakai rute /qr/[id] untuk redirect)
+DROP POLICY IF EXISTS "Public can view active qr codes" ON public.qr_codes;
+CREATE POLICY "Public can view active qr codes"
+    ON public.qr_codes FOR SELECT
+    TO anon, authenticated
+    USING (is_active = true);
+
+-- b. Admin bisa melihat semua QR, termasuk yang nonaktif
+DROP POLICY IF EXISTS "Admin can view all qr codes" ON public.qr_codes;
+CREATE POLICY "Admin can view all qr codes"
+    ON public.qr_codes FOR SELECT
+    TO authenticated
+    USING ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+
+-- c. Admin bisa membuat, mengubah, dan menghapus QR
+DROP POLICY IF EXISTS "Admin can insert qr codes" ON public.qr_codes;
+CREATE POLICY "Admin can insert qr codes"
+    ON public.qr_codes FOR INSERT
+    TO authenticated
+    WITH CHECK ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+
+DROP POLICY IF EXISTS "Admin can update qr codes" ON public.qr_codes;
+CREATE POLICY "Admin can update qr codes"
+    ON public.qr_codes FOR UPDATE
+    TO authenticated
+    USING ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin')
+    WITH CHECK ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
+
+DROP POLICY IF EXISTS "Admin can delete qr codes" ON public.qr_codes;
+CREATE POLICY "Admin can delete qr codes"
+    ON public.qr_codes FOR DELETE
     TO authenticated
     USING ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
