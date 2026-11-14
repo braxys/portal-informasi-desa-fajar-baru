@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 980" width="1440" height="980" role="img" aria-labelledby="wfLoginTitle wfLoginDesc">
+  <title id="wfLoginTitle">Wireframe login admin Portal Desa Fajar Baru untuk desktop</title>
+  <desc id="wfLoginDesc">Halaman login dua panel: panel merek di kiri dan formulir email-password di kanan, lengkap dengan catatan keamanan.</desc>
+  <defs>
+    <linearGradient id="wfLoginBrand" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#064E3B" />
+      <stop offset=".55" stop-color="#0F172A" />
+      <stop offset="1" stop-color="#0E7490" />
+    </linearGradient>
+    <linearGradient id="wfLoginPrimary" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#047857" />
+      <stop offset="1" stop-color="#0E7490" />
+    </linearGradient>
+    <linearGradient id="wfLoginMark" x1="7" y1="5" x2="42" y2="41" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981" />
+      <stop offset="1" stop-color="#0E7490" />
+    </linearGradient>
+    <symbol id="mark" viewBox="0 0 48 48">
+      <path d="M24 4 7 11v12c0 10.5 6.8 17.2 17 21 10.2-3.8 17-10.5 17-21V11L24 4Z" fill="url(#wfLoginMark)" />
+      <path d="M13 30c5-7 9-10 11-14 3 6 7 9 12 14H13Z" fill="#FFFFFF" fill-opacity=".95" />
+      <path d="M14 31h20M18 35h12" stroke="#064E3B" stroke-width="2" stroke-linecap="round" />
+      <path d="M16 22c3-1 5-3 6-6-4 0-7 2-8 5l2 1ZM32 22c-3-1-5-3-6-6 4 0 7 2 8 5l-2 1Z" fill="#A7F3D0" />
+    </symbol>
+    <symbol id="markWhite" viewBox="0 0 48 48">
+      <mask id="wfLoginCut">
+        <rect width="48" height="48" fill="#FFFFFF" />
+        <path d="M13 30c5-7 9-10 11-14 3 6 7 9 12 14H13Z" fill="#000000" />
+        <path d="M14 31h20M18 35h12" stroke="#000000" stroke-width="2" stroke-linecap="round" />
+        <path d="M16 22c3-1 5-3 6-6-4 0-7 2-8 5l2 1ZM32 22c-3-1-5-3-6-6 4 0 7 2 8 5l-2 1Z" fill="#000000" />
+      </mask>
+      <path d="M24 4 7 11v12c0 10.5 6.8 17.2 17 21 10.2-3.8 17-10.5 17-21V11L24 4Z" fill="#FFFFFF" mask="url(#wfLoginCut)" />
+    </symbol>
+    <clipPath id="browserClip">
+      <rect x="120" y="130" width="1200" height="720" rx="18" />
+    </clipPath>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0F172A" flood-opacity=".12" />
+    </filter>
+  </defs>
+
+  <style>
+    .canvas { fill: #F7F9F7; }
+    .h1 { fill: #0F172A; font-family: 'DM Sans', Arial, sans-serif; font-weight: 800; }
+    .h2 { fill: #0F172A; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; }
+    .body { fill: #64748B; font-family: 'DM Sans', Arial, sans-serif; font-weight: 500; }
+    .tiny { fill: #94A3B8; font-family: 'DM Sans', Arial, sans-serif; font-weight: 600; }
+    .accent { fill: #047857; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; }
+    .white { fill: #FFFFFF; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; }
+    .white-body { fill: #CBD5E1; font-family: 'DM Sans', Arial, sans-serif; font-weight: 500; }
+    .label { fill: #0F172A; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; font-size: 14px; }
+    .note { fill: #475569; font-family: 'DM Sans', Arial, sans-serif; font-weight: 500; font-size: 11px; }
+    .num { fill: #047857; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; font-size: 10px; }
+    .line { stroke: #CBD5E1; stroke-width: 1; }
+    .dash { stroke: #94A3B8; stroke-width: 1; stroke-dasharray: 5 5; }
+    .input { fill: #FFFFFF; stroke: #E2E8F0; stroke-width: 1.2; }
+    .browser { fill: #FFFFFF; stroke: #CBD5E1; stroke-width: 1.5; }
+  </style>
+
+  <rect class="canvas" width="1440" height="980" />
+  <text x="120" y="58" class="h1" font-size="24" letter-spacing="-0.6">Wireframe Login Admin</text>
+  <text x="120" y="84" class="body" font-size="13">Portal Informasi Desa Fajar Baru · desktop 1440 × 900 · Fase 1</text>
+  <rect x="1128" y="36" width="192" height="34" rx="17" fill="#ECFDF5" stroke="#A7F3D0" />
+  <circle cx="1148" cy="53" r="4" fill="#047857" />
+  <text x="1160" y="57" class="accent" font-size="10" letter-spacing="1.4">LOW-FIDELITY / BUKAN UI FINAL</text>
+
+  <!-- Browser -->
+  <g clip-path="url(#browserClip)">
+    <rect x="120" y="130" width="1200" height="720" fill="#FFFFFF" />
+    <rect x="120" y="130" width="1200" height="44" fill="#F1F5F9" />
+    <circle cx="146" cy="152" r="5" fill="#FCA5A5" />
+    <circle cx="164" cy="152" r="5" fill="#FCD34D" />
+    <circle cx="182" cy="152" r="5" fill="#86EFAC" />
+    <rect x="430" y="142" width="400" height="20" rx="10" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="444" y="156" class="tiny" font-size="9">portal-fajarbaru.vercel.app/admin/login</text>
+
+    <!-- Panel merek -->
+    <rect x="120" y="174" width="490" height="676" fill="url(#wfLoginBrand)" />
+    <circle cx="190" cy="250" r="110" fill="#10B981" opacity=".12" />
+    <circle cx="560" cy="760" r="180" fill="#0E7490" opacity=".18" />
+    <use href="#markWhite" x="160" y="218" width="54" height="54" />
+    <text x="226" y="242" class="white" font-size="16">Desa Fajar Baru</text>
+    <text x="226" y="259" fill="#A7F3D0" font-family="'DM Sans', Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="2.4">PUSAT INFORMASI</text>
+
+    <text x="160" y="352" class="white" font-size="36" letter-spacing="-1.2">Kelola informasi</text>
+    <text x="160" y="392" class="white" font-size="36" letter-spacing="-1.2">desa dengan mudah.</text>
+    <text x="160" y="430" class="white-body" font-size="13">Satu tempat untuk memperbarui tautan layanan,</text>
+    <text x="160" y="450" class="white-body" font-size="13">memantau kunjungan, dan memastikan warga</text>
+    <text x="160" y="470" class="white-body" font-size="13">mendapat informasi yang tepat.</text>
+
+    <g>
+      <circle cx="168" cy="522" r="9" fill="#10B981" opacity=".2" />
+      <path d="m164 522 3 3 5-6" stroke="#6EE7B7" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="188" y="527" class="white-body" font-size="12">Akses khusus perangkat desa</text>
+    </g>
+    <g>
+      <circle cx="168" cy="556" r="9" fill="#10B981" opacity=".2" />
+      <path d="m164 556 3 3 5-6" stroke="#6EE7B7" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="188" y="561" class="white-body" font-size="12">Perubahan langsung tampil di portal publik</text>
+    </g>
+    <g>
+      <circle cx="168" cy="590" r="9" fill="#10B981" opacity=".2" />
+      <path d="m164 590 3 3 5-6" stroke="#6EE7B7" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="188" y="595" class="white-body" font-size="12">Data kunjungan untuk laporan SDGs 16.10.2</text>
+    </g>
+
+    <line x1="160" y1="740" x2="570" y2="740" stroke="#FFFFFF" stroke-opacity=".14" />
+    <text x="160" y="770" fill="#94A3B8" font-family="'DM Sans', Arial, sans-serif" font-size="10">Pemerintah Desa Fajar Baru · Jati Agung, Lampung Selatan</text>
+  </g>
+  <rect x="120" y="130" width="1200" height="720" rx="18" fill="none" stroke="#CBD5E1" stroke-width="1.5" />
+
+  <!-- Panel formulir -->
+  <rect x="610" y="174" width="710" height="676" fill="#F7F9F7" />
+  <a href="#">
+    <text x="1160" y="214" class="accent" font-size="11" text-anchor="end">← Kembali ke portal publik</text>
+  </a>
+
+  <g filter="url(#cardShadow)">
+    <rect x="750" y="270" width="430" height="420" rx="24" fill="#FFFFFF" stroke="#E7EEEA" />
+  </g>
+  <text x="786" y="316" class="accent" font-size="9" letter-spacing="1.8">AREA ADMIN</text>
+  <text x="786" y="350" class="h2" font-size="26" letter-spacing="-0.6">Masuk ke Dashboard</text>
+  <text x="786" y="374" class="body" font-size="11">Gunakan email dan kata sandi yang diberikan</text>
+  <text x="786" y="390" class="body" font-size="11">oleh Sekretariat Desa.</text>
+
+  <text x="786" y="424" class="h2" font-size="10">Email</text>
+  <rect class="input" x="786" y="434" width="358" height="46" rx="12" />
+  <text x="802" y="462" class="tiny" font-size="10">admin@fajarbaru.desa</text>
+
+  <text x="786" y="504" class="h2" font-size="10">Kata sandi</text>
+  <rect class="input" x="786" y="514" width="358" height="46" rx="12" />
+  <text x="802" y="542" class="tiny" font-size="12">••••••••••</text>
+  <path d="M1106 532c4-6 9-9 14-9s10 3 14 9c-4 6-9 9-14 9s-10-3-14-9Z" stroke="#94A3B8" stroke-width="1.4" fill="none" />
+  <circle cx="1120" cy="532" r="3" stroke="#94A3B8" stroke-width="1.4" fill="none" />
+
+  <g>
+    <rect x="786" y="576" width="15" height="15" rx="4" fill="#FFFFFF" stroke="#CBD5E1" />
+    <text x="808" y="588" class="body" font-size="10">Ingat saya</text>
+    <text x="1054" y="588" class="accent" font-size="10" text-anchor="end">Lupa kata sandi?</text>
+  </g>
+
+  <rect x="786" y="606" width="358" height="48" rx="24" fill="url(#wfLoginPrimary)" />
+  <text x="922" y="636" class="white" font-size="12" text-anchor="middle">Masuk ke Dashboard</text>
+  <path d="M1122 630h10m-4-4 4 4-4 4" stroke="#FFFFFF" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Contoh pesan error -->
+  <rect x="786" y="666" width="358" height="30" rx="8" fill="#FEF2F2" stroke="#FECACA" />
+  <text x="800" y="685" fill="#B91C1C" font-family="'DM Sans', Arial, sans-serif" font-size="9">Email atau kata sandi salah. Silakan coba lagi.</text>
+
+  <!-- Catatan keamanan -->
+  <rect x="750" y="712" width="430" height="52" rx="12" fill="#ECFDF5" stroke="#A7F3D0" />
+  <path d="M770 730 762 733v5.5c0 4.5 3.1 7.7 7.5 9.5 4.4-1.8 7.5-5 7.5-9.5V733l-7.5-3Z" stroke="#047857" stroke-width="1.3" fill="none" />
+  <text x="790" y="734" class="h2" font-size="9">Jangan bagikan akses admin</text>
+  <text x="790" y="748" class="body" font-size="9">Sesi berakhir otomatis dan dashboard dilindungi middleware.</text>
+
+  <!-- Penanda 1-4 -->
+  <g>
+    <circle cx="660" cy="222" r="12" fill="#D1FAE5" />
+    <text x="660" y="226" class="num" text-anchor="middle">1</text>
+    <line x1="672" y1="222" x2="748" y2="222" class="dash" />
+  </g>
+  <g>
+    <circle cx="736" cy="452" r="12" fill="#D1FAE5" />
+    <text x="736" y="456" class="num" text-anchor="middle">2</text>
+  </g>
+  <g>
+    <circle cx="736" cy="626" r="12" fill="#D1FAE5" />
+    <text x="736" y="630" class="num" text-anchor="middle">3</text>
+  </g>
+  <g>
+    <circle cx="1136" cy="696" r="12" fill="#D1FAE5" />
+    <text x="1136" y="700" class="num" text-anchor="middle">4</text>
+  </g>
+
+  <!-- Legenda -->
+  <line x1="120" y1="892" x2="1320" y2="892" class="line" />
+  <text x="120" y="918" class="label" font-size="11">Catatan wireframe</text>
+  <g class="note">
+    <circle cx="120" cy="940" r="8" fill="#D1FAE5" /><text x="120" y="944" class="num" text-anchor="middle">1</text>
+    <text x="134" y="944">Panel merek menjaga konteks desa dan mengurangi kesan “sistem asing”.</text>
+    <circle cx="560" cy="940" r="8" fill="#D1FAE5" /><text x="560" y="944" class="num" text-anchor="middle">2</text>
+    <text x="574" y="944">Input 46px, label permanen, autocomplete email dan password.</text>
+  </g>
+  <g class="note">
+    <circle cx="120" cy="964" r="8" fill="#D1FAE5" /><text x="120" y="968" class="num" text-anchor="middle">3</text>
+    <text x="134" y="968">Tombol utama selebar kartu; tampilkan loading dan cegah klik ganda.</text>
+    <circle cx="560" cy="964" r="8" fill="#D1FAE5" /><text x="560" y="968" class="num" text-anchor="middle">4</text>
+    <text x="574" y="968">Pesan error generik: jangan ungkap apakah email terdaftar.</text>
+  </g>
+</svg>

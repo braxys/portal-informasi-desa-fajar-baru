@@ -1,0 +1,274 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1040" width="1280" height="1040" role="img" aria-labelledby="wfPublicTitle wfPublicDesc">
+  <title id="wfPublicTitle">Wireframe halaman publik Portal Desa Fajar Baru untuk mobile</title>
+  <desc id="wfPublicDesc">Tiga layar mobile: beranda, daftar layanan, serta peta dan kontak. Dilengkapi catatan interaksi.</desc>
+  <defs>
+    <linearGradient id="wfPrimary" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#047857" />
+      <stop offset="1" stop-color="#0E7490" />
+    </linearGradient>
+    <linearGradient id="wfMark" x1="7" y1="5" x2="42" y2="41" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981" />
+      <stop offset="1" stop-color="#0E7490" />
+    </linearGradient>
+    <symbol id="mark" viewBox="0 0 48 48">
+      <path d="M24 4 7 11v12c0 10.5 6.8 17.2 17 21 10.2-3.8 17-10.5 17-21V11L24 4Z" fill="url(#wfMark)" />
+      <path d="M13 30c5-7 9-10 11-14 3 6 7 9 12 14H13Z" fill="#FFFFFF" fill-opacity=".95" />
+      <path d="M14 31h20M18 35h12" stroke="#064E3B" stroke-width="2" stroke-linecap="round" />
+      <path d="M16 22c3-1 5-3 6-6-4 0-7 2-8 5l2 1ZM32 22c-3-1-5-3-6-6 4 0 7 2 8 5l-2 1Z" fill="#A7F3D0" />
+    </symbol>
+  </defs>
+
+  <style>
+    .canvas { fill: #F7F9F7; }
+    .phone { fill: #FFFFFF; stroke: #CBD5E1; stroke-width: 1.5; }
+    .screen { fill: #F7F9F7; }
+    .wire { fill: #E2E8F0; }
+    .wire-soft { fill: #F1F5F9; }
+    .line { stroke: #CBD5E1; stroke-width: 1; }
+    .line-dash { stroke: #CBD5E1; stroke-width: 1; stroke-dasharray: 4 4; }
+    .h1 { fill: #0F172A; font-family: 'DM Sans', Arial, sans-serif; font-weight: 800; }
+    .h2 { fill: #0F172A; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; }
+    .body { fill: #64748B; font-family: 'DM Sans', Arial, sans-serif; font-weight: 500; }
+    .tiny { fill: #94A3B8; font-family: 'DM Sans', Arial, sans-serif; font-weight: 600; }
+    .accent { fill: #047857; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; }
+    .white { fill: #FFFFFF; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; }
+    .label { fill: #0F172A; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; font-size: 14px; }
+    .note { fill: #475569; font-family: 'DM Sans', Arial, sans-serif; font-weight: 500; font-size: 11px; }
+    .num { fill: #047857; font-family: 'DM Sans', Arial, sans-serif; font-weight: 700; font-size: 10px; }
+    .card { fill: #FFFFFF; stroke: #E2E8F0; stroke-width: 1; }
+  </style>
+
+  <rect class="canvas" width="1280" height="1040" />
+
+  <!-- Header dokumen -->
+  <text x="60" y="54" class="h1" font-size="24" letter-spacing="-0.6">Wireframe Halaman Publik</text>
+  <text x="60" y="80" class="body" font-size="13">Portal Informasi Desa Fajar Baru · mobile-first 390 × 844 · Fase 1</text>
+  <rect x="1010" y="36" width="210" height="34" rx="17" fill="#ECFDF5" stroke="#A7F3D0" />
+  <circle cx="1030" cy="53" r="4" fill="#047857" />
+  <text x="1042" y="57" class="accent" font-size="10" letter-spacing="1.4">LOW-FIDELITY / BUKAN UI FINAL</text>
+
+  <!-- Layar 1: Beranda -->
+  <text x="60" y="133" class="label">01 · Beranda</text>
+  <text x="60" y="150" class="note">Kesan pertama, nilai desa, dan aksi utama.</text>
+  <g transform="translate(60 170)">
+    <rect class="phone" width="360" height="780" rx="36" />
+    <rect class="screen" x="10" y="10" width="340" height="760" rx="28" />
+    <rect x="130" y="18" width="100" height="18" rx="9" fill="#E2E8F0" />
+    <text x="24" y="34" class="tiny" font-size="9">9:41</text>
+    <circle cx="300" cy="30" r="3" fill="#CBD5E1" />
+    <circle cx="312" cy="30" r="3" fill="#CBD5E1" />
+    <rect x="322" y="26" width="12" height="8" rx="2" fill="#CBD5E1" />
+
+    <!-- Header -->
+    <use href="#mark" x="20" y="56" width="34" height="34" />
+    <text x="62" y="72" class="h2" font-size="13">Desa Fajar Baru</text>
+    <text x="62" y="87" class="accent" font-size="7" letter-spacing="1.5">PUSAT INFORMASI</text>
+    <rect x="304" y="64" width="30" height="26" rx="13" fill="#FFFFFF" stroke="#E2E8F0" />
+    <path d="M313 72h12M313 77h12M313 82h12" stroke="#0F172A" stroke-width="1.6" stroke-linecap="round" />
+    <line x1="10" y1="104" x2="350" y2="104" class="line" />
+
+    <!-- Hero -->
+    <rect x="20" y="122" width="190" height="28" rx="14" fill="#ECFDF5" stroke="#A7F3D0" />
+    <circle cx="36" cy="136" r="4" fill="#10B981" />
+    <text x="46" y="140" class="accent" font-size="8" letter-spacing="1">PORTAL TERPADU WARGA</text>
+    <text x="20" y="188" class="h1" font-size="28" letter-spacing="-1">Informasi desa,</text>
+    <text x="20" y="218" class="h1" font-size="28" letter-spacing="-1" fill="#047857">lebih dekat</text>
+    <text x="20" y="248" class="h1" font-size="28" letter-spacing="-1">untuk semua.</text>
+    <rect x="20" y="270" width="292" height="7" rx="3.5" class="wire" />
+    <rect x="20" y="285" width="258" height="7" rx="3.5" class="wire" />
+    <rect x="20" y="300" width="196" height="7" rx="3.5" class="wire" />
+
+    <!-- CTA -->
+    <rect x="20" y="328" width="152" height="46" rx="23" fill="url(#wfPrimary)" />
+    <text x="40" y="355" class="white" font-size="11">Jelajahi layanan</text>
+    <path d="M146 350h10m-4-4 4 4-4 4" stroke="#FFFFFF" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="180" y="328" width="160" height="46" rx="23" fill="#FFFFFF" stroke="#CBD5E1" />
+    <text x="200" y="355" class="h2" font-size="11">Lihat peta desa</text>
+
+    <!-- Statistik -->
+    <line x1="20" y1="398" x2="340" y2="398" class="line" />
+    <text x="20" y="424" class="h2" font-size="16">5+</text>
+    <text x="20" y="438" class="body" font-size="8">Layanan digital</text>
+    <text x="124" y="424" class="h2" font-size="16">24/7</text>
+    <text x="124" y="438" class="body" font-size="8">Akses informasi</text>
+    <circle cx="236" cy="420" r="3" fill="#10B981" />
+    <text x="244" y="424" class="accent" font-size="11">Aktif</text>
+    <text x="236" y="438" class="body" font-size="8">Status portal</text>
+
+    <!-- Layanan ringkas -->
+    <text x="20" y="470" class="accent" font-size="8" letter-spacing="1.5">LAYANAN CEPAT</text>
+    <text x="20" y="492" class="h2" font-size="17">Layanan dalam satu genggaman.</text>
+    <rect class="card" x="20" y="508" width="320" height="104" rx="18" />
+    <rect x="34" y="522" width="38" height="38" rx="10" fill="#ECFDF5" />
+    <path d="M45 535h16v12H45zM48 532h10v3H48z" stroke="#047857" stroke-width="1.5" fill="none" stroke-linejoin="round" />
+    <text x="84" y="536" class="h2" font-size="12">Pendaftaran BUMDes</text>
+    <text x="84" y="552" class="body" font-size="8">Bergabung dan tumbuh bersama</text>
+    <text x="84" y="564" class="body" font-size="8">membangun potensi ekonomi desa.</text>
+    <text x="84" y="590" class="accent" font-size="9">Buka layanan →</text>
+    <rect class="card" x="20" y="622" width="320" height="104" rx="18" />
+    <rect x="34" y="636" width="38" height="38" rx="10" fill="#ECFEFF" />
+    <path d="M44 646h18v13H44zM47 642h12v4H47zM50 651h6M50 655h4" stroke="#0E7490" stroke-width="1.4" fill="none" stroke-linecap="round" />
+    <text x="84" y="650" class="h2" font-size="12">Website Resmi Desa</text>
+    <text x="84" y="666" class="body" font-size="8">Berita, profil, dan transparansi</text>
+    <text x="84" y="678" class="body" font-size="8">Desa Fajar Baru.</text>
+    <text x="84" y="704" class="accent" font-size="9">Buka layanan →</text>
+    <text x="170" y="746" class="tiny" font-size="8">Gulir untuk layanan lainnya</text>
+    <path d="M180 756v6m-3-3 3 3 3-3" stroke="#94A3B8" stroke-width="1.2" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- Layar 2: Layanan -->
+  <text x="480" y="133" class="label">02 · Daftar Layanan</text>
+  <text x="480" y="150" class="note">Semua kanal resmi dengan target sentuh besar.</text>
+  <g transform="translate(480 170)">
+    <rect class="phone" width="360" height="780" rx="36" />
+    <rect class="screen" x="10" y="10" width="340" height="760" rx="28" />
+    <rect x="130" y="18" width="100" height="18" rx="9" fill="#E2E8F0" />
+    <text x="24" y="34" class="tiny" font-size="9">9:41</text>
+    <use href="#mark" x="20" y="56" width="34" height="34" />
+    <text x="62" y="72" class="h2" font-size="13">Desa Fajar Baru</text>
+    <text x="62" y="87" class="accent" font-size="7" letter-spacing="1.5">PUSAT INFORMASI</text>
+    <rect x="304" y="64" width="30" height="26" rx="13" fill="#FFFFFF" stroke="#E2E8F0" />
+    <path d="M313 72h12M313 77h12M313 82h12" stroke="#0F172A" stroke-width="1.6" stroke-linecap="round" />
+    <line x1="10" y1="104" x2="350" y2="104" class="line" />
+
+    <text x="20" y="130" class="accent" font-size="8" letter-spacing="1.5">AKSES CEPAT</text>
+    <text x="20" y="156" class="h1" font-size="24">Layanan warga.</text>
+    <text x="20" y="174" class="body" font-size="9">Pilih kanal resmi yang ingin dibuka.</text>
+
+    <!-- Search -->
+    <rect x="20" y="188" width="320" height="42" rx="21" fill="#FFFFFF" stroke="#E2E8F0" />
+    <circle cx="40" cy="209" r="6" stroke="#94A3B8" stroke-width="1.5" fill="none" />
+    <path d="m45 214 4 4" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round" />
+    <text x="56" y="213" class="tiny" font-size="9">Cari layanan atau informasi…</text>
+
+    <!-- Kartu layanan -->
+    <g>
+      <rect class="card" x="20" y="246" width="320" height="110" rx="18" />
+      <rect x="34" y="260" width="38" height="38" rx="10" fill="#ECFDF5" />
+      <path d="M45 272h16v13H45zM48 269h10v3H48z" stroke="#047857" stroke-width="1.5" fill="none" stroke-linejoin="round" />
+      <text x="84" y="274" class="h2" font-size="12">Pendaftaran BUMDes</text>
+      <text x="84" y="290" class="body" font-size="8">Formulir open recruitment pengurus</text>
+      <text x="84" y="302" class="body" font-size="8">Badan Usaha Milik Desa.</text>
+      <text x="84" y="328" class="accent" font-size="9">Buka formulir →</text>
+      <rect x="294" y="262" width="30" height="16" rx="8" fill="#ECFDF5" />
+      <text x="302" y="273" class="accent" font-size="6">UTAMA</text>
+    </g>
+    <g>
+      <rect class="card" x="20" y="366" width="320" height="110" rx="18" />
+      <rect x="34" y="380" width="38" height="38" rx="10" fill="#ECFEFF" />
+      <path d="M44 390h18v13H44zM47 386h12v4H47zM50 395h6M50 399h4" stroke="#0E7490" stroke-width="1.4" fill="none" stroke-linecap="round" />
+      <text x="84" y="394" class="h2" font-size="12">Website Resmi Desa</text>
+      <text x="84" y="410" class="body" font-size="8">Berita, profil, transparansi, dan</text>
+      <text x="84" y="422" class="body" font-size="8">agenda Desa Fajar Baru.</text>
+      <text x="84" y="448" class="accent" font-size="9">Buka website →</text>
+    </g>
+    <g>
+      <rect class="card" x="20" y="486" width="320" height="110" rx="18" />
+      <rect x="34" y="500" width="38" height="38" rx="10" fill="#F0FDFA" />
+      <path d="M53 508 45 511v5.5c0 4.5 3.1 7.7 7.5 9.5 4.4-1.8 7.5-5 7.5-9.5V511L53 508Z" stroke="#0F766E" stroke-width="1.4" fill="none" />
+      <path d="m49.5 518 2 2 4-4" stroke="#0F766E" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      <text x="84" y="514" class="h2" font-size="12">Kuisioner Anti Korupsi</text>
+      <text x="84" y="530" class="body" font-size="8">Bantu pelayanan publik yang jujur</text>
+      <text x="84" y="542" class="body" font-size="8">dan transparan.</text>
+      <text x="84" y="568" class="accent" font-size="9">Isi kuisioner →</text>
+    </g>
+    <g>
+      <rect class="card" x="20" y="606" width="320" height="110" rx="18" />
+      <rect x="34" y="620" width="38" height="38" rx="10" fill="#EFF6FF" />
+      <path d="M45 632h16v13H45zM48 629h10v3H48zM49 637h8M49 641h5" stroke="#0E7490" stroke-width="1.4" fill="none" stroke-linecap="round" />
+      <text x="84" y="634" class="h2" font-size="12">Kuisioner Perilaku Masyarakat</text>
+      <text x="84" y="650" class="body" font-size="8">Sampaikan pandangan Anda untuk</text>
+      <text x="84" y="662" class="body" font-size="8">pelayanan desa yang lebih baik.</text>
+      <text x="84" y="688" class="accent" font-size="9">Isi kuisioner →</text>
+    </g>
+    <text x="166" y="744" class="tiny" font-size="8">Media sosial resmi desa</text>
+    <circle cx="120" cy="756" r="7" fill="#E2E8F0" />
+    <circle cx="168" cy="756" r="7" fill="#E2E8F0" />
+    <circle cx="216" cy="756" r="7" fill="#E2E8F0" />
+  </g>
+
+  <!-- Layar 3: Peta & Kontak -->
+  <text x="900" y="133" class="label">03 · Peta &amp; Kontak</text>
+  <text x="900" y="150" class="note">Lokasi fasilitas dan kanal komunikasi resmi.</text>
+  <g transform="translate(900 170)">
+    <rect class="phone" width="360" height="780" rx="36" />
+    <rect class="screen" x="10" y="10" width="340" height="760" rx="28" />
+    <rect x="130" y="18" width="100" height="18" rx="9" fill="#E2E8F0" />
+    <text x="24" y="34" class="tiny" font-size="9">9:41</text>
+    <use href="#mark" x="20" y="56" width="34" height="34" />
+    <text x="62" y="72" class="h2" font-size="13">Desa Fajar Baru</text>
+    <text x="62" y="87" class="accent" font-size="7" letter-spacing="1.5">PUSAT INFORMASI</text>
+    <rect x="304" y="64" width="30" height="26" rx="13" fill="#FFFFFF" stroke="#E2E8F0" />
+    <path d="M313 72h12M313 77h12M313 82h12" stroke="#0F172A" stroke-width="1.6" stroke-linecap="round" />
+    <line x1="10" y1="104" x2="350" y2="104" class="line" />
+
+    <text x="20" y="130" class="accent" font-size="8" letter-spacing="1.5">JELAJAH DESA</text>
+    <text x="20" y="156" class="h1" font-size="24">Peta &amp; kontak.</text>
+    <text x="20" y="174" class="body" font-size="9">Temukan fasilitas dan hubungi pemerintah desa.</text>
+
+    <!-- Peta -->
+    <rect x="20" y="190" width="320" height="286" rx="20" fill="#E8EEE9" stroke="#D5E1DA" />
+    <g opacity=".7">
+      <path d="M20 240h320M20 300h320M20 360h320M20 420h320" stroke="#FFFFFF" stroke-width="1.2" />
+      <path d="M80 190v286M160 190v286M240 190v286M300 190v286" stroke="#FFFFFF" stroke-width="1.2" />
+      <path d="M20 270c60-18 100 24 160 0s100-18 160 0" stroke="#CBD5E1" stroke-width="2" fill="none" />
+      <path d="M20 390c60-18 100 24 160 0s100-18 160 0" stroke="#CBD5E1" stroke-width="2" fill="none" />
+    </g>
+    <circle cx="160" cy="312" r="14" fill="#0F766E" stroke="#FFFFFF" stroke-width="4" />
+    <path d="M160 305a5 5 0 0 1 5 5c0 4-5 8-5 8s-5-4-5-8a5 5 0 0 1 5-5Z" fill="#FFFFFF" />
+    <circle cx="238" cy="255" r="11" fill="#0E7490" stroke="#FFFFFF" stroke-width="3" />
+    <path d="M238 250a4 4 0 0 1 4 4c0 3-4 6-4 6s-4-3-4-6a4 4 0 0 1 4-4Z" fill="#FFFFFF" />
+    <circle cx="100" cy="382" r="11" fill="#0F766E" stroke="#FFFFFF" stroke-width="3" />
+    <path d="M100 377a4 4 0 0 1 4 4c0 3-4 6-4 6s-4-3-4-6a4 4 0 0 1 4-4Z" fill="#FFFFFF" />
+    <rect x="32" y="202" width="96" height="24" rx="12" fill="#FFFFFF" stroke="#E2E8F0" />
+    <circle cx="46" cy="214" r="4" fill="#0F766E" />
+    <text x="56" y="218" class="body" font-size="8">Kantor desa</text>
+    <rect x="32" y="436" width="148" height="28" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="46" y="454" class="body" font-size="8">Ketuk marker untuk detail</text>
+
+    <!-- Info lokasi -->
+    <rect class="card" x="20" y="492" width="320" height="104" rx="18" />
+    <rect x="34" y="506" width="38" height="38" rx="10" fill="#ECFDF5" />
+    <path d="M53 512c5 0 9 4 9 9 0 7-9 14-9 14s-9-7-9-14c0-5 4-9 9-9Z" stroke="#047857" stroke-width="1.4" fill="none" />
+    <circle cx="53" cy="521" r="3" stroke="#047857" stroke-width="1.4" fill="none" />
+    <text x="84" y="520" class="h2" font-size="12">Balai Desa Fajar Baru</text>
+    <text x="84" y="536" class="body" font-size="8">Kec. Jati Agung, Lampung Selatan</text>
+    <text x="84" y="552" class="body" font-size="8">Senin–Jumat · 08.00–15.00 WIB</text>
+    <text x="84" y="578" class="accent" font-size="9">Buka di Google Maps →</text>
+
+    <!-- Kontak -->
+    <rect class="card" x="20" y="608" width="320" height="82" rx="18" />
+    <text x="34" y="630" class="accent" font-size="8" letter-spacing="1.3">HUBUNGI KAMI</text>
+    <text x="34" y="650" class="body" font-size="9">desafajarbaru@gmail.com</text>
+    <text x="34" y="668" class="body" font-size="9">+62 812 3456 7890</text>
+    <circle cx="304" cy="646" r="14" fill="#ECFDF5" />
+    <path d="M298 642h12v8h-12zM300 640h8v2h-8z" stroke="#047857" stroke-width="1.2" fill="none" />
+
+    <!-- Footer ringkas -->
+    <rect x="20" y="702" width="320" height="44" rx="14" fill="#0F172A" />
+    <use href="#mark" x="32" y="710" width="28" height="28" />
+    <text x="68" y="722" class="white" font-size="9">Desa Fajar Baru</text>
+    <text x="68" y="734" fill="#94A3B8" font-family="'DM Sans', Arial, sans-serif" font-size="7">Pemerintah Desa · 2025</text>
+    <text x="286" y="728" class="white" font-size="14">↗</text>
+  </g>
+
+  <!-- Legenda catatan -->
+  <line x1="60" y1="966" x2="1220" y2="966" class="line" />
+  <text x="60" y="992" class="label" font-size="11">Catatan wireframe</text>
+  <g class="note">
+    <circle cx="60" cy="1012" r="8" fill="#D1FAE5" /><text x="60" y="1016" class="num" text-anchor="middle">1</text>
+    <text x="74" y="1016">Header ringkas: logo, nama desa, menu. Tinggi 56–64px.</text>
+    <circle cx="460" cy="1012" r="8" fill="#D1FAE5" /><text x="460" y="1016" class="num" text-anchor="middle">2</text>
+    <text x="474" y="1016">Hero menjawab “ini portal apa?” dan menyediakan 2 aksi.</text>
+    <circle cx="860" cy="1012" r="8" fill="#D1FAE5" /><text x="860" y="1016" class="num" text-anchor="middle">3</text>
+    <text x="874" y="1016">Kartu layanan memakai target sentuh minimal 44px.</text>
+  </g>
+  <g class="note">
+    <circle cx="60" cy="1034" r="8" fill="#D1FAE5" /><text x="60" y="1038" class="num" text-anchor="middle">4</text>
+    <text x="74" y="1038">Peta hanya menampilkan titik penting; detail muncul saat diketuk.</text>
+    <circle cx="460" cy="1034" r="8" fill="#D1FAE5" /><text x="460" y="1038" class="num" text-anchor="middle">5</text>
+    <text x="474" y="1038">Kontak dan jam layanan harus terlihat tanpa membuka menu.</text>
+    <circle cx="860" cy="1034" r="8" fill="#D1FAE5" /><text x="860" y="1038" class="num" text-anchor="middle">6</text>
+    <text x="874" y="1038">Tidak ada carousel berat; prioritaskan muat cepat di jaringan lemah.</text>
+  </g>
+</svg>

@@ -7,22 +7,30 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:clean-duplicates": "node --env-file=.env.local backend/clean-duplicates.mjs",
+    "db:migrate": "node --env-file=.env.local backend/migrate.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.57.4",
+    "html2canvas-pro": "^2.6.4",
+    "leaflet": "^1.9.4",
     "next": "^16.4.4",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
+    "@types/leaflet": "^1.9.22",
     "@types/node": "^22.18.6",
+    "@types/pg": "^8.11.10",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "eslint": "^9.36.0",
     "eslint-config-next": "^16.4.4",
+    "pg": "^8.13.1",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2"
   },
