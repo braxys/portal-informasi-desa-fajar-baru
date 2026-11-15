@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Portal Informasi Desa Fajar Baru · Presentasi Kelompok 3</title>
+<meta name="description" content="Presentasi proyek Portal Informasi Desa Fajar Baru berbasis web dan QR Code — Kapita Selekta IF25-41031, Kelompok 3, Teknik Informatika ITERA." />
+<meta name="author" content="Kelompok 3 — Kapita Selekta IF25-41031" />
+
+<style>
+/* ==========================================================================
+   1. TOKEN & DASAR
+   Palet disamakan dengan portal Desa Fajar Baru (docs/design/color-tokens.css):
+   hijau desa #047857 / #059669 / #10B981, biru layanan #0E7490,
+   kanvas #F7F9F7, garis #E7EEEA, tinta #0F172A.
+   ========================================================================== */
+:root{
+  --title:#064E3B;
+  --accent:#047857;
+  --accent-ink:#FFFFFF;
+  --accent-grad:linear-gradient(110deg,#059669 0%,#0E7490 100%);
+  --head-grad:linear-gradient(110deg,#047857 0%,#0E7490 100%);
+  --head-bg:#047857;
+  --head-ink:#FFFFFF;
+  --deco-1:#6EE7B7;
+  --deco-2:#D1FAE5;
+  --pale:#D1FAE5;
+  --bg:#F7F9F7;
+  --ink:#0F172A;
+  --muted:#64748B;
+  --line:#E7EEEA;
+  --card:#FFFFFF;
+  --card-alt:#F1F8F4;
+  --ok:#047857;
+  --warn:#B45309;
+  --bad:#B91C1C;
+  --chrome-bg:#E8F2EC;
+  --chrome:#065F46;
+  --chrome-line:#CFE3D7;
+  --shadow:0 30px 60px -32px rgba(6,78,59,.38);
+  --ui:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+[data-theme="dark"]{
+  --title:#E6F4EE;
+  --accent:#34D399;
+  --accent-ink:#06231A;
+  --accent-grad:linear-gradient(110deg,#10B981 0%,#0891B2 100%);
+  --head-grad:linear-gradient(110deg,#047857 0%,#0E7490 100%);
+  --deco-1:#2E7D5F;
+  --deco-2:#16302A;
+  --pale:#1B3A30;
+  --bg:#0C1714;
+  --ink:#DBE9E3;
+  --muted:#9AB5AB;
+  --line:#26433A;
+  --card:#132420;
+  --card-alt:#182D27;
+  --ok:#4ADE80;
+  --warn:#FBBF24;
+  --bad:#F87171;
+  --chrome-bg:#08120F;
+  --chrome:#DBE9E3;
+  --chrome-line:#243D35;
+  --shadow:0 30px 60px -32px rgba(0,0,0,.75);
+  /* Header tabel & judul panel tetap hijau tua agar teks putih terbaca */
+  --head-bg:#047857;
+  --head-ink:#FFFFFF;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Georgia,"Times New Roman",serif;
+  background:var(--chrome-bg);
+  color:var(--ink);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:var(--ui)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ==========================================================================
+   2. PANGGUNG (letterbox 16:9)
+   ========================================================================== */
+#stage{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:14px 14px 96px;
+}
+#frame{position:relative;flex:0 0 auto}
+#canvas{
+  position:absolute;top:0;left:0;
+  width:1280px;height:720px;
+  transform-origin:top left;
+  background:var(--bg);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+/* ==========================================================================
+   3. SLIDE UMUM
+   ========================================================================== */
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:34px 56px 0;
+  background:var(--bg);
+  color:var(--ink);
+  opacity:0;visibility:hidden;
+  transform:translateX(26px);
+  transition:opacity .36s ease,transform .36s ease;
+}
+.slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+
+/* Animasi masuk bertahap */
+.slide .reveal{opacity:0;transform:translateY(12px)}
+.slide.active .reveal{animation:rise .5s cubic-bezier(.2,.7,.3,1) forwards;animation-delay:calc(var(--d,0) * 55ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* Kepala slide */
+.s-head{display:flex;align-items:flex-start;gap:16px;padding-bottom:12px;border-bottom:2px solid var(--line);margin-bottom:18px}
+.s-head .logo{width:34px;height:40px;flex:0 0 auto;margin-top:2px}
+.s-head .logo img{width:100%;height:100%;object-fit:contain;display:block}
+.s-kicker{
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);margin:0 0 3px;
+}
+.s-title{font-size:40px;line-height:1.08;margin:0;color:var(--title);font-weight:700;letter-spacing:-.01em}
+.s-sub{font-size:16.5px;color:var(--muted);font-style:italic;margin:5px 0 0}
+
+/* Badan slide */
+.s-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:2px 0}
+/* Isi yang mengisi tinggi (tabel panjang, hasil) */
+.s-body.fill{justify-content:flex-start}
+
+/* Kalimat pengantar di atas isi */
+.lead{
+  font-size:19px;line-height:1.45;color:var(--ink);margin:0;
+  max-width:1000px;
+}
+.lead b{color:var(--title)}
+
+/* Kalimat panduan (default tersembunyi) */
+.guide-line{
+  display:none;
+  font-style:italic;font-size:14.5px;line-height:1.35;color:var(--accent);
+  background:var(--card-alt);border-left:3px solid var(--accent);
+  padding:7px 13px;border-radius:0 8px 8px 0;margin:10px 0 0;
+}
+#canvas.show-guide .guide-line{display:block}
+
+/* Footer tetap */
+.s-foot{
+  margin-top:auto;display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--ui);font-size:12.5px;color:var(--muted);
+  border-top:1px solid var(--line);padding:9px 0 12px;letter-spacing:.01em;
+}
+.s-foot .pg{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent)}
+.caption{font-size:13px;font-style:italic;color:var(--muted);margin:0}
+
+/* ==========================================================================
+   4. KOMPONEN: KARTU, TABEL, METRIK, ALUR, DIAGRAM
+   ========================================================================== */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:22px 24px;display:flex;flex-direction:column;gap:10px;
+  min-height:220px;justify-content:center;
+  box-shadow:0 12px 26px -22px rgba(6,78,59,.22);
+}
+.card .ico{
+  width:34px;height:34px;border-radius:10px;background:var(--pale);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto;
+}
+.card .ico svg{width:19px;height:19px}
+.card h3{margin:0;font-size:19px;line-height:1.22;color:var(--title)}
+.card p{margin:0;font-size:15.5px;line-height:1.42;color:var(--muted)}
+.card .meta{font-family:var(--ui);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+
+/* Tabel */
+.tbl-wrap{width:100%;overflow:hidden;border-radius:12px;border:1px solid var(--line)}
+table.tbl{width:100%;border-collapse:collapse;table-layout:fixed;background:var(--card)}
+table.tbl th{
+  background:var(--head-bg);background-image:var(--head-grad);color:var(--head-ink);
+  font-family:var(--ui);font-size:13.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  text-align:left;padding:12px 16px;
+}
+table.tbl td{
+  font-size:17.5px;line-height:1.42;padding:14px 16px;color:var(--ink);
+  border-top:1px solid var(--line);vertical-align:top;
+}
+table.tbl th{padding:12px 16px}
+table.tbl tbody tr:nth-child(even){background:var(--card-alt)}
+table.tbl td:first-child{color:var(--title);font-weight:700}
+.badge{
+  display:inline-block;font-family:var(--ui);font-size:12px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:999px;
+  border:1px solid currentColor;
+}
+.badge.ok{color:var(--ok)}
+.badge.warn{color:var(--warn)}
+.badge.bad{color:var(--bad)}
+.ph{color:var(--muted);font-style:italic;opacity:.85}
+
+/* Metrik */
+.metrics{display:grid;gap:14px}
+.metric{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:24px 26px;display:flex;flex-direction:column;gap:5px;position:relative;overflow:hidden;
+  min-height:214px;justify-content:center;
+}
+.metric::after{content:"";position:absolute;left:0;top:0;width:5px;height:100%;background:var(--accent-grad);opacity:.9}
+.metric .val{font-size:64px;line-height:1;font-weight:700;color:var(--title);letter-spacing:-.02em}
+.metric .val small{font-size:26px;font-weight:400;color:var(--accent);margin-left:4px}
+.metric .lab{font-size:19px;font-weight:700;color:var(--ink);margin-top:6px}
+.metric .src{font-family:var(--ui);font-size:12.5px;line-height:1.45;color:var(--muted);margin-top:3px}
+
+/* Dua kolom panel */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.panel > h3{
+  margin:0;padding:13px 18px;background:var(--head-bg);background-image:var(--head-grad);color:var(--head-ink);
+  font-family:var(--ui);font-size:13.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+}
+.panel .p-body{padding:14px 18px 16px;display:flex;flex-direction:column;gap:14px}
+.rowline{display:flex;gap:14px;font-size:17px;line-height:1.45}
+.rowline .k{
+  flex:0 0 128px;font-family:var(--ui);font-size:12.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--accent);padding-top:3px;
+}
+.rowline .v{flex:1 1 auto;color:var(--ink)}
+
+/* Alur horizontal */
+.flow{display:flex;align-items:stretch;gap:0}
+.flow .step{
+  flex:1 1 0;background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:20px 20px 22px;display:flex;flex-direction:column;gap:8px;position:relative;min-height:300px;
+}
+.flow .arrow{
+  flex:0 0 30px;display:flex;align-items:center;justify-content:center;color:var(--accent);
+  font-size:19px;opacity:.75;
+}
+.flow .n{
+  font-family:var(--ui);font-size:11.5px;font-weight:700;letter-spacing:.14em;color:var(--accent);
+}
+.flow .step h4{margin:0;font-size:16.5px;line-height:1.24;color:var(--title)}
+.flow .step p{margin:0;font-size:13.8px;line-height:1.36;color:var(--muted)}
+
+/* Diagram arsitektur */
+.diagram{display:flex;align-items:stretch;gap:0}
+.dbox{
+  flex:1 1 0;background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:18px 18px;display:flex;flex-direction:column;gap:7px;justify-content:flex-start;
+}
+.dbox.hi{border-color:var(--accent);background:var(--card-alt)}
+.dbox .dh{font-family:var(--ui);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.dbox h4{margin:0;font-size:16.5px;color:var(--title);line-height:1.2}
+.dbox ul{margin:4px 0 0;padding-left:15px;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.dbox ul li{margin:1px 0}
+.darrow{flex:0 0 26px;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:18px}
+
+/* ERD */
+.erd{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ent{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ent .eh{
+  background:var(--head-bg);background-image:var(--head-grad);color:var(--head-ink);padding:7px 12px;
+  font-family:var(--ui);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  display:flex;justify-content:space-between;gap:6px;align-items:baseline;
+}
+.ent .eh span{font-weight:400;opacity:.85;letter-spacing:0;text-transform:none;font-size:11px}
+.ent ul{margin:0;padding:8px 12px 10px 24px;font-size:13.4px;line-height:1.55;color:var(--ink)}
+.ent ul li::marker{color:var(--accent)}
+
+.note-bar{
+  margin-top:12px;background:var(--card-alt);border:1px dashed var(--line);border-radius:11px;
+  padding:9px 14px;font-size:14px;color:var(--ink);display:flex;gap:10px;align-items:center;
+}
+.note-bar b{color:var(--title)}
+
+/* ==========================================================================
+   5. SLIDE KHUSUS: COVER, AGENDA, PENUTUP
+   ========================================================================== */
+.cover{padding:0;display:block}
+.cover .strip{position:absolute;left:0;top:0;width:26px;height:100%;background:var(--accent-grad)}
+.cover .deco{position:absolute;right:-60px;top:-90px;width:420px;height:420px;pointer-events:none}
+.cover .deco .ring{position:absolute;border-radius:50%;border:1.5px solid var(--deco-1)}
+.cover .deco .r1{width:330px;height:330px;right:40px;top:40px;opacity:.55}
+.cover .deco .r2{width:200px;height:200px;right:105px;top:105px;background:var(--deco-2);opacity:.55;border:none}
+.cover .deco .line{position:absolute;width:210px;height:1.5px;background:var(--deco-1);right:170px;top:330px;transform:rotate(-32deg);transform-origin:right center;opacity:.8}
+.cover .deco .dot{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--accent);right:352px;top:398px}
+.cover-inner{position:relative;height:100%;padding:44px 66px 40px 76px;display:flex;flex-direction:column}
+.cover .logo-big{width:74px;height:88px;margin-bottom:14px}
+.cover .logo-big img{width:100%;height:100%;object-fit:contain}
+.cover .kick{
+  font-family:var(--ui);font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 12px;
+}
+.cover h1{font-size:50px;line-height:1.08;margin:0 0 10px;color:var(--title);max-width:900px;letter-spacing:-.015em}
+.cover .tag{font-size:19px;line-height:1.4;color:var(--muted);margin:0 0 16px;max-width:760px;font-style:italic}
+.cover .where{font-family:var(--ui);font-size:13.5px;color:var(--ink);margin:0 0 14px;letter-spacing:.02em}
+.cover .members{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:4px 22px;
+  border-top:1px solid var(--line);padding-top:12px;max-width:900px;
+}
+.cover .members div{font-family:var(--ui);font-size:12.6px;color:var(--ink);line-height:1.5}
+.cover .members div span{color:var(--muted);font-variant-numeric:tabular-nums}
+.cover .bottom{
+  margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+  border-top:2px solid var(--accent);padding-top:10px;
+}
+.cover .bottom p{margin:0;font-family:var(--ui);font-size:12.5px;color:var(--muted);line-height:1.55}
+.cover .bottom p b{color:var(--title);font-weight:700}
+
+.agenda{display:grid;grid-template-columns:1fr 1fr;gap:0 34px;flex:1 1 auto;align-content:center}
+.agenda .item{display:flex;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.agenda .no{
+  font-family:var(--ui);font-size:17px;font-weight:700;color:var(--accent);
+  flex:0 0 34px;padding-top:3px;font-variant-numeric:tabular-nums;
+}
+.agenda h4{margin:0;font-size:20px;color:var(--title);line-height:1.25}
+.agenda p{margin:3px 0 0;font-size:15.5px;color:var(--muted);line-height:1.4}
+
+.closing{display:grid;grid-template-columns:1.45fr .95fr;gap:24px;align-items:stretch}
+.closing .left{display:flex;flex-direction:column;gap:12px}
+.closing .links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+.closing .lnk{
+  display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:8px 12px;text-decoration:none;color:var(--ink);font-size:13.4px;line-height:1.3;
+}
+.closing .lnk b{display:block;font-family:var(--ui);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
+.closing .lnk span{color:var(--muted);word-break:break-all;font-family:var(--ui);font-size:11.5px}
+.closing .qrbox{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;
+}
+.closing .qrbox .qr{width:158px;height:158px;background:#fff;border-radius:10px;padding:6px;display:flex;align-items:center;justify-content:center}
+.closing .qrbox canvas,.closing .qrbox img{width:100%;height:100%;display:block}
+.closing .qrbox .qrf{
+  width:100%;height:100%;border:1.5px dashed #A7C4B7;border-radius:8px;color:#475569;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  font-family:var(--ui);font-size:10.5px;line-height:1.35;padding:8px;
+}
+.closing .qrbox h4{margin:0;font-size:19px;color:var(--title)}
+.closing .qrbox p{margin:0;font-size:12.5px;color:var(--muted);font-family:var(--ui);word-break:break-all}
+.closing .thanks{font-size:30px;color:var(--title);margin:0;letter-spacing:-.01em}
+.closing .qa{
+  font-family:var(--ui);font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);
+}
+
+/* ==========================================================================
+   6. CHROME (UI presentasi)
+   ========================================================================== */
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--accent-grad);width:0;z-index:60;transition:width .3s ease}
+#toolbar{
+  position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:55;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;
+  background:var(--chrome-bg);border:1px solid var(--chrome-line);
+  border-radius:14px;padding:7px 9px;box-shadow:0 18px 40px -24px rgba(20,26,43,.7);
+  max-width:calc(100vw - 20px);font-family:var(--ui);
+}
+.tb-group{display:flex;align-items:center;gap:4px}
+.tb-group + .tb-group{border-left:1px solid var(--chrome-line);padding-left:7px;margin-left:3px}
+#toolbar button{
+  display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid transparent;color:var(--chrome);
+  font-size:12.5px;font-weight:600;padding:6px 9px;border-radius:9px;cursor:pointer;
+  line-height:1;transition:background .16s ease,color .16s ease,border-color .16s ease;
+}
+#toolbar button:hover{background:var(--pale)}
+#toolbar button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+#toolbar button.primary{background:var(--accent-grad);color:var(--accent-ink);border-color:transparent}
+#toolbar button.primary:hover{filter:brightness(1.07)}
+#toolbar button svg{width:14px;height:14px;flex:0 0 auto}
+#counter{
+  font-family:var(--ui);font-size:12.5px;font-weight:700;color:var(--chrome);
+  min-width:62px;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:.02em;
+}
+#btnTimer{font-variant-numeric:tabular-nums;min-width:74px;justify-content:center}
+
+/* Layar penuh: slide mengisi seluruh layar, seluruh menu disembunyikan */
+body.is-full #toolbar,
+body.is-full #dots,
+body.is-full #progress{display:none!important}
+body.is-full #stage{padding:0;background:var(--bg)}
+body.is-full #canvas{border-radius:0;box-shadow:none}
+body.is-full #toast{bottom:26px}
+/* Sembunyikan kursor saat presentasi berjalan (muncul lagi bila mouse digerakkan) */
+body.is-full.idle,body.is-full.idle *{cursor:none!important}
+/* Tombol keluar layar penuh: tersembunyi, muncul saat kursor ke sudut kanan atas */
+#fsExit{
+  position:fixed;top:12px;right:12px;z-index:75;display:none;
+  align-items:center;gap:6px;padding:7px 11px;border-radius:10px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.28);background:rgba(6,78,59,.72);color:#fff;
+  font-family:var(--ui);font-size:11.5px;font-weight:600;letter-spacing:.02em;
+  opacity:0;transition:opacity .22s ease;backdrop-filter:blur(6px);
+}
+[data-theme="dark"] #fsExit{
+  border-color:rgba(209,250,229,.3);background:rgba(209,250,229,.16);color:#E6F4EE;
+}
+body.is-full #fsExit{display:inline-flex}
+body.is-full #fsExit.show{opacity:1}
+body.is-full.idle #fsExit{opacity:0!important}
+
+/* Saat panel catatan terbuka, geser panggung agar slide tidak tertutup */
+body.notes-open #stage{padding-right:404px}
+@media (max-width:900px){body.notes-open #stage{padding-right:14px}}
+#notes{
+  position:fixed;right:0;top:0;height:100%;width:390px;max-width:92vw;z-index:70;
+  background:var(--card);border-left:1px solid var(--line);
+  transform:translateX(102%);transition:transform .3s ease;
+  display:flex;flex-direction:column;font-family:var(--ui);
+  box-shadow:-20px 0 50px -30px rgba(20,26,43,.6);
+}
+#notes.open{transform:none}
+#notes header{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:11px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+#notes header h2{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+#notes .nact{display:flex;align-items:center;gap:4px;flex:1 1 100%;justify-content:space-between;flex-wrap:wrap}
+#notes .nact button{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:30px;height:30px;padding:0 8px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--chrome);
+  font-family:var(--ui);font-size:12px;font-weight:700;line-height:1;
+}
+#notes .nact button:hover{background:var(--pale)}
+#notes .nact button:disabled{opacity:.4;cursor:default}
+#notes .ncount{font-family:var(--ui);font-size:11.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;min-width:44px;text-align:center}
+#notes #nJump{
+  flex:1 1 96px;min-width:96px;height:30px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--chrome);
+  font-family:var(--ui);font-size:11.5px;font-weight:600;padding:0 4px;
+}
+#notes .nbody{padding:16px;overflow:auto;flex:1 1 auto}
+#notes .nslide{font-family:var(--ui);font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+#notes .ntitle{font-family:Georgia,serif;font-size:19px;color:var(--title);margin:0 0 12px;line-height:1.25}
+#notes .ntext{
+  font-size:calc(14px * var(--ns, 1));line-height:1.7;color:var(--ink);
+  white-space:pre-line;font-family:var(--ui);
+}
+#notes .nguide{margin-top:16px;padding:10px 12px;background:var(--card-alt);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:13px;font-style:italic;color:var(--accent);line-height:1.5}
+#notes .hint{margin-top:18px;font-size:11.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line);padding-top:10px}
+
+/* Mode naskah (?naskah=1): hanya teks yang tampil — untuk dibaca di HP masing-masing */
+body.script-only{background:var(--card)}
+body.script-only #stage,
+body.script-only #toolbar,
+body.script-only #dots,
+body.script-only #progress,
+body.script-only #toast{display:none!important}
+body.script-only #notes{
+  position:static;width:100%;max-width:100%;height:100%;transform:none;
+  border-left:none;box-shadow:none;background:var(--card);
+}
+body.script-only #notes .nbody{padding:18px 20px 40px;max-width:820px;margin:0 auto;width:100%}
+body.script-only #notes .ntext{font-size:calc(17px * var(--ns, 1));line-height:1.8;overflow-wrap:anywhere}
+body.script-only #notes .ntitle{font-size:23px}
+body.script-only #notes .hint{display:none}
+body.script-only #notes header{max-width:820px;margin:0 auto;width:100%;box-sizing:border-box}
+
+/* Di ponsel panel catatan memakai seluruh layar agar nyaman dibaca */
+@media (max-width:900px){
+  #notes{width:100%;max-width:100%;border-left:none;overflow-x:hidden}
+  #notes header{flex-wrap:wrap;gap:6px;padding:10px 12px}
+  #notes header h2{font-size:11px}
+  #notes .nact{flex:1 1 100%;margin:2px 0 0;gap:4px;flex-wrap:wrap;justify-content:space-between}
+  #notes .nact button{min-width:32px;height:32px;padding:0 8px;font-size:12px}
+  #notes .ncount{min-width:44px;font-size:12px}
+  #notes #btnNotesClose{flex:0 0 auto}
+  #notes .nbody{padding:14px 16px 32px;overflow-x:hidden}
+  #notes .ntext{font-size:calc(16.5px * var(--ns, 1));line-height:1.75;overflow-wrap:anywhere}
+  #notes .ntitle{font-size:21px}
+  #notes .hint{display:none}
+}
+
+/* Ikhtisar / overview */
+#overview{
+  position:fixed;inset:0;z-index:80;background:var(--chrome-bg);
+  display:none;flex-direction:column;padding:22px 24px 84px;overflow:auto;
+}
+#overview.open{display:flex}
+#overview .ov-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:16px;font-family:var(--ui)}
+#overview .ov-head h2{margin:0;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+#overview .ov-head p{margin:0;font-size:12px;color:var(--muted)}
+#ovGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:16px}
+.thumb{
+  position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;
+  border:2px solid var(--chrome-line);background:var(--bg);cursor:pointer;padding:0;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+.thumb:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 16px 30px -20px rgba(20,26,43,.6)}
+.thumb.cur{border-color:var(--accent);box-shadow:0 0 0 3px var(--pale)}
+.thumb .holder{position:absolute;inset:0}
+.thumb .holder .slide{position:absolute;top:0;left:0;opacity:1!important;visibility:visible!important;transition:none!important}
+.thumb .holder .slide .reveal{opacity:1!important;transform:none!important;animation:none!important}
+.thumb .lbl{
+  position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;gap:8px;
+  padding:5px 8px;background:linear-gradient(to top,rgba(15,21,36,.86),rgba(15,21,36,0));
+  color:#fff;font-family:var(--ui);font-size:10.5px;font-weight:600;letter-spacing:.03em;
+}
+.thumb .lbl .n{color:#A7F3D0;font-variant-numeric:tabular-nums}
+
+/* Toast */
+#toast{
+  position:fixed;left:50%;bottom:86px;transform:translate(-50%,16px);z-index:90;
+  background:#1E293B;color:#F8FAFC;font-family:var(--ui);font-size:13px;line-height:1.5;
+  padding:11px 16px;border-radius:11px;max-width:min(560px,90vw);
+  box-shadow:0 20px 40px -20px rgba(0,0,0,.6);opacity:0;pointer-events:none;
+  transition:opacity .22s ease,transform .22s ease;
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.err{background:#7F1D1D}
+#toast.ok{background:#065F46}
+
+/* Layar kecil: sembunyikan label tombol */
+@media (max-width:900px){
+  #toolbar button .t{display:none}
+  #toolbar{padding:6px}
+  #stage{padding-bottom:104px}
+}
+
+/* ==========================================================================
+   7. CETAK / PDF  — satu slide per halaman 16:9, tanpa UI
+   ========================================================================== */
+@media print{
+  /* 1280x720 px @96dpi = 13,333in x 7,5in (16:9) */
+  @page{size:13.333in 7.5in;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  #toolbar,#progress,#notes,#overview,#toast,#dots,#lightbox,#fsExit{display:none!important}
+  /* Mode naskah tetap harus mencetak slide, bukan teks naskah */
+  body.script-only #stage{display:block!important}
+  body.script-only{background:#fff}
+  #stage{position:static;display:block;padding:0}
+  #frame{position:static;width:1280px!important;height:auto!important}
+  #canvas{
+    position:static!important;transform:none!important;
+    width:1280px!important;height:auto!important;
+    border-radius:0;box-shadow:none;overflow:visible;background:var(--bg);
+  }
+  .slide{
+    position:relative!important;inset:auto!important;
+    width:1280px;height:720px;opacity:1!important;visibility:visible!important;transform:none!important;
+    page-break-after:always;break-after:page;overflow:hidden;
+    transition:none!important;
+  }
+  .slide.cover{overflow:hidden}
+  .slide:last-child{page-break-after:auto;break-after:auto}
+  .slide .reveal{opacity:1!important;transform:none!important;animation:none!important}
+  .guide-line{display:none!important}
+  .card,.panel,.metric,.ent,.dbox,.flow .step{box-shadow:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* Hormati preferensi gerak minimal */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;transition-duration:.001ms!important}
+  .slide .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress" role="progressbar" aria-label="Kemajuan presentasi" aria-valuemin="1" aria-valuemax="1" aria-valuenow="1"></div>
+
+<main id="stage" aria-label="Panggung presentasi">
+  <div id="frame">
+    <div id="canvas"></div>
+  </div>
+</main>
+
+<!-- Toolbar navigasi & mode tampilan -->
+<div id="toolbar" role="toolbar" aria-label="Kontrol presentasi">
+  <div class="tb-group">
+    <button id="btnPrev" aria-label="Slide sebelumnya" title="Sebelumnya (←)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <span id="counter" aria-live="polite">1 / 21</span>
+    <button id="btnNext" aria-label="Slide berikutnya" title="Berikutnya (→)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+
+  <div class="tb-group">
+    <button id="btnOverview" aria-pressed="false" aria-label="Ikhtisar semua slide" title="Ikhtisar (G)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>
+      <span class="t">Ikhtisar</span>
+    </button>
+    <button id="btnNotes" aria-pressed="false" aria-label="Panel naskah presentasi" title="Naskah presentasi (N)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>
+      <span class="t">Naskah</span>
+    </button>
+    <button id="btnGuide" aria-pressed="false" aria-label="Tampilkan atau sembunyikan kalimat panduan" title="Panduan (P)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 12h16M4 18h7"/><circle cx="18" cy="6" r="2"/></svg>
+      <span class="t">Panduan</span>
+    </button>
+    <button id="btnTheme" aria-pressed="false" aria-label="Ganti tema terang atau gelap" title="Tema (T)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.4"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></svg>
+      <span class="t">Tema</span>
+    </button>
+  </div>
+
+  <div class="tb-group">
+    <button id="btnTimer" aria-label="Mulai atau jeda timer presentasi" title="Timer (mulai/jeda)">00:00</button>
+    <button id="btnTimerReset" aria-label="Reset timer presentasi" title="Reset timer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+    </button>
+    <button id="btnFull" aria-pressed="false" aria-label="Masuk atau keluar layar penuh" title="Layar penuh — menu disembunyikan (F)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 15v5h-5M15 4h5v5M9 20H4v-5"/></svg>
+      <span class="t">Layar penuh</span>
+    </button>
+  </div>
+
+  <div class="tb-group">
+    <button id="btnPdf" class="primary" title="Unduh PDF 16:9 (satu slide per halaman)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>
+      <span class="t">Unduh PDF</span>
+    </button>
+    <button id="btnPptx" title="Unduh PowerPoint (.pptx)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5"/><path d="M8 12h4a2.4 2.4 0 0 1 0 4.8H8z"/></svg>
+      <span class="t">PPTX</span>
+    </button>
+    <button id="btnHelp" aria-label="Bantuan pintasan papan tombol" title="Bantuan (?)">?</button>
+  </div>
+</div>
+
+<!-- Panel catatan pembicara -->
+<aside id="notes" aria-hidden="true" aria-label="Catatan pembicara">
+  <header>
+    <h2>Naskah</h2>
+    <div class="nact">
+      <button id="btnNotesPrev" aria-label="Slide sebelumnya" title="Slide sebelumnya (←)">‹</button>
+      <span class="ncount" id="nCount">1 / 21</span>
+      <button id="btnNotesNext" aria-label="Slide berikutnya" title="Slide berikutnya (→)">›</button>
+      <select id="nJump" aria-label="Lompat ke slide" title="Lompat ke slide"></select>
+      <button id="btnNotesFontDown" aria-label="Perkecil teks catatan" title="Perkecil teks">A−</button>
+      <button id="btnNotesFontUp" aria-label="Perbesar teks catatan" title="Perbesar teks">A+</button>
+      <button id="btnNotesClose" aria-label="Tutup catatan">Tutup</button>
+    </div>
+  </header>
+  <div class="nbody">
+    <div class="nslide" id="nSlide">Slide 1</div>
+    <h3 class="ntitle" id="nTitle">—</h3>
+    <div class="ntext" id="nText">—</div>
+    <div class="nguide" id="nGuide" hidden></div>
+    <div class="hint">Pintasan: <b>←/→</b> pindah slide · <b>Spasi</b> lanjut · <b>Home/End</b> awal/akhir · <b>F</b> layar penuh (menu disembunyikan) · <b>G</b> ikhtisar · <b>N</b> naskah · <b>P</b> panduan · <b>T</b> tema · <b>Esc</b> tutup panel. Untuk mode baca di HP, buka <b>index.html?naskah=1</b>.</div>
+  </div>
+</aside>
+
+<!-- Ikhtisar semua slide -->
+<section id="overview" aria-label="Ikhtisar slide" aria-hidden="true">
+  <div class="ov-head">
+    <h2>Ikhtisar slide</h2>
+    <p>Klik thumbnail untuk melompat · tekan G atau Esc untuk menutup</p>
+  </div>
+  <div id="ovGrid"></div>
+</section>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- Tombol keluar layar penuh (hanya tampil di mode layar penuh) -->
+<button id="fsExit" type="button" aria-label="Keluar layar penuh" title="Keluar layar penuh (Esc)">
+  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 20v-5h5M20 9h-5V4M4 15h5v5"/></svg>
+  Keluar layar penuh
+</button>
+
+<!-- Pratinjau gambar: klik tangkapan layar untuk memperbesar -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau gambar" aria-hidden="true">
+  <img alt="" />
+  <p></p>
+</div>
+
+<!-- ====================== GAYA TAMBAHAN ====================== -->
+<style>
+/* Penyesuaian keterbacaan (proyektor kelas) */
+table.tbl td{font-size:17px}
+table.tbl th{font-size:13.5px}
+.card p{font-size:16.5px}
+.rowline{font-size:16.5px}
+.flow .step p{font-size:14.8px}
+.agenda p{font-size:14.6px}
+.note-bar{font-size:14.6px}
+
+/* Indikator titik */
+#dots{
+  position:fixed;bottom:76px;left:50%;transform:translateX(-50%);z-index:58;
+  display:flex;align-items:center;gap:5px;flex-wrap:nowrap;max-width:calc(100vw - 40px);
+  padding:5px 9px;border-radius:999px;background:var(--chrome-bg);border:1px solid var(--chrome-line);
+}
+#dots button{
+  width:7px;height:7px;padding:0;border:none;border-radius:50%;
+  background:var(--chrome-line);cursor:pointer;transition:width .18s ease,background .18s ease;
+}
+#dots button[aria-current="true"]{width:20px;border-radius:99px;background:var(--accent)}
+#dots button:hover{background:var(--accent)}
+@media (max-width:1000px){#dots{display:none}}
+
+/* Grafik batang */
+.chart{display:flex;flex-direction:column;gap:9px}
+.chart .crow{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:center}
+.chart .cname{font-family:var(--ui);font-size:12.6px;font-weight:700;color:var(--title);line-height:1.28}
+.chart .cbars{display:flex;flex-direction:column;gap:4px}
+.chart .cbar{display:flex;align-items:center;gap:8px}
+.chart .cbar .tag{font-family:var(--ui);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:0 0 56px}
+.chart .cbar .track{flex:1 1 auto;height:13px;background:var(--card-alt);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.chart .cbar .fill{height:100%;border-radius:99px;display:block}
+.chart .cbar.before .fill{background:var(--deco-1)}
+.chart .cbar.after .fill{background:var(--accent)}
+.chart .cbar .num{font-family:var(--ui);font-size:11.6px;font-weight:700;color:var(--ink);flex:0 0 72px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* Placeholder tangkapan layar */
+.shot{
+  width:100%;height:100%;border:1.5px dashed var(--line);border-radius:9px;
+  background:var(--card-alt);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;color:var(--muted);text-align:center;padding:8px;
+}
+.shot b{font-family:var(--ui);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.shot span{font-family:var(--ui);font-size:10px;line-height:1.35}
+.shot .glyph{font-size:22px;line-height:1;color:var(--accent);opacity:.75}
+
+/* Tangkapan layar asli (folder screenshot/) */
+.shot-frame{
+  position:relative;flex:1 1 auto;min-height:110px;margin-top:8px;
+  border-radius:9px;background:var(--card-alt);border:1px solid var(--line);
+  overflow:hidden;
+}
+.shot-frame img{
+  position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);
+  display:block;object-fit:var(--fit,contain);object-position:var(--pos,center);
+  border-radius:6px;cursor:zoom-in;background:#fff;
+}
+.shot-cap{
+  margin:5px 0 0;font-family:var(--ui);font-size:10.5px;line-height:1.3;
+  color:var(--muted);text-align:center;
+}
+.shot-missing{
+  position:absolute;inset:6px;display:flex;align-items:center;justify-content:center;
+  border:1.5px dashed var(--line);border-radius:6px;padding:8px;
+  font-family:var(--ui);font-size:10px;color:var(--muted);text-align:center;
+}
+
+/* Pratinjau gambar layar penuh */
+#lightbox{
+  position:fixed;inset:0;z-index:95;display:none;
+  background:rgba(9,14,26,.9);padding:28px;
+  align-items:center;justify-content:center;cursor:zoom-out;
+}
+#lightbox.open{display:flex}
+#lightbox img{
+  max-width:100%;max-height:100%;width:auto;height:auto;
+  border-radius:10px;background:#fff;box-shadow:0 40px 80px -40px #000;
+}
+#lightbox p{
+  position:absolute;left:0;right:0;bottom:14px;margin:0;text-align:center;
+  font-family:var(--ui);font-size:12.5px;color:#D1FAE5;
+}
+
+/* Logo ITERA berupa gambar: beri alas putih agar tetap terbaca di tema gelap */
+[data-theme="dark"] .s-head .logo,
+[data-theme="dark"] .cover .logo-big{
+  background:#fff;border-radius:8px;padding:3px;box-sizing:content-box;
+}
+
+/* Kartu rekomendasi bernomor */
+.rec{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 18px}
+.rec .n{font-family:var(--ui);font-size:25px;font-weight:700;color:var(--accent);line-height:1;flex:0 0 44px;font-variant-numeric:tabular-nums;opacity:.9}
+.rec h4{margin:0 0 3px;font-size:18px;color:var(--title);line-height:1.24}
+.rec p{margin:0;font-size:15.4px;color:var(--muted);line-height:1.42}
+
+/* Mode tangkap layar untuk ekspor PDF */
+body.capturing #canvas{transform:none!important;border-radius:0;box-shadow:none}
+body.capturing #stage{align-items:flex-start;justify-content:flex-start;padding:0;display:block}
+</style>
+
+<!-- Indikator titik (klik untuk lompat) -->
+<nav id="dots" aria-label="Indikator slide"></nav>
+
+<script>
+/* ============================================================================
+   DATA PRESENTASI — "EDIT DI SINI"
+   Semua isi slide ada di objek META dan array `slides` di bawah.
+   Ubah teks/nilai di sini; markup tidak perlu disentuh.
+   ============================================================================ */
+
+/* Logo ITERA — gambar dari folder screenshot/.
+   Bila berkas tidak ditemukan, otomatis jatuh ke placeholder SVG. */
+const LOGO_SRC = "screenshot/logo-itera.png";
+/* Rasio lebar/tinggi gambar logo (316 × 380 px) — dipakai saat ekspor PPTX. */
+const LOGO_ASPECT = 316 / 380;
+
+/* Fallback: bila gambar logo gagal dimuat, ganti dengan placeholder SVG. */
+document.addEventListener("error", (e) => {
+  const img = e.target;
+  if (!img || img.tagName !== "IMG" || !img.hasAttribute("data-logo")) return;
+  const holder = img.parentElement;
+  if (holder) holder.innerHTML = logoMarkup("", true);
+}, true);
+
+const META = {
+  judul: "Portal Informasi Desa Berbasis Web dan QR Code",
+  judulSingkat: "Portal-Desa-Fajar-Baru",
+  kelompok: 3,
+  mataKuliah: "Kapita Selekta IF25-41031",
+  prodi: "S1 Teknik Informatika · Fakultas Teknologi Industri · Institut Teknologi Sumatera",
+  tanggal: "16 November 2026",
+  desa: "Desa Fajar Baru, Kecamatan Jati Agung, Kabupaten Lampung Selatan",
+  demo: "https://portal-informasi-desa-fajar-baru.vercel.app",
+  repo: "https://github.com/braxys/portal-informasi-desa-fajar-baru",
+};
+
+const ANGGOTA = [
+  { nama: "Arief Fandi Satria", nim: "124140020", peran: "UI/UX" },
+  { nama: "Bagas Hari Muthi", nim: "124140128", peran: "Project Manager" },
+  { nama: "Krisna Dwi Cristian", nim: "124140152", peran: "Backend" },
+  { nama: "Pindo Kresno Wibowo KAI", nim: "124140158", peran: "Frontend" },
+  { nama: "Raja Daffa Apriza MW", nim: "124140182", peran: "Backend" },
+  { nama: "Arya Dimar Fath", nim: "124140212", peran: "Frontend" },
+];
+
+/* Data hasil evaluasi.
+   PENTING: angka di bawah adalah CONTOH FORMAT yang saling konsisten dengan
+   slide Kondisi Awal. Ganti dengan hasil uji lapangan sebelum presentasi.
+   Ukuran ketiga diambil dari statistik dashboard admin (pindai QR & klik
+   tautan), bukan dari jumlah pendaftar BUMDes — pendaftaran diproses di
+   formulir eksternal dan bukan kendali kelompok. */
+const HASIL = [
+  { label: "Waktu menemukan informasi", before: 12, after: 3, unit: "menit", lowerBetter: true, target: 5 },
+  { label: "Pindai QR & klik tautan tercatat", before: 0, after: 64, unit: "kali", lowerBetter: false, target: 40 },
+];
+
+const slides = [
+/* 1 — COVER ---------------------------------------------------------------- */
+{
+  type: "cover",
+  kicker: "Presentasi Solusi dan Evaluasi Before–After · Minggu 12–13",
+  title: "Portal Informasi Desa Berbasis Web dan QR Code",
+  tagline: "untuk Mendukung Digitalisasi Penyebaran Informasi Masyarakat",
+  guide: "Tempatkan logo ITERA di kiri atas, lalu hapus kalimat panduan.",
+  notes: "Assalamualaikum warahmatullahi wabarakatuh. Selamat pagi Bapak/Ibu dosen pengampu dan teman-teman. Kami dari Kelompok 3, Kapita Selekta IF25-41031, akan mempresentasikan proyek kami: Portal Informasi Desa Berbasis Web dan QR Code. Mitra kami Pemerintah Desa Fajar Baru, Kecamatan Jati Agung, Kabupaten Lampung Selatan. Alurnya sederhana: kami mulai dari masalah mitra, lalu solusi yang kami bangun, dan ditutup dengan hasil evaluasi sebelum–sesudah.",
+},
+/* 2 — AGENDA --------------------------------------------------------------- */
+{
+  type: "agenda",
+  kicker: "Agenda",
+  title: "Agenda presentasi",
+  sub: "Delapan bagian, alokasi ±15 menit termasuk tanya jawab",
+  guide: "Sebutkan urutan slide mengikuti rubrik penilaian agar penilaian mudah diikuti.",
+  notes: "Sebelum masuk, kami sampaikan alurnya. Ada delapan bagian, sekitar 15 menit termasuk tanya jawab. Kami mulai dari latar belakang dan mitra, target pengguna, lalu tujuan SDGs Desa yang kami sasar, yaitu 16.10.2, 8.6.1, dan 9.c.1. Setelah itu solusi dan fitur, arsitektur dan data, demonstrasi produk, dan bagian terpenting: evaluasi before–after beserta capaian target. Kami tutup dengan refleksi dan rekomendasi. Bila waktu mepet, bagian arsitektur dan struktur data bisa kami lewati.",
+  items: [
+    { title: "Latar belakang dan mitra", desc: "Akar masalah: penyebaran informasi masih konvensional" },
+    { title: "Target pengguna", desc: "Warga, perangkat desa, dan kader" },
+    { title: "SDGs dan target", desc: "Indikator 16.10.2, 8.6.1, dan 9.c.1" },
+    { title: "Solusi dan fitur", desc: "Dari masalah mitra ke fitur" },
+    { title: "Arsitektur dan data", desc: "Cara sistem bekerja dan menyimpan data" },
+    { title: "Demonstrasi dan kesiapan", desc: "Skenario pengguna dan posisi TKT" },
+    { title: "Evaluasi before–after", desc: "Desain ukur, hasil, dan capaian SDGs" },
+    { title: "Refleksi dan penutup", desc: "Kendala, keberlanjutan, dan rekomendasi" },
+  ],
+},
+/* 3 — LATAR BELAKANG ------------------------------------------------------- */
+{
+  type: "cards",
+  kicker: "Latar belakang",
+  title: "Latar belakang",
+  sub: "Kondisi sekarang, akar masalah, dan dampaknya",
+  guide: "Mulai dari kondisi yang dilihat sendiri saat observasi, bukan dari teori.",
+  notes: "Kami mulai dari apa yang kami lihat langsung di lapangan. Desa Fajar Baru sudah berupaya menyampaikan informasi, tetapi caranya masih konvensional: instruksi lisan dari perangkat desa ke kepala dusun, lalu diteruskan dari mulut ke mulut. Akibatnya jangkauan informasi sempit dan tidak merata. Dampak paling nyata: rekrutmen pengurus BUMDes tidak mendapat satu pun pendaftar, sehingga roda kelembagaan desa tertahan. Jadi masalahnya bukan sekadar belum ada website, tetapi saluran penyebaran informasinya belum pernah berpindah ke digital.",
+  lead: "Desa sudah berupaya, tetapi <b>penyebaran informasinya masih dilakukan secara konvensional</b>.",
+  cards: [
+    { icon: "megaphone", meta: "Kondisi sekarang", title: "Informasi disampaikan lisan", desc: "Rekrutmen pengurus BUMDes hanya lewat instruksi lisan ke kepala dusun, lalu diteruskan dari mulut ke mulut." },
+    { icon: "link", meta: "Akar masalah", title: "Penyebaran masih konvensional", desc: "Belum ada saluran digital resmi, sehingga jangkauan bergantung pada pertemuan dan obrolan warga." },
+    { icon: "chart", meta: "Dampak", title: "BUMDes vakum, partisipasi rendah", desc: "Informasi tidak sampai ke calon pendaftar; pendaftar nihil dan roda kelembagaan desa tertahan." },
+  ],
+  note: "<b>Bukti:</b> saat ditagih perkembangannya, para kepala dusun melaporkan belum mendapatkan satu pun pendaftar.",
+},
+/* 4 — MITRA DAN MASALAH ---------------------------------------------------- */
+{
+  type: "table",
+  kicker: "Konteks",
+  title: "Mitra dan masalah",
+  sub: "Siapa yang dibantu dan apa persoalannya",
+  guide: "Rumuskan masalah dari sudut pandang warga, bukan dari kegiatan kelompok.",
+  notes: "Mitra kami ada dua. Mitra pemerintah: Pemerintah Desa Fajar Baru, termasuk perangkat desa dan kepala dusun. Mitra sasaran: warga desa yang memakai layanan dan mencari informasi program desa. Aspek kegiatannya pelayanan publik dan kelembagaan desa. Bukti masalah kami dapat dari wawancara perangkat desa pada November 2026: BUMDes vakum dan pendaftar nol orang. Inilah titik awal pengukuran kami.",
+  head: ["Unsur", "Isian"],
+  widths: [26, 74],
+  rows: [
+    ["Mitra pemerintah", "Pemerintah Desa Fajar Baru — perangkat desa dan kepala dusun"],
+    ["Mitra sasaran", "Warga desa pengguna layanan dan informasi program desa"],
+    ["Aspek kegiatan", "Pelayanan publik dan kelembagaan desa"],
+    ["Akar masalah", "Penyebaran informasi masih konvensional: rekrutmen BUMDes hanya instruksi lisan ke kepala dusun, belum ada saluran digital resmi"],
+    ["Bukti masalah", "BUMDes vakum; pendaftar 0 orang"],
+    ["Sumber data", "Observasi dan wawancara perangkat desa, November 2026"],
+  ],
+  note: "<b>Inti masalah:</b> informasi penting desa masih disebarkan secara lisan, sehingga tidak menjangkau warga secara luas dan merata.",
+},
+/* 5 — TARGET PENGGUNA ------------------------------------------------------ */
+{
+  type: "cards",
+  kicker: "Pengguna",
+  title: "Target pengguna",
+  sub: "Tiga pihak yang paling terdampak",
+  guide: "Sebutkan satu nama atau kelompok warga nyata yang sudah diwawancarai.",
+  notes: "Ada tiga pihak yang harus kami layani sekaligus. Pertama, warga dan calon pengurus BUMDes sebagai pengguna utama; mereka membuka dari HP dan butuh info lowongan dengan cepat. Kedua, perangkat desa sebagai admin; mereka harus bisa mengubah tautan tanpa menyentuh kode, jadi dashboard admin kami buat sesederhana mungkin. Ketiga, kepala dusun dan kader sebagai penyampai informasi; mereka butuh bahan sosialisasi siap pakai. Ketiganya punya kendala yang sama: belum ada saluran resmi. Karena itu aksesnya kami rancang lewat satu kali pindai QR, tanpa memasang aplikasi.",
+  lead: "Solusi harus melayani <b>tiga pihak</b> sekaligus: warga yang mencari informasi, perangkat desa yang mengelola, dan kader yang menyebarkan.",
+  cards: [
+    { meta: "Pengguna utama", title: "Warga & calon pengurus", desc: "Butuh info lowongan cepat dari HP. Kendala: informasi hanya diterima dari mulut ke mulut." },
+    { meta: "Pengelola", title: "Perangkat desa (admin)", desc: "Butuh mengubah tautan tanpa menyentuh kode. Kendala: penyebaran masih manual dan lisan." },
+    { meta: "Penyampai informasi", title: "Kepala dusun & kader", desc: "Butuh bahan sosialisasi siap pakai. Kendala: harus menyampaikan ulang secara lisan dengan jangkauan terbatas." },
+  ],
+  note: "Akses lewat satu kali pindai QR, tanpa memasang aplikasi tambahan.",
+},
+/* 6 — KONDISI AWAL --------------------------------------------------------- */
+{
+  type: "metrics",
+  kicker: "Kondisi awal (Before)",
+  title: "Kondisi awal",
+  sub: "Data sebelum solusi diterapkan",
+  guide: "Tampilkan ukuran yang akan diukur ulang setelah penerapan. Tanpa angka, kondisi awal tidak dapat dinilai.",
+  notes: "Ini kondisi awal, atau before, dengan bobot penilaian 15. Ada tiga angka kondisi awal. Pertama, saluran informasi digital resmi: nol. Kedua, pindai QR dan klik tautan yang tercatat: nol, karena portalnya belum ada. Ketiga, waktu warga mencari informasi layanan: 12 menit, dari kuesioner awal. Angka nol ini penting, karena menjadi bukti bahwa penyebaran informasi memang masih sepenuhnya lisan. Dari ketiganya, dua angka yang kami ukur ulang dengan cara yang sama adalah waktu mencari informasi dan jumlah pindai QR serta klik tautan; keduanya kami ambil dari dashboard admin dan kuesioner dengan instrumen yang sama.",
+  lead: "Sebelum portal dibangun, informasi desa <b>hanya disebarkan secara lisan</b> — belum ada saluran digital resmi. Tiga angka berikut menjadi titik awal pengukuran.",
+  metrics: [
+    { val: "0", unit: "", lab: "Saluran informasi digital resmi", src: "Sumber: observasi lapangan dan telaah dokumen desa" },
+    { val: "0", unit: "", lab: "Pindai QR & klik tautan tercatat", src: "Sumber: dashboard admin — belum ada data sebelum portal aktif" },
+    { val: "12", unit: "menit", lab: "Waktu warga mencari info layanan", src: "Sumber: kuesioner awal warga desa" },
+  ],
+  note: "Pindai QR dan waktu mencari informasi diukur ulang pada slide Hasil (before–after).",
+},
+/* 7 — SDGs DAN TARGET ------------------------------------------------------ */
+{
+  type: "table",
+  kicker: "SDGs Desa",
+  title: "SDGs Desa dan target",
+  sub: "Salinan Butir 7 proposal pengajuan",
+  guide: "Isi harus sama dengan proposal; slide capaian nanti membandingkan hasil dengan tabel ini.",
+  notes: "Kami menyasar tiga tujuan SDGs Desa, satu indikator untuk masing-masing. Tujuan 16, desa damai dan berkeadilan, lewat indikator 16.10.2: akses publik terhadap informasi desa. Tujuan 8, pertumbuhan ekonomi desa merata, lewat 8.6.1: pemuda 15 sampai 24 tahun yang tidak bekerja, tidak bersekolah, dan tidak ikut pelatihan. Di desa ini masalahnya info lowongan dan pelatihan BUMDes tidak sampai ke mereka. Tujuan 9, infrastruktur dan inovasi, lewat 9.c.1: penduduk yang terjangkau jaringan seluler dan internet. Portal kami dirancang ringan supaya benar-benar bisa dibuka dari HP warga di jaringan lemah. Cara pembuktiannya ada di kolom terakhir: statistik dashboard, klik tautan, dan uji akses lintas perangkat.",
+  head: ["Indikator SDGs Desa", "Kondisi awal", "Target", "Cara pembuktian"],
+  widths: [30, 26, 22, 22],
+  rows: [
+    ["16.10.2 — Akses publik terhadap informasi desa", "Informasi disebarkan lisan, belum ada saluran digital", "Portal sekali pindai untuk semua tautan desa", "Statistik dashboard admin + kuesioner warga"],
+    ["8.6.1 — Pemuda 15–24 tahun tanpa kerja, sekolah, atau pelatihan (NEET)", "Info lowongan dan pelatihan BUMDes hanya dari mulut ke mulut", "Lowongan dan pelatihan desa terpublikasi di portal", "Klik tautan lowongan + jumlah pendaftar"],
+    ["9.c.1 — Penduduk terjangkau jaringan seluler/internet", "Belum ada layanan digital resmi yang bisa dibuka dari HP", "Portal ringan terbuka di jaringan lemah", "Uji akses lintas perangkat + statistik kunjungan"],
+  ],
+  note: "<b>Tujuan 16:</b> Perdamaian, Keadilan, dan Kelembagaan yang Tangguh · <b>Tujuan 8:</b> Pekerjaan Layak dan Pertumbuhan Ekonomi · <b>Tujuan 9:</b> Infrastruktur, Industri, dan Inovasi.",
+},
+/* 8 — SOLUSI YANG DIBANGUN ------------------------------------------------- */
+{
+  type: "table",
+  kicker: "Solusi",
+  title: "Solusi yang dibangun",
+  sub: "Dari masalah mitra ke fitur",
+  guide: "Setiap fitur utama harus dapat ditelusuri ke satu masalah mitra; fitur tanpa masalah sebaiknya tidak ditampilkan.",
+  notes: "Solusi kami sengaja dibuat sederhana: satu halaman, satu QR, tanpa aplikasi. Tabel ini menunjukkan setiap fitur selalu menjawab satu masalah mitra. Penyebaran yang masih lisan dijawab dengan satu halaman berisi tautan penting desa. Warga yang sulit menemukan lokasi layanan dijawab dengan peta fasilitas. Stiker QR yang tidak punya data capaian dijawab dengan QR berpelacakan. Dan ketergantungan perubahan konten pada pengembang dijawab dengan dashboard admin mandiri. Fitur yang tidak menjawab masalah mitra tidak kami tampilkan, misalnya akun warga, karena lingkupnya jadi terlalu besar.",
+  head: ["Masalah mitra", "Fitur atau komponen", "Teknologi"],
+  widths: [31, 38, 31],
+  rows: [
+    ["Penyebaran informasi masih lisan dan tidak masif", "Satu halaman berisi tautan penting desa", "Link aggregator + QR berpelacakan"],
+    ["Warga sulit menemukan lokasi layanan", "Peta fasilitas desa dengan filter", "Leaflet + data batas BPS"],
+    ["Stiker QR tanpa data capaian", "QR berpelacakan pindai dan klik", "Rute pelacak + log aktivitas"],
+    ["Perubahan konten bergantung pengembang", "Dashboard admin mandiri", "Supabase Auth + panel admin"],
+  ],
+  note: "Fitur yang tidak menjawab masalah mitra tidak ditampilkan.",
+},
+/* 9 — FITUR UTAMA ---------------------------------------------------------- */
+{
+  type: "cards",
+  kicker: "Fitur",
+  title: "Fitur utama",
+  sub: "Enam kemampuan yang dipakai sehari-hari",
+  guide: "Tunjukkan fitur yang benar-benar dipakai warga, bukan daftar panjang.",
+  notes: "Enam fitur ini yang dipakai sehari-hari. Satu halaman layanan: semua tautan penting desa dalam satu URL. QR berpelacakan: setiap pindai tercatat dan bot disaring. Peta fasilitas dengan filter kategori. Dashboard admin untuk mengelola tautan dan titik peta tanpa kode. Statistik kunjungan: klik, pindai, dan kunjungan tampil langsung. Dan yang terakhir, ramah jaringan lemah: halaman ringan dan cepat dibuka dari HP. Tiga yang paling kami tonjolkan adalah daftar tautan layanan, QR berpelacakan, dan peta.",
+  cards: [
+    { icon: "link", title: "Satu halaman layanan", desc: "Semua tautan penting desa dalam satu URL." },
+    { icon: "qr", title: "QR berpelacakan", desc: "Setiap pindai tercatat, bot disaring." },
+    { icon: "map", title: "Peta fasilitas", desc: "Lokasi layanan dengan filter kategori." },
+    { icon: "grid", title: "Dashboard admin", desc: "Kelola tautan dan titik peta tanpa kode." },
+    { icon: "chart", title: "Statistik kunjungan", desc: "Klik, pindai, dan kunjungan tampil langsung." },
+    { icon: "update", title: "Ramah jaringan lemah", desc: "Halaman ringan, cepat dibuka dari HP." },
+  ],
+  note: "Semua fitur diuji dari sudut pandang warga yang memakai HP.",
+},
+/* 10 — ARSITEKTUR DAN TEKNOLOGI -------------------------------------------- */
+{
+  type: "architecture",
+  kicker: "Rancangan",
+  title: "Arsitektur dan teknologi",
+  sub: "Aliran data dari ponsel warga sampai basis data",
+  guide: "Ganti kotak dengan gambar; beri nomor dan keterangan pada setiap gambar.",
+  notes: "Alurnya satu arah. Warga memindai QR atau membuka tautan, permintaan masuk ke aplikasi Next.js yang berjalan di Vercel, logika server memvalidasi dan mencatat aktivitas, lalu data disimpan di Supabase dengan PostgreSQL. Keamanannya berlapis: halaman admin diproteksi, setiap input divalidasi di server, dan akses data dibatasi aturan RLS di database. Untuk peta kami memakai Leaflet dan OpenStreetMap, sedangkan rilis memakai Vercel dan GitHub dengan migrasi SQL otomatis.",
+  boxes: [
+    { dh: "Pengguna", h4: "Warga & admin", ul: ["Pindai QR atau buka tautan", "Browser HP dan desktop"] },
+    { dh: "Antarmuka", h4: "Next.js di Vercel", ul: ["Halaman publik mobile-first", "Dashboard admin terproteksi"] },
+    { dh: "Logika server", h4: "Server Actions", ul: ["Validasi setiap input", "Pencatatan aktivitas"] },
+    { dh: "Data", h4: "Supabase", ul: ["PostgreSQL + RLS", "Auth dan realtime"] },
+  ],
+  caption: "Gambar 1. Arsitektur sistem portal. Sumber: dokumen rencana sistem kelompok.",
+  tech: [
+    { name: "Frontend", tools: "Next.js 16 · React 19 · Tailwind v4", why: "Halaman cepat dan ramah mesin pencari." },
+    { name: "Backend", tools: "Server Actions · Supabase Auth", why: "Tanpa server terpisah, validasi terpusat." },
+    { name: "Database", tools: "PostgreSQL · RLS · Realtime", why: "Data aman per peran, angka live." },
+    { name: "Peta", tools: "Leaflet · OpenStreetMap", why: "Peta interaktif bersumber terbuka." },
+    { name: "Deployment", tools: "Vercel · GitHub · migrasi SQL", why: "Rilis otomatis tiap perubahan." },
+  ],
+},
+/* 11 — STRUKTUR DATA ------------------------------------------------------- */
+{
+  type: "erd",
+  kicker: "Data",
+  title: "Struktur data",
+  sub: "Empat tabel utama dan perannya",
+  guide: "Cukup tunjukkan peran tiap tabel; detail kolom tidak perlu dibacakan.",
+  notes: "Semua konten disimpan di empat tabel PostgreSQL. Tabel links menyimpan tautan beserta jumlah klik. qr_codes menyimpan QR, url tujuan, dan jumlah pindai. markers menyimpan titik peta. traffic_logs menyimpan seluruh aktivitas: jenis event, tautan atau QR terkait, sumber, dan waktu. Hubungannya satu ke banyak: satu tautan punya banyak log, satu QR juga punya banyak log. Log bersifat hanya-tambah, jadi riwayat tidak bisa diubah dari aplikasi. Tabel pengguna tidak kami buat sendiri, karena itu dikelola Supabase Auth, dan peran admin dibaca dari app_metadata.role.",
+  lead: "Semua konten portal disimpan di <b>empat tabel</b> PostgreSQL dengan aturan akses per baris (RLS).",
+  entities: [
+    { name: "links", tag: "tautan", fields: ["judul", "url", "kategori", "status aktif", "urutan", "jumlah klik"] },
+    { name: "qr_codes", tag: "QR", fields: ["nama QR", "url tujuan", "status aktif", "jumlah pindai"] },
+    { name: "markers", tag: "peta", fields: ["nama lokasi", "lintang & bujur", "kategori", "tautan maps"] },
+    { name: "traffic_logs", tag: "analitik", fields: ["jenis event", "tautan / QR terkait", "sumber", "waktu"] },
+  ],
+  note: "Akses dibatasi RLS: warga hanya membaca data aktif, admin memakai peran <b>app_metadata.role</b>.",
+},
+/* 12 — DEMONSTRASI PRODUK -------------------------------------------------- */
+{
+  type: "steps",
+  kicker: "Demonstrasi",
+  title: "Demonstrasi produk",
+  sub: "Satu skenario pengguna dari awal sampai akhir",
+  guide: "Demonstrasikan langsung atau putar rekaman dengan data nyata; sebut juga kondisi gagal yang diuji.",
+  notes: "Sekarang kami tunjukkan skenarionya dari awal sampai akhir. Langkah pertama, warga memindai stiker QR di balai desa; ini tampilan stiker dan halaman yang terbuka. Langkah kedua, warga memilih layanan, karena satu halaman memuat semua tautan penting desa, dari pendaftaran BUMDes sampai survei. Langkah ketiga, pindai dan klik tadi langsung tercatat di dashboard admin, terlihat pada angka pindai QR dan klik tautan. Satu batas sistem yang perlu kami sebutkan: portal ini mengarahkan ke formulir atau layanan eksternal, jadi yang kami ukur adalah akses warga, yaitu pindai dan klik, bukan isi pendaftarannya.",
+  steps: [
+    { title: "Pindai QR", desc: "Warga memindai stiker di balai desa.", shot: "Tampilan kamera & halaman awal", img: "screenshot/pindai-qr.png", alt: "Stiker QR Survei Perilaku Desa Fajar Baru" },
+    { title: "Pilih layanan", desc: "Satu halaman memuat semua tautan penting.", shot: "Daftar tautan layanan desa", img: "screenshot/pilih-layanan.png", alt: "Halaman beranda portal Desa Fajar Baru" },
+    { title: "Statistik tercatat", desc: "Pindai dan klik langsung masuk dashboard admin.", shot: "Dashboard admin: pindai & klik", img: "screenshot/dashboard-admin.png", alt: "Dashboard admin: kelola tautan dan statistik" },
+  ],
+  caption: "Gambar 2. Skenario pindai QR sampai statistik akses tercatat. Sumber: dokumentasi kelompok.",
+},
+/* 13 — INOVASI DAN KESIAPAN ------------------------------------------------ */
+{
+  type: "panels",
+  kicker: "Inovasi",
+  title: "Inovasi dan kesiapan",
+  sub: "Beda dari cara lama dan posisi TKT",
+  guide: "Akui batas kesiapan produk; klaim jujur lebih kuat daripada klaim yang tidak bisa dibuktikan.",
+  notes: "Apa bedanya dengan cara lama? Cara lama: informasi disebarkan lisan ke kepala dusun lalu dari mulut ke mulut, jangkauannya sempit. Yang kami ubah: penyebaran berpindah ke saluran digital resmi, satu tautan dan stiker QR, warga mengakses mandiri kapan saja. Solusi serupa memang ada, misalnya Linktree generik, tetapi tanpa peta, tanpa pelacakan, dan tanpa hak akses. Posisi TKT kami TKT 5, karena sistem sudah berjalan di domain produksi dan diuji bersama perangkat desa. Batas kesiapannya kami akui: koordinat fasilitas belum diverifikasi lapangan dan uji lintas perangkat belum tercatat lengkap.",
+  panels: [
+    { title: "Dibanding cara lama", rows: [
+      { k: "Cara lama", v: "Informasi disebarkan lisan ke kepala dusun, lalu dari mulut ke mulut — jangkauan sempit." },
+      { k: "Yang berbeda", v: "Penyebaran berpindah ke saluran digital resmi: satu tautan + stiker QR, warga mengakses mandiri kapan saja." },
+      { k: "Solusi serupa", v: "Linktree generik tanpa peta, tanpa pelacakan, tanpa hak akses." },
+    ]},
+    { title: "Posisi TKT (target 5–6)", rows: [
+      { k: "Klaim TKT", v: "TKT 5 — sistem berjalan di lingkungan nyata mitra." },
+      { k: "Batas siap", v: "Koordinat fasilitas dan uji lapangan luas belum selesai." },
+    ]},
+  ],
+},
+/* 14 — DESAIN EVALUASI ----------------------------------------------------- */
+{
+  type: "table",
+  kicker: "Evaluasi",
+  title: "Desain evaluasi",
+  sub: "Cara mengukur sebelum dan sesudah",
+  guide: "Ukuran sesudah harus sama dengan kondisi awal, dengan pengguna yang sama atau setara.",
+  notes: "Ini bagian dengan bobot terbesar, 25. Metodenya before–after dengan ukuran yang sama. Ukuran pertama: waktu menemukan informasi, diukur dengan stopwatch dan skenario tugas, pesertanya warga, sebelum dan sesudah. Ukuran kedua: pindai QR dan klik tautan, dibaca dari statistik dashboard admin; instrumennya log traffic portal, pesertanya seluruh pengunjung, diamati selama dan sesudah uji coba. Keterbatasannya kami akui di depan: penerapan di desa relatif singkat, jadi kami memilih evaluasi kecil yang jujur dan terukur daripada klaim besar.",
+  head: ["Ukuran", "Cara mengukur", "Instrumen", "Peserta", "Waktu"],
+  widths: [23, 27, 19, 15, 16],
+  rows: [
+    ["Waktu menemukan informasi", "Hitung waktu mencari satu layanan", "Stopwatch + skenario tugas", "warga", "Sebelum & sesudah"],
+    ["Pindai QR & klik tautan", "Baca statistik dashboard admin", "Log traffic portal", "Seluruh pengunjung", "Selama & sesudah uji coba"],
+  ],
+  note: "Ukuran sesudah memakai ukuran dan pengguna yang sama dengan kondisi awal.",
+},
+/* 15 — HASIL BEFORE–AFTER -------------------------------------------------- */
+{
+  type: "results",
+  kicker: "Hasil",
+  title: "Hasil before dan after",
+  sub: "Perubahan yang terukur",
+  guide: "Sertakan grafik bila ukuran lebih dari satu; sebut jumlah dan karakteristik pengguna yang diukur.",
+  notes: "Ini slide terpenting. Perhatikan bahwa ukurannya sama persis dengan slide kondisi awal. Waktu mencari informasi turun dari 12 menit menjadi 3 menit, sedangkan target kami 5 menit, jadi tercapai. Pindai QR dan klik tautan tercatat 64 kali, di atas target 40. Sumbernya kuesioner warga dan statistik dashboard admin pada rentang tanggal yang kami sebutkan di caption. Angka ini kami ambil apa adanya dari dashboard, tidak kami bulatkan ke atas.",
+  caption: "Gambar 3. Perbandingan sebelum–sesudah. Sumber: kuesioner warga dan statistik dashboard admin, [tanggal].",
+},
+/* 16 — CAPAIAN SDGs -------------------------------------------------------- */
+{
+  type: "table",
+  kicker: "Capaian",
+  title: "Capaian terhadap target SDGs",
+  sub: "Hasil dibandingkan dengan janji proposal",
+  guide: "Nyatakan juga target yang belum tercapai; klaim dampak tidak boleh melampaui data slide hasil.",
+  notes: "Sekarang kami bandingkan hasilnya dengan janji di proposal. Indikator 16.10.2 tercapai: portal aktif dan bisa diakses sekali pindai, dengan 64 pindai dan klik tercatat pada periode uji. Indikator 8.6.1 kami tandai sebagian: lowongan dan pelatihan BUMDes sudah terpublikasi di portal, tetapi jumlah pendaftar belum bisa kami klaim karena pendaftaran diproses di formulir eksternal. Indikator 9.c.1 juga sebagian: portal terbuka dari HP di jaringan lemah, tetapi uji lintas perangkat belum lengkap. Kami sengaja tidak mengklaim dampak jangka panjang; cukup kami katakan arah perubahannya sudah terlihat.",
+  head: ["Indikator", "Target proposal", "Hasil", "Status", "Penjelasan"],
+  widths: [26, 22, 20, 13, 19],
+  rows: [
+    ["16.10.2 Akses informasi", "Portal aktif sekali pindai", "64 pindai & klik tercatat", { t: "Tercapai", b: "ok" }, "Warga mengakses dari satu tautan"],
+    ["8.6.1 Pemuda NEET terlayani", "Lowongan & pelatihan BUMDes terpublikasi di portal", "4 klik tautan lowongan / pelatihan", { t: "Sebagian", b: "warn" }, "Pendaftar tercatat lewat formulir eksternal"],
+    ["9.c.1 Keterjangkauan jaringan", "Portal terbuka dari HP di jaringan lemah", "Lancar di berbagai perangkat", { t: "Sebagian", b: "warn" }, "Halaman ringan, tanpa aplikasi tambahan"],
+  ],
+  note: "Status dinilai terhadap target proposal, bukan perkiraan tim.",
+},
+/* 17 — ANALISIS DAN KETERBATASAN ------------------------------------------- */
+{
+  type: "panels",
+  kicker: "Analisis",
+  title: "Analisis dan keterbatasan",
+  sub: "Mengapa hasilnya demikian dan seberapa kuat",
+  guide: "Kaitkan setiap keterbatasan dengan seberapa kuat kesimpulan Anda.",
+  notes: "Kenapa hasilnya demikian? Faktor utamanya fitur: saluran digital resmi menggantikan penyebaran lisan. Tetapi kami juga jujur ada penjelasan lain, yaitu sosialisasi dan pendampingan kader ikut menaikkan jumlah pindai dan klik. Kami juga tidak punya kelompok pembanding, jadi perbandingannya bersifat sebelum–sesudah, bukan eksperimen. Keterbatasan lainnya: penerapan singkat sehingga dampak jangka panjang belum terlihat, dan jumlah responden terbatas sehingga belum mewakili seluruh warga desa. Justru karena itu, kesimpulan kami batasi pada apa yang benar-benar terukur.",
+  panels: [
+    { title: "Penyebab perubahan", rows: [
+      { k: "Faktor fitur", v: "Saluran digital resmi menggantikan penyebaran lisan dari mulut ke mulut." },
+      { k: "Penjelasan lain", v: "Sosialisasi dan pendampingan kader ikut menaikkan jumlah pindai dan klik." },
+      { k: "Pembanding", v: "Belum ada kelompok pembanding; perbandingan bersifat sebelum–sesudah." },
+    ]},
+    { title: "Keterbatasan evaluasi", rows: [
+      { k: "Durasi", v: "Penerapan singkat, dampak jangka panjang belum terlihat." },
+    ]},
+  ],
+},
+/* 18 — KENDALA DAN PELAJARAN ----------------------------------------------- */
+{
+  type: "table",
+  kicker: "Refleksi",
+  title: "Kendala dan pelajaran",
+  sub: "Hal yang tidak berjalan sesuai rencana",
+  guide: "Sebutkan juga faktor pendukung, misalnya dukungan perangkat desa atau antusiasme kader.",
+  notes: "Tiga kendala utama. Jaringan internet desa terbatas, kami tangani dengan meringkas halaman dan mengecilkan aset; pelajarannya, desain harus ringan sejak awal. Warga belum terbiasa memindai QR, kami tangani dengan panduan gambar dan pendampingan kader; pelajarannya, sosialisasi menentukan keberhasilan. Data fasilitas belum terverifikasi, kami nonaktifkan titik contoh sementara, bukan dipaksakan tampil; pelajarannya, data lapangan wajib diverifikasi. Faktor pendukungnya juga perlu kami sebut: dukungan perangkat desa dan antusiasme warga saat uji coba.",
+  head: ["Kendala", "Penanganan", "Pelajaran"],
+  widths: [27, 38, 35],
+  rows: [
+    ["Jaringan internet desa terbatas", "Halaman diringkas dan aset dikecilkan", "Desain harus ringan sejak awal"],
+    ["Warga belum terbiasa memindai QR", "Panduan gambar dan pendampingan kader", "Sosialisasi menentukan keberhasilan"],
+    ["Data fasilitas belum terverifikasi", "Titik contoh dinonaktifkan sementara", "Data lapangan wajib diverifikasi"],
+  ],
+  note: "<b>Faktor pendukung:</b> dukungan perangkat desa dan antusiasme warga saat uji coba.",
+},
+/* 19 — KEBERLANJUTAN ------------------------------------------------------- */
+{
+  type: "table",
+  kicker: "Keberlanjutan",
+  title: "Keberlanjutan dan serah terima",
+  sub: "Siapa yang melanjutkan setelah proyek berakhir",
+  guide: "Penanggung jawab berasal dari mitra desa; tampilkan foto Berita Acara Serah Terima bila sudah ditandatangani.",
+  notes: "Keberlanjutan tanpa penanggung jawab hanya slogan, jadi kami tetapkan siapa yang melanjutkan. Pengelolaan harian: admin desa memperbarui tautan dan QR, penanggung jawabnya perangkat desa sebagai operator. Pemeliharaan: pemeriksaan tautan dan data peta tiap bulan oleh tim IT desa atau kader digital. Biaya: hosting gratis, domain desa bertahap, ditanggung pemerintah desa. Pelatihan pengguna baru: panduan singkat dan video lima menit oleh sekretaris desa. Dan serah terima: berita acara dan akun admin diserahkan oleh sekretaris desa pada tanggal yang akan kami cantumkan. Akun admin diserahkan lewat pengelola rahasia, bukan lewat chat.",
+  head: ["Aspek", "Rencana", "Penanggung jawab"],
+  widths: [26, 44, 30],
+  rows: [
+    ["Pengelolaan harian", "Admin desa memperbarui tautan dan QR", "Perangkat desa (operator)"],
+    ["Pemeliharaan", "Pemeriksaan tautan dan data peta tiap bulan", "Tim IT desa / kader digital"],
+    ["Biaya", "Hosting gratis; domain desa bertahap", "Pemerintah desa"],
+    ["Pelatihan pengguna baru", "Panduan singkat dan video 5 menit", "Sekretaris desa"],
+    ["Serah terima", "Berita acara dan akun admin diserahkan", "Sekretaris Desa"],
+  ],
+},
+/* 20 — REKOMENDASI --------------------------------------------------------- */
+{
+  type: "recs",
+  kicker: "Tindak lanjut",
+  title: "Rekomendasi dan tindak lanjut",
+  sub: "Langkah berikutnya, berurutan menurut dampak",
+  guide: "Rekomendasi harus berasal dari temuan evaluasi dan kendala, bukan daftar fitur baru yang diinginkan.",
+  notes: "Rekomendasi kami urutkan menurut dampak, dan semuanya berasal dari temuan evaluasi, bukan daftar fitur baru. Pertama, verifikasi koordinat fasilitas desa; temuannya data peta belum final, pelaksananya tim backend bersama perangkat desa. Kedua, cetak stiker QR final dan papan petunjuk; temuannya QR masih versi uji dan warga meminta papan petunjuk di balai desa, pelaksananya tim UI/UX dan pemerintah desa. Ketiga, evaluasi lanjutan tiga bulan; temuannya sampel masih kecil, pelaksananya admin desa dan dosen pembimbing.",
+  recs: [
+    { title: "Verifikasi koordinat fasilitas desa", desc: "Temuan: data peta belum final. Pelaksana: tim backend bersama perangkat desa." },
+    { title: "Cetak stiker QR final dan papan petunjuk", desc: "Temuan: QR masih versi uji. Pelaksana: tim UI/UX dan pemerintah desa." },
+    { title: "Evaluasi lanjutan tiga bulan", desc: "Temuan: sampel masih kecil. Pelaksana: admin desa dan dosen pembimbing." },
+  ],
+},
+/* 21 — PENUTUP ------------------------------------------------------------- */
+{
+  type: "closing",
+  kicker: "Penutup",
+  title: "Terima kasih",
+  sub: "Pertanyaan dan diskusi",
+  guide: "Pastikan seluruh anggota berperan; tautan harus bisa diakses tim pengajar.",
+  notes: "Demikian presentasi kami. Tiga hal yang kami harap melekat: masalahnya adalah saluran informasi yang masih lisan, solusinya satu halaman dan satu QR yang ringan, dan hasilnya terukur lewat dashboard admin. Kami siap menjawab pertanyaan. Untuk pertanyaan soal data peta, sumbernya batas desa dari BPS; soal keamanan, akses data dibatasi RLS; soal pengujian, kami sampaikan status apa adanya. Terima kasih kepada Bapak/Ibu dosen dan kepada perangkat Desa Fajar Baru. Wassalamualaikum warahmatullahi wabarakatuh.",
+  links: [
+    { label: "Demo portal", url: META.demo },
+    { label: "Repositori", url: META.repo },
+  ],
+  qrUrl: META.demo,
+},
+];
+
+
+/* ============================================================================
+   MESIN RENDER — mengubah data di atas menjadi HTML slide
+   ============================================================================ */
+const $ = (sel, root = document) => root.querySelector(sel);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hasPlaceholder = (s) => /\[ISI\]|\[tanggal\]|\[ \]/.test(String(s ?? ""));
+const val = (s) => (hasPlaceholder(s) ? `<span class="ph">${esc(s)}</span>` : esc(s));
+
+/* Logo ITERA — gambar dari folder screenshot/.
+   Bila berkas tidak ditemukan, otomatis jatuh ke placeholder SVG. */
+function logoMarkup(cls, forceSvg) {
+  if (LOGO_SRC && !forceSvg) return `<img src="${esc(LOGO_SRC)}" alt="Logo ITERA" data-logo />`;
+  return `<svg viewBox="0 0 34 40" role="img" aria-label="Logo ITERA" class="${cls || ""}">
+    <rect x="1" y="1" width="32" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <text x="17" y="18" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="6.2" font-weight="700" fill="currentColor">LOGO</text>
+    <text x="17" y="26" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="6.2" font-weight="700" fill="currentColor">ITERA</text>
+    <path d="M8 31h18" stroke="currentColor" stroke-width="1.2" opacity=".6"/>
+  </svg>`;
+}
+
+/* Ikon inline sederhana untuk kartu */
+const ICONS = {
+  user: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 20c0-3.3 3.6-5.4 8-5.4s8 2.1 8 5.4"/>',
+  shield: '<path d="M12 3l7 3v6c0 4.2-3 7.6-7 9-4-1.4-7-4.8-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  megaphone: '<path d="M4 10v4l10 5V5z"/><path d="M14 7h3a3 3 0 0 1 0 6h-3"/>',
+  link: '<path d="M10 14a4 4 0 0 1 0-6l2-2a4 4 0 0 1 6 6l-1 1"/><path d="M14 10a4 4 0 0 1 0 6l-2 2a4 4 0 0 1-6-6l1-1"/>',
+  map: '<path d="M9 4l6 2 6-2v14l-6 2-6-2-6 2V6z"/><path d="M9 4v14M15 6v14"/>',
+  chart: '<path d="M4 20h16"/><path d="M7 20V10M12 20V5M17 20v-7"/>',
+  qr: '<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h3v3h-3zM20 20h-3"/>',
+  grid: '<rect x="4" y="4" width="7" height="7" rx="1.4"/><rect x="13" y="4" width="7" height="7" rx="1.4"/><rect x="4" y="13" width="7" height="7" rx="1.4"/><rect x="13" y="13" width="7" height="7" rx="1.4"/>',
+  update: '<path d="M4 12a8 8 0 0 1 13.7-5.7L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.7L4 16"/><path d="M4 20v-4h4"/>',
+};
+
+/* Pembungkus animasi bertahap */
+let revealCount = 0;
+const R = () => `style="--d:${revealCount++}"`;
+
+/* --- Layout: tabel ------------------------------------------------------- */
+function renderTable(s) {
+  const widths = s.widths || [];
+  const cols = widths.map((w) => `<col style="width:${w}%">`).join("");
+  const head = `<tr>${s.head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr>`;
+  const body = s.rows.map((row) => `<tr>${row.map((cell) => {
+    if (cell && typeof cell === "object" && cell.t) return `<td><span class="badge ${cell.b}">${esc(cell.t)}</span></td>`;
+    return `<td>${val(cell)}</td>`;
+  }).join("")}</tr>`).join("");
+  return `<div class="s-body">
+    <div class="tbl-wrap reveal" ${R()}><table class="tbl"><colgroup>${cols}</colgroup><thead>${head}</thead><tbody>${body}</tbody></table></div>
+    ${s.note ? `<div class="note-bar reveal" ${R()}>${s.note}</div>` : ""}
+  </div>`;
+}
+
+/* --- Layout: metrik ------------------------------------------------------ */
+function renderMetrics(s) {
+  const n = s.metrics.length;
+  const grid = n === 2 ? "g2" : n === 4 ? "g4" : "g3";
+  const cards = s.metrics.map((m) => `<div class="metric reveal" ${R()}>
+      <div class="val">${val(m.val)}${m.unit ? `<small>${esc(m.unit)}</small>` : ""}</div>
+      <div class="lab">${esc(m.lab)}</div>
+      <div class="src">${esc(m.src)}</div>
+    </div>`).join("");
+  return `<div class="s-body">
+    ${s.lead ? `<p class="lead reveal" ${R()}>${s.lead}</p>` : ""}
+    <div class="metrics ${grid}">${cards}</div>
+    ${s.note ? `<div class="note-bar reveal" ${R()}>${s.note}</div>` : ""}
+  </div>`;
+}
+
+/* --- Layout: kartu ------------------------------------------------------- */
+function renderCards(s) {
+  const icons = ["user", "shield", "megaphone", "link", "qr", "map", "grid", "update"];
+  const n = s.cards.length;
+  const grid = n <= 2 ? "g2" : n <= 3 ? "g3" : n === 4 ? "g4" : n === 6 ? "g3" : "g3";
+  const cards = s.cards.map((c, i) => `<article class="card reveal" ${R()}>
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[c.icon] || ICONS[icons[i % icons.length]]}</svg></div>
+      ${c.meta ? `<div class="meta">${esc(c.meta)}</div>` : ""}
+      <h3>${esc(c.title)}</h3>
+      <p>${esc(c.desc)}</p>
+    </article>`).join("");
+  return `<div class="s-body">
+    ${s.lead ? `<p class="lead reveal" ${R()}>${s.lead}</p>` : ""}
+    <div class="grid ${grid}">${cards}</div>
+    ${s.note ? `<div class="note-bar reveal" ${R()}>${s.note}</div>` : ""}
+  </div>`;
+}
+
+/* --- Layout: dua panel --------------------------------------------------- */
+function renderPanels(s) {
+  const panels = s.panels.map((p) => `<div class="panel reveal" ${R()}>
+      <h3>${esc(p.title)}</h3>
+      <div class="p-body">${p.rows.map((r) => `<div class="rowline"><div class="k">${esc(r.k)}</div><div class="v">${esc(r.v)}</div></div>`).join("")}</div>
+    </div>`).join("");
+  return `<div class="s-body">
+    <div class="grid g2" style="align-items:start">${panels}</div>
+  </div>`;
+}
+
+/* --- Layout: alur langkah ------------------------------------------------ */
+/* Cadangan bila berkas gambar tidak ditemukan: ganti dengan kotak keterangan. */
+function imgFallback(el) {
+  const box = document.createElement("div");
+  box.className = "shot-missing";
+  box.textContent = "Gambar tidak ditemukan · periksa folder screenshot/";
+  el.replaceWith(box);
+}
+
+function renderSteps(s) {
+  const steps = s.steps.map((st, i) => `${i ? '<div class="arrow" aria-hidden="true">→</div>' : ""}
+    <div class="step reveal" ${R()}>
+      <div class="n">0${i + 1}</div>
+      <h4>${esc(st.title)}</h4>
+      <p>${esc(st.desc)}</p>
+      ${st.img
+        ? `<div class="shot-frame">
+             <img src="${esc(st.img)}" alt="${esc(st.alt || st.shot || st.title)}" decoding="async"
+                  style="--fit:${esc(st.fit || "contain")};--pos:${esc(st.pos || "center")}"
+                  data-caption="${esc(st.shot || st.title)}"
+                  onerror="imgFallback(this)" />
+           </div>
+           ${st.shot ? `<p class="shot-cap">${esc(st.shot)}</p>` : ""}`
+        : `<div class="shot" style="flex:1 1 auto;min-height:74px;margin-top:4px">
+             <div class="glyph">▣</div>
+             <b>Screenshot</b>
+             <span>${esc(st.shot)}</span>
+           </div>`}
+    </div>`).join("");
+  return `<div class="s-body fill">
+    <div class="flow" style="flex:1 1 auto">${steps}</div>
+    ${s.caption ? `<p class="caption reveal" ${R()}>${esc(s.caption)}</p>` : ""}
+  </div>`;
+}
+
+/* --- Layout: arsitektur + tech stack ------------------------------------- */
+function renderArchitecture(s) {
+  const boxes = s.boxes.map((b, i) => `${i ? '<div class="darrow" aria-hidden="true">→</div>' : ""}
+    <div class="dbox${i === 2 ? " hi" : ""} reveal" ${R()}>
+      <div class="dh">${esc(b.dh)}</div>
+      <h4>${esc(b.h4)}</h4>
+      <ul>${b.ul.map((li) => `<li>${esc(li)}</li>`).join("")}</ul>
+    </div>`).join("");
+  const tech = s.tech.map((t) => `<div class="card reveal" ${R()} style="gap:4px;padding:14px 15px;min-height:0">
+      <div class="meta">${esc(t.name)}</div>
+      <h3 style="font-size:16px">${esc(t.tools)}</h3>
+      <p style="font-size:14.4px">${esc(t.why)}</p>
+    </div>`).join("");
+  return `<div class="s-body">
+    <div class="diagram">${boxes}</div>
+    <p class="caption reveal" ${R()}>${esc(s.caption)}</p>
+    <div class="grid" style="grid-template-columns:repeat(5,1fr);gap:10px">${tech}</div>
+  </div>`;
+}
+
+/* --- Layout: hasil before–after ----------------------------------------- */
+function renderResults(s) {
+  const rows = HASIL.map((h) => {
+    const diff = +(h.after - h.before).toFixed(1);
+    const pct = h.before === 0 ? null : Math.round((diff / h.before) * 100);
+    const better = h.lowerBetter ? h.after <= h.before : h.after >= h.before;
+    const targetHit = h.lowerBetter ? h.after <= h.target : h.after >= h.target;
+    const badge = targetHit ? '<span class="badge ok">Tercapai</span>' : better ? '<span class="badge warn">Sebagian</span>' : '<span class="badge bad">Belum</span>';
+    const change = `${diff > 0 ? "+" : ""}${diff}${h.unit ? " " + h.unit : ""}${pct !== null ? ` (${pct > 0 ? "+" : ""}${pct}%)` : ""}`;
+    return `<tr>
+      <td>${esc(h.label)}</td>
+      <td>${esc(String(h.before))}${h.unit ? " " + esc(h.unit) : ""}</td>
+      <td>${esc(String(h.after))}${h.unit ? " " + esc(h.unit) : ""}</td>
+      <td>${esc(change)}</td>
+      <td>${esc(String(h.target))}${h.unit ? " " + esc(h.unit) : ""}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join("");
+
+  // Skala batang dinormalkan per baris, karena satuannya berbeda-beda.
+  const chart = HASIL.map((h) => {
+    const rowMax = Math.max(h.before, h.after, h.target, 0.001);
+    const w = (v) => (v === 0 ? "0%" : `${Math.max(2, (v / rowMax) * 100)}%`);
+    return `<div class="crow reveal" ${R()}>
+      <div class="cname">${esc(h.label)}</div>
+      <div class="cbars">
+        <div class="cbar before"><span class="tag">Sebelum</span><span class="track"><span class="fill" style="width:${w(h.before)}"></span></span><span class="num">${esc(String(h.before))}${h.unit ? " " + esc(h.unit) : ""}</span></div>
+        <div class="cbar after"><span class="tag">Sesudah</span><span class="track"><span class="fill" style="width:${w(h.after)}"></span></span><span class="num">${esc(String(h.after))}${h.unit ? " " + esc(h.unit) : ""}</span></div>
+      </div>
+    </div>`;
+  }).join("");
+
+  return `<div class="s-body">
+    <div class="tbl-wrap reveal" ${R()}><table class="tbl">
+      <colgroup><col style="width:26%"><col style="width:12%"><col style="width:12%"><col style="width:18%"><col style="width:12%"><col style="width:20%"></colgroup>
+      <thead><tr><th scope="col">Ukuran</th><th scope="col">Sebelum</th><th scope="col">Sesudah</th><th scope="col">Perubahan</th><th scope="col">Target</th><th scope="col">Tercapai?</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+    <div class="chart" style="margin-top:2px">${chart}</div>
+    <p class="caption reveal" ${R()}>${esc(s.caption)}</p>
+  </div>`;
+}
+
+/* --- Layout: rekomendasi ------------------------------------------------- */
+function renderRecs(s) {
+  const items = s.recs.map((r, i) => `<div class="rec reveal" ${R()}>
+      <div class="n">0${i + 1}</div>
+      <div><h4>${esc(r.title)}</h4><p>${esc(r.desc)}</p></div>
+    </div>`).join("");
+  return `<div class="s-body">
+    <div class="grid" style="gap:14px;flex:1 1 auto;align-content:start">${items}</div>
+  </div>`;
+}
+
+/* --- Layout: agenda ------------------------------------------------------ */
+function renderAgenda(s) {
+  const items = s.items.map((it, i) => `<div class="item reveal" ${R()}>
+      <div class="no">${String(i + 1).padStart(2, "0")}</div>
+      <div><h4>${esc(it.title)}</h4><p>${esc(it.desc)}</p></div>
+    </div>`).join("");
+  return `<div class="s-body">
+    <div class="agenda">${items}</div>
+  </div>`;
+}
+
+/* --- Layout: cover ------------------------------------------------------- */
+function renderCover(s) {
+  const members = ANGGOTA.map((a) => `<div>${esc(a.nama)} <span>· ${esc(a.nim)}</span></div>`).join("");
+  return `<div class="s-body" style="justify-content:flex-start;gap:0">
+    <div class="logo-big" style="color:var(--title)">${logoMarkup()}</div>
+    <p class="kick">${esc(s.kicker)}</p>
+    <h1>${esc(s.title)}</h1>
+    <p class="tag">${esc(s.tagline)}</p>
+    <p class="where">${esc(META.desa)}</p>
+    <div class="members">${members}</div>
+    <div class="bottom">
+      <p><b>Kelompok ${META.kelompok}</b> · ${esc(META.mataKuliah)}<br />${esc(META.prodi)}</p>
+      <p style="text-align:right">${esc(META.tanggal)}</p>
+    </div>
+  </div>`;
+}
+
+/* --- Layout: penutup ---------------------------------------------------- */
+function renderClosing(s) {
+  const links = s.links.map((l) => `<a class="lnk" href="${l.url.startsWith("http") ? esc(l.url) : "#"}" ${l.url.startsWith("http") ? 'target="_blank" rel="noopener"' : ""}>
+      <b>${esc(l.label)}</b><span>${val(l.url)}</span>
+    </a>`).join("");
+  return `<div class="s-body">
+    <div class="closing">
+      <div class="left">
+        <p class="thanks">Terima kasih</p>
+        <p class="qa">Pertanyaan &amp; Diskusi · Q&amp;A</p>
+        <div class="links">${links}</div>
+        <div class="note-bar" style="margin-top:auto">
+          <b>Tim:</b> ${ANGGOTA.map((a) => esc(a.nama.split(" ")[0])).join(" · ")}
+        </div>
+      </div>
+      <div class="qrbox">
+        <div class="qr" id="qrTarget"><div class="qrf"><strong>QR CODE</strong><span>Menyiapkan…</span></div></div>
+        <h4>Pindai untuk membuka portal</h4>
+        <p>${esc(s.qrUrl)}</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* --- Layout: struktur data (ERD sederhana) ------------------------------- */
+function renderErd(s) {
+  const ents = s.entities.map((e) => `<div class="ent reveal" ${R()}>
+      <div class="eh">${esc(e.name)}<span>${esc(e.tag || "")}</span></div>
+      <ul>${e.fields.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+    </div>`).join("");
+  return `<div class="s-body">
+    ${s.lead ? `<p class="lead reveal" ${R()}>${s.lead}</p>` : ""}
+    <div class="erd">${ents}</div>
+    ${s.note ? `<div class="note-bar reveal" ${R()}>${s.note}</div>` : ""}
+  </div>`;
+}
+
+/* Peta tipe → fungsi render */
+const RENDERERS = {
+  table: renderTable,
+  metrics: renderMetrics,
+  cards: renderCards,
+  panels: renderPanels,
+  steps: renderSteps,
+  architecture: renderArchitecture,
+  results: renderResults,
+  recs: renderRecs,
+  agenda: renderAgenda,
+  erd: renderErd,
+  cover: renderCover,
+  closing: renderClosing,
+};
+
+/* Bangun semua slide ke kanvas */
+const canvas = $("#canvas");
+function buildSlides() {
+  canvas.innerHTML = slides.map((s, i) => {
+    revealCount = 0;
+    const inner = RENDERERS[s.type](s);
+    if (s.type === "cover") {
+      return `<section class="slide slide-${i + 1} cover" id="slide-${i + 1}" role="group" aria-roledescription="slide" aria-label="Slide ${i + 1}: ${esc(s.title)}">
+        <div class="strip"></div>
+        <div class="deco" aria-hidden="true"><div class="ring r1"></div><div class="ring r2"></div><div class="line"></div><div class="dot"></div></div>
+        <div class="cover-inner">${inner}</div>
+        ${s.guide ? `<p class="guide-line" style="position:absolute;left:76px;right:66px;bottom:10px;margin:0;z-index:3">${esc(s.guide)}</p>` : ""}
+      </section>`;
+    }
+    const body = inner.replace(/^<div class="s-body"[^>]*>/, "").replace(/<\/div>$/, "");
+    return `<section class="slide slide-${i + 1}" id="slide-${i + 1}" role="group" aria-roledescription="slide" aria-label="Slide ${i + 1}: ${esc(s.title)}">
+      <header class="s-head">
+        <div class="logo" style="color:var(--title)">${logoMarkup()}</div>
+        <div>
+          ${s.kicker ? `<p class="s-kicker">${esc(s.kicker)}</p>` : ""}
+          <h2 class="s-title">${esc(s.title)}</h2>
+          ${s.sub ? `<p class="s-sub">${esc(s.sub)}</p>` : ""}
+        </div>
+      </header>
+      <div class="s-body">${body}</div>
+      ${s.guide ? `<p class="guide-line">${esc(s.guide)}</p>` : ""}
+      <footer class="s-foot">
+        <span>${esc(META.mataKuliah)} · Kelompok ${META.kelompok}</span>
+        <span class="pg">${i + 1} / ${slides.length}</span>
+      </footer>
+    </section>`;
+  }).join("");
+}
+buildSlides();
+
+
+/* ============================================================================
+   NAVIGASI, SKALA, MODE TAMPILAN
+   ============================================================================ */
+const elSlides = () => Array.from(canvas.querySelectorAll(".slide"));
+let index = 0;
+let total = slides.length;
+
+/* --- Skala kanvas 16:9 mengikuti ukuran layar (letterbox) ---------------- */
+const frameEl = $("#frame");
+function fitCanvas() {
+  const stage = $("#stage");
+  const isFull = document.body.classList.contains("is-full");
+  const notesOpen = document.body.classList.contains("notes-open") && window.innerWidth > 900;
+  // Di layar penuh tanpa panel naskah: tanpa bingkai & tanpa ruang toolbar.
+  const padX = isFull && !notesOpen ? 0 : 14;
+  const padTop = isFull ? 0 : 14;
+  const padBottom = isFull ? 0 : (window.innerWidth <= 900 ? 104 : 96);
+  const notesW = notesOpen ? 390 : 0;
+  const availW = stage.clientWidth - padX * 2 - notesW;
+  const availH = stage.clientHeight - padTop - padBottom;
+  const scale = Math.max(0.15, Math.min(availW / 1280, availH / 720));
+  canvas.style.transform = `scale(${scale})`;
+  frameEl.style.width = `${1280 * scale}px`;
+  frameEl.style.height = `${720 * scale}px`;
+}
+window.addEventListener("resize", fitCanvas);
+fitCanvas();
+
+/* --- Indikator titik ---------------------------------------------------- */
+const dotsEl = $("#dots");
+slides.forEach((s, i) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.setAttribute("aria-label", `Ke slide ${i + 1}: ${s.title}`);
+  b.addEventListener("click", () => go(i));
+  dotsEl.appendChild(b);
+});
+
+/* --- Tampilkan slide ---------------------------------------------------- */
+function paint() {
+  elSlides().forEach((el, i) => {
+    el.classList.toggle("active", i === index);
+    el.setAttribute("aria-hidden", i === index ? "false" : "true");
+  });
+  const pct = ((index + 1) / total) * 100;
+  const bar = $("#progress");
+  bar.style.width = pct + "%";
+  bar.setAttribute("aria-valuemax", String(total));
+  bar.setAttribute("aria-valuenow", String(index + 1));
+  $("#counter").textContent = `${index + 1} / ${total}`;
+  Array.from(dotsEl.children).forEach((b, i) => b.setAttribute("aria-current", i === index ? "true" : "false"));
+  paintNotes();
+  // Ganti hash tanpa menambah riwayat berlebihan
+  if (location.hash !== `#${index + 1}`) history.replaceState(null, "", `#${index + 1}`);
+}
+
+function go(i, opts) {
+  index = Math.max(0, Math.min(total - 1, i));
+  paint();
+  if (opts && opts.focus) elSlides()[index].focus({ preventScroll: true });
+}
+const next = () => go(index + 1);
+const prev = () => go(index - 1);
+
+/* --- Panel catatan (naskah presentasi) ---------------------------------- */
+function paintNotes() {
+  const s = slides[index];
+  $("#nSlide").textContent = `Slide ${index + 1} dari ${total} · ${s.kicker || s.type}`;
+  $("#nTitle").textContent = s.title;
+  $("#nText").textContent = s.notes || "—";
+  $("#nCount").textContent = `${index + 1} / ${total}`;
+  $("#nJump").value = String(index);
+  $("#btnNotesPrev").disabled = index === 0;
+  $("#btnNotesNext").disabled = index === total - 1;
+  const g = $("#nGuide");
+  if (s.guide) { g.hidden = false; g.textContent = `Panduan: ${s.guide}`; }
+  else { g.hidden = true; }
+}
+const notesEl = $("#notes");
+const notesBody = notesEl.querySelector(".nbody");
+function toggleNotes(force) {
+  const open = force ?? !notesEl.classList.contains("open");
+  // Keluar dari mode naskah-saja kembali ke tampilan slide
+  if (!open && document.body.classList.contains("script-only")) {
+    document.body.classList.remove("script-only");
+    notesEl.style.transform = "";
+    fitCanvas();
+  }
+  notesEl.classList.toggle("open", open);
+  document.body.classList.toggle("notes-open", open);
+  notesEl.setAttribute("aria-hidden", open ? "false" : "true");
+  $("#btnNotes").setAttribute("aria-pressed", open ? "true" : "false");
+  if (open) {
+    paintNotes();
+    notesBody.scrollTop = 0;
+    // Di ponsel panel menutup panggung; fokuskan teks agar tombol volume/layar tidak salah tekan.
+    if (window.innerWidth <= 900) notesEl.focus?.();
+  }
+  setTimeout(fitCanvas, 320);
+}
+$("#btnNotes").addEventListener("click", () => toggleNotes());
+$("#btnNotesClose").addEventListener("click", () => toggleNotes(false));
+$("#btnNotesPrev").addEventListener("click", () => { prev(); notesBody.scrollTop = 0; });
+$("#btnNotesNext").addEventListener("click", () => { next(); notesBody.scrollTop = 0; });
+
+/* Daftar lompat slide di panel naskah */
+const nJump = $("#nJump");
+slides.forEach((s, i) => {
+  const o = document.createElement("option");
+  o.value = String(i);
+  o.textContent = `${i + 1}. ${s.title}`;
+  nJump.appendChild(o);
+});
+nJump.addEventListener("change", () => { go(Number(nJump.value)); notesBody.scrollTop = 0; });
+
+/* Ukuran teks naskah, tersimpan di perangkat masing-masing */
+let noteScale = 1;
+try { noteScale = parseFloat(localStorage.getItem("kapsel-note-scale")) || 1; } catch (e) {}
+function applyNoteScale() {
+  notesEl.style.setProperty("--ns", String(noteScale));
+  try { localStorage.setItem("kapsel-note-scale", String(noteScale)); } catch (e) {}
+}
+$("#btnNotesFontUp").addEventListener("click", () => { noteScale = Math.min(1.8, +(noteScale + 0.1).toFixed(2)); applyNoteScale(); });
+$("#btnNotesFontDown").addEventListener("click", () => { noteScale = Math.max(0.8, +(noteScale - 0.1).toFixed(2)); applyNoteScale(); });
+applyNoteScale();
+
+/* Geser (swipe) di panel naskah untuk pindah slide — nyaman di HP */
+let nTouchX = 0, nTouchY = 0, nTouchT = 0;
+notesBody.addEventListener("touchstart", (e) => {
+  const t = e.changedTouches[0];
+  nTouchX = t.clientX; nTouchY = t.clientY; nTouchT = Date.now();
+}, { passive: true });
+notesBody.addEventListener("touchend", (e) => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - nTouchX;
+  const dy = t.clientY - nTouchY;
+  if (Date.now() - nTouchT > 900) return;
+  if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+  dx < 0 ? next() : prev();
+  notesBody.scrollTop = 0;
+}, { passive: true });
+
+/* --- Kalimat panduan ---------------------------------------------------- */
+let guideOn = false;
+function toggleGuide(force) {
+  guideOn = force ?? !guideOn;
+  canvas.classList.toggle("show-guide", guideOn);
+  $("#btnGuide").setAttribute("aria-pressed", guideOn ? "true" : "false");
+  toast(guideOn ? "Kalimat panduan ditampilkan (tidak ikut tercetak di PDF)." : "Kalimat panduan disembunyikan.");
+}
+$("#btnGuide").addEventListener("click", () => toggleGuide());
+
+/* --- Tema gelap/terang -------------------------------------------------- */
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute("data-theme") !== "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  $("#btnTheme").setAttribute("aria-pressed", dark ? "true" : "false");
+  try { localStorage.setItem("kapsel-theme", dark ? "dark" : "light"); } catch (e) {}
+}
+$("#btnTheme").addEventListener("click", toggleTheme);
+try {
+  const saved = localStorage.getItem("kapsel-theme");
+  if (saved === "dark") { document.documentElement.setAttribute("data-theme", "dark"); $("#btnTheme").setAttribute("aria-pressed", "true"); }
+} catch (e) {}
+
+/* --- Layar penuh -------------------------------------------------------- */
+/* Saat layar penuh, semua menu (toolbar, titik navigasi, progress) disembunyikan
+   agar slide benar-benar memenuhi layar. Tekan F atau Esc untuk keluar. */
+function setFullUI(on) {
+  document.body.classList.toggle("is-full", on);
+  $("#btnFull").setAttribute("aria-pressed", on ? "true" : "false");
+  if (on) {
+    toggleOverview(false);
+    toggleNotes(false);
+    toast("Layar penuh · menu disembunyikan. Tekan F atau Esc untuk keluar.", "ok");
+  }
+  document.body.classList.remove("idle");
+  if (on && typeof wakeCursor === "function") wakeCursor();
+  setTimeout(fitCanvas, 80);
+}
+function toggleFull() {
+  const el = document.documentElement;
+  const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+  const fakeFull = document.body.classList.contains("is-full");
+  if (fakeFull && !fsEl) { setFullUI(false); return; }
+  if (!fsEl) {
+    const req = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (req) {
+      try {
+        const p = req.call(el);
+        // Bila browser menolak (mis. iframe tanpa izin), tetap sembunyikan menu.
+        if (p && typeof p.catch === "function") p.catch(() => setFullUI(true));
+      } catch (e) { setFullUI(true); }
+    } else {
+      setFullUI(true);
+    }
+  } else {
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exit) { try { exit.call(document); } catch (e) { setFullUI(false); } }
+    else setFullUI(false);
+  }
+}
+$("#btnFull").addEventListener("click", toggleFull);
+function syncFullUI() {
+  const on = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  setFullUI(on);
+}
+document.addEventListener("fullscreenchange", syncFullUI);
+document.addEventListener("webkitfullscreenchange", syncFullUI);
+
+/* Sembunyikan kursor saat menganggur di mode layar penuh */
+let idleTimer = 0;
+const fsExitBtn = $("#fsExit");
+function wakeCursor() {
+  document.body.classList.remove("idle");
+  if (document.body.classList.contains("is-full")) fsExitBtn.classList.add("show");
+  clearTimeout(idleTimer);
+  if (document.body.classList.contains("is-full")) {
+    idleTimer = setTimeout(() => {
+      document.body.classList.add("idle");
+      fsExitBtn.classList.remove("show");
+    }, 2200);
+  }
+}
+document.addEventListener("mousemove", wakeCursor, { passive: true });
+document.addEventListener("mousedown", wakeCursor, { passive: true });
+document.addEventListener("touchstart", wakeCursor, { passive: true });
+fsExitBtn.addEventListener("click", () => {
+  const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+  if (fsEl) {
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exit) { try { exit.call(document); } catch (e) { setFullUI(false); } }
+    else setFullUI(false);
+  } else {
+    setFullUI(false);
+  }
+});
+
+/* --- Ikhtisar semua slide ----------------------------------------------- */
+const ovEl = $("#overview");
+let ovBuilt = false;
+function buildOverview() {
+  if (ovBuilt) return;
+  const grid = $("#ovGrid");
+  grid.innerHTML = "";
+  slides.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "thumb";
+    b.setAttribute("aria-label", `Lompat ke slide ${i + 1}: ${s.title}`);
+    const holder = document.createElement("div");
+    holder.className = "holder";
+    holder.innerHTML = `<div class="thumb-scale"></div>`;
+    const scaleBox = holder.firstChild;
+    // Salin slide asli, lalu skala ke ukuran thumbnail
+    const clone = elSlides()[i].cloneNode(true);
+    clone.classList.add("active");
+    clone.style.width = "1280px";
+    clone.style.height = "720px";
+    clone.style.transformOrigin = "top left";
+    scaleBox.appendChild(clone);
+    const lbl = document.createElement("div");
+    lbl.className = "lbl";
+    lbl.innerHTML = `<span>${esc(s.title)}</span><span class="n">${i + 1}</span>`;
+    b.appendChild(holder);
+    b.appendChild(lbl);
+    b.addEventListener("click", () => { go(i); toggleOverview(false); });
+    grid.appendChild(b);
+  });
+  ovBuilt = true;
+  scaleOverview();
+}
+function scaleOverview() {
+  $("#ovGrid").querySelectorAll(".thumb").forEach((t) => {
+    const box = t.querySelector(".thumb-scale");
+    const clone = box.firstChild;
+    if (!clone) return;
+    const w = t.clientWidth;
+    const k = w / 1280;
+    box.style.position = "absolute";
+    box.style.inset = "0";
+    box.style.overflow = "hidden";
+    clone.style.transform = `scale(${k})`;
+  });
+  $("#ovGrid").querySelectorAll(".thumb.cur").forEach((t) => t.classList.remove("cur"));
+  const cur = $("#ovGrid").children[index];
+  if (cur) cur.classList.add("cur");
+}
+function toggleOverview(force) {
+  const open = force ?? !ovEl.classList.contains("open");
+  if (open) { buildOverview(); }
+  ovEl.classList.toggle("open", open);
+  ovEl.setAttribute("aria-hidden", open ? "false" : "true");
+  $("#btnOverview").setAttribute("aria-pressed", open ? "true" : "false");
+  if (open) scaleOverview();
+}
+$("#btnOverview").addEventListener("click", () => toggleOverview());
+window.addEventListener("resize", () => { if (ovEl.classList.contains("open")) scaleOverview(); });
+
+/* --- Timer presentasi --------------------------------------------------- */
+let timerSec = 0, timerId = null;
+const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+function paintTimer() { $("#btnTimer").textContent = fmt(timerSec); }
+function toggleTimer() {
+  if (timerId) {
+    clearInterval(timerId); timerId = null;
+    $("#btnTimer").setAttribute("aria-label", "Lanjutkan timer presentasi");
+    toast("Timer dijeda.");
+  } else {
+    timerId = setInterval(() => { timerSec++; paintTimer(); }, 1000);
+    $("#btnTimer").setAttribute("aria-label", "Jeda timer presentasi");
+    toast("Timer berjalan.");
+  }
+}
+$("#btnTimer").addEventListener("click", toggleTimer);
+$("#btnTimerReset").addEventListener("click", () => {
+  clearInterval(timerId); timerId = null; timerSec = 0; paintTimer();
+  $("#btnTimer").setAttribute("aria-label", "Mulai timer presentasi");
+  toast("Timer direset ke 00:00.");
+});
+paintTimer();
+
+/* --- Toast -------------------------------------------------------------- */
+let toastId = null;
+function toast(msg, kind) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "show" + (kind ? " " + kind : "");
+  clearTimeout(toastId);
+  toastId = setTimeout(() => { t.className = ""; }, kind === "err" ? 6500 : 3200);
+}
+
+
+/* ============================================================================
+   UNDUH: PDF (cetak 16:9) dan PPTX (PptxGenJS via CDN)
+   ============================================================================ */
+
+/* Muat skrip eksternal sekali, dengan timeout dan penanganan error */
+function loadScript(src, timeout = 12000) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[data-src="${src}"]`)) return resolve();
+    const el = document.createElement("script");
+    el.src = src;
+    el.async = true;
+    el.dataset.src = src;
+    const timer = setTimeout(() => reject(new Error("Waktu memuat library habis")), timeout);
+    el.onload = () => { clearTimeout(timer); resolve(); };
+    el.onerror = () => { clearTimeout(timer); reject(new Error("Gagal memuat library dari CDN")); };
+    document.head.appendChild(el);
+  });
+}
+
+/* --- PDF: cetak satu slide per halaman 16:9 ----------------------------- */
+const PDF_NAME = `${META.judulSingkat}-Kelompok-${META.kelompok}.pdf`;
+$("#btnPdf").addEventListener("click", async () => {
+  toast("Menyiapkan file PDF… satu slide per halaman 16:9.");
+  const before = index;
+  document.body.classList.add("capturing");
+  // Pastikan semua slide terlihat & tanpa animasi saat dialog cetak terbuka
+  elSlides().forEach((el) => el.classList.add("active"));
+  document.title = PDF_NAME.replace(/\.pdf$/, "");
+
+  const restore = () => {
+    elSlides().forEach((el, i) => el.classList.toggle("active", i === before));
+    document.body.classList.remove("capturing");
+    document.title = "Portal Informasi Desa Fajar Baru · Presentasi Kelompok 3";
+    window.removeEventListener("afterprint", restore);
+  };
+  window.addEventListener("afterprint", restore);
+
+  setTimeout(() => {
+    try {
+      window.print();
+      toast("Dialog cetak terbuka. Pilih “Simpan sebagai PDF”, ukuran kertas 16:9.", "ok");
+    } catch (err) {
+      toast("Gagal membuka dialog cetak: " + err.message, "err");
+      restore();
+    }
+  }, 420);
+});
+
+/* --- PPTX: PptxGenJS ---------------------------------------------------- */
+$("#btnPptx").addEventListener("click", async () => {
+  const btn = $("#btnPptx");
+  btn.disabled = true;
+  toast("Menyiapkan file PPTX…");
+  try {
+    await loadScript("https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js");
+    if (typeof PptxGenJS === "undefined") throw new Error("Library PptxGenJS tidak tersedia");
+
+    const pptx = new PptxGenJS();
+    pptx.defineLayout({ name: "KAPSEL_16x9", width: 13.333, height: 7.5 });
+    pptx.layout = "KAPSEL_16x9";
+    pptx.author = `Kelompok ${META.kelompok} — ${META.mataKuliah}`;
+    pptx.title = META.judul;
+
+    const C = { title: "064E3B", accent: "047857", ink: "0F172A", muted: "64748B", pale: "D1FAE5", bg: "F7F9F7", card: "FFFFFF", line: "E7EEEA" };
+    const F = "Georgia";
+
+    slides.forEach((s, i) => {
+      const slide = pptx.addSlide();
+      slide.background = { color: C.bg };
+
+      // Footer + nomor slide (konsisten dengan versi web)
+      slide.addText(`${META.mataKuliah} · Kelompok ${META.kelompok}`, {
+        x: 0.5, y: 6.95, w: 7, h: 0.3, fontFace: F, fontSize: 10, color: C.muted,
+      });
+      slide.addText(`${i + 1} / ${slides.length}`, {
+        x: 11.4, y: 6.95, w: 1.4, h: 0.3, fontFace: F, fontSize: 10, color: C.accent, align: "right",
+      });
+
+      // Cover
+      if (s.type === "cover") {
+        slide.background = { color: C.bg };
+        slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 0.22, h: 7.5, fill: { color: C.accent } });
+        if (LOGO_SRC) slide.addImage({ path: LOGO_SRC, x: 0.75, y: 0.4, h: 0.82, w: 0.82 * LOGO_ASPECT });
+        slide.addText(s.kicker, { x: 0.75, y: 1.36, w: 10.5, h: 0.32, fontFace: F, fontSize: 11, color: C.accent, bold: true, charSpacing: 1.6 });
+        slide.addText(s.title, { x: 0.75, y: 1.7, w: 10.6, h: 1.45, fontFace: F, fontSize: 34, bold: true, color: C.title, lineSpacingMultiple: 1.02 });
+        slide.addText(s.tagline, { x: 0.75, y: 3.2, w: 10.2, h: 0.5, fontFace: F, fontSize: 15, italic: true, color: C.muted });
+        slide.addText(META.desa, { x: 0.75, y: 3.75, w: 10.2, h: 0.3, fontFace: F, fontSize: 12, color: C.ink });
+        slide.addText(ANGGOTA.map((a) => `${a.nama} · ${a.nim}`).join("\n"), {
+          x: 0.75, y: 4.25, w: 10.4, h: 1.2, fontFace: F, fontSize: 11, color: C.ink, lineSpacingMultiple: 1.25,
+        });
+        slide.addShape(pptx.ShapeType.line, { x: 0.75, y: 5.62, w: 11.4, h: 0, line: { color: C.accent, width: 2 } });
+        slide.addText(`Kelompok ${META.kelompok} · ${META.mataKuliah}\n${META.prodi}`, {
+          x: 0.75, y: 5.72, w: 7.6, h: 0.7, fontFace: F, fontSize: 10.5, color: C.muted, lineSpacingMultiple: 1.3,
+        });
+        slide.addText(META.tanggal, { x: 8.6, y: 5.72, w: 3.6, h: 0.4, fontFace: F, fontSize: 10.5, color: C.muted, align: "right" });
+        return;
+      }
+
+      // Kepala slide
+      slide.addText(s.kicker || "", { x: 0.5, y: 0.32, w: 9, h: 0.28, fontFace: F, fontSize: 10, bold: true, color: C.accent, charSpacing: 1.4 });
+      slide.addText(s.title, { x: 0.5, y: 0.58, w: 11.5, h: 0.6, fontFace: F, fontSize: 28, bold: true, color: C.title });
+      if (s.sub) slide.addText(s.sub, { x: 0.5, y: 1.2, w: 11.5, h: 0.32, fontFace: F, fontSize: 12.5, italic: true, color: C.muted });
+      slide.addShape(pptx.ShapeType.line, { x: 0.5, y: 1.58, w: 12.33, h: 0, line: { color: C.line, width: 1.5 } });
+
+      const top = 1.78;
+
+      // Tabel
+      if (s.type === "table") {
+        const head = s.head.map((h) => ({ text: h, options: { bold: true, color: "FFFFFF", fill: { color: C.accent }, fontSize: 10.5 } }));
+        const rows = s.rows.map((r) => r.map((c) => {
+          const text = c && typeof c === "object" && c.t ? c.t : String(c);
+          return { text: text.replace(/\[ISI\]/g, "[ISI]"), options: { fontSize: 11, color: C.ink } };
+        }));
+        const w = s.widths ? s.widths.map((x) => (x / 100) * 12.33) : undefined;
+        slide.addTable([head, ...rows], {
+          x: 0.5, y: top, w: 12.33, colW: w, fontFace: F, border: { type: "solid", color: C.line, pt: 0.75 },
+          valign: "top", rowH: 0.34, autoPage: false,
+        });
+        if (s.note) {
+          slide.addText(s.note.replace(/<[^>]+>/g, ""), {
+            x: 0.5, y: 5.9, w: 12.33, h: 0.5, fontFace: F, fontSize: 11, color: C.ink, fill: { color: C.pale }, italic: true,
+          });
+        }
+        return;
+      }
+
+      // Metrik
+      if (s.type === "metrics") {
+        const items = s.metrics || [];
+        const n = items.length || 1;
+        const gap = 0.22;
+        const cw = (12.33 - gap * (n - 1)) / n;
+        items.forEach((m, k) => {
+          const x = 0.5 + k * (cw + gap);
+          slide.addShape(pptx.ShapeType.roundRect, { x, y: top + 0.2, w: cw, h: 2.5, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.08 });
+          slide.addText(String(m.val), { x: x + 0.18, y: top + 0.4, w: cw - 0.36, h: 0.9, fontFace: F, fontSize: 40, bold: true, color: C.title });
+          slide.addText(m.lab, { x: x + 0.18, y: top + 1.35, w: cw - 0.36, h: 0.5, fontFace: F, fontSize: 12, bold: true, color: C.ink });
+          slide.addText(m.src, { x: x + 0.18, y: top + 1.9, w: cw - 0.36, h: 0.6, fontFace: F, fontSize: 9, color: C.muted });
+        });
+        if (s.note) slide.addText(s.note.replace(/<[^>]+>/g, ""), { x: 0.5, y: 5.9, w: 12.33, h: 0.5, fontFace: F, fontSize: 11, italic: true, color: C.ink });
+        return;
+      }
+
+      // Kartu
+      if (s.type === "cards") {
+        const n = s.cards.length;
+        const gap = 0.24;
+        const cw = (12.33 - gap * (n - 1)) / n;
+        s.cards.forEach((c, k) => {
+          const x = 0.5 + k * (cw + gap);
+          slide.addShape(pptx.ShapeType.roundRect, { x, y: top + 0.2, w: cw, h: 3.1, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.08 });
+          if (c.meta) slide.addText(c.meta.toUpperCase(), { x: x + 0.2, y: top + 0.4, w: cw - 0.4, h: 0.3, fontFace: F, fontSize: 9, bold: true, color: C.accent });
+          slide.addText(c.title, { x: x + 0.2, y: top + (c.meta ? 0.7 : 0.5), w: cw - 0.4, h: 0.6, fontFace: F, fontSize: 14, bold: true, color: C.title });
+          slide.addText(c.desc, { x: x + 0.2, y: top + (c.meta ? 1.35 : 1.15), w: cw - 0.4, h: 1.6, fontFace: F, fontSize: 11, color: C.muted });
+        });
+        if (s.note) slide.addText(s.note, { x: 0.5, y: 5.9, w: 12.33, h: 0.5, fontFace: F, fontSize: 11, italic: true, color: C.ink });
+        return;
+      }
+
+      // Dua panel
+      if (s.type === "panels") {
+        const gap = 0.3;
+        const cw = (12.33 - gap) / 2;
+        s.panels.forEach((p, k) => {
+          const x = 0.5 + k * (cw + gap);
+          slide.addShape(pptx.ShapeType.roundRect, { x, y: top + 0.1, w: cw, h: 3.5, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.06 });
+          slide.addShape(pptx.ShapeType.rect, { x, y: top + 0.1, w: cw, h: 0.42, fill: { color: C.accent } });
+          slide.addText(p.title.toUpperCase(), { x: x + 0.16, y: top + 0.14, w: cw - 0.32, h: 0.34, fontFace: F, fontSize: 10, bold: true, color: "FFFFFF", charSpacing: 1.2 });
+          p.rows.forEach((r, ri) => {
+            slide.addText(r.k.toUpperCase(), { x: x + 0.16, y: top + 0.68 + ri * 0.95, w: cw - 0.32, h: 0.24, fontFace: F, fontSize: 8.5, bold: true, color: C.accent });
+            slide.addText(r.v, { x: x + 0.16, y: top + 0.92 + ri * 0.95, w: cw - 0.32, h: 0.6, fontFace: F, fontSize: 11, color: C.ink });
+          });
+        });
+        return;
+      }
+
+      // Alur langkah
+      if (s.type === "steps") {
+        const n = s.steps.length;
+        const gap = 0.36;
+        const cw = (12.33 - gap * (n - 1)) / n;
+        s.steps.forEach((st, k) => {
+          const x = 0.5 + k * (cw + gap);
+          slide.addShape(pptx.ShapeType.roundRect, { x, y: top + 0.15, w: cw, h: 4.35, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.08 });
+          slide.addText(`0${k + 1}`, { x: x + 0.18, y: top + 0.3, w: 0.8, h: 0.3, fontFace: F, fontSize: 11, bold: true, color: C.accent });
+          slide.addText(st.title, { x: x + 0.18, y: top + 0.6, w: cw - 0.36, h: 0.4, fontFace: F, fontSize: 14, bold: true, color: C.title });
+          slide.addText(st.desc, { x: x + 0.18, y: top + 1.0, w: cw - 0.36, h: 0.7, fontFace: F, fontSize: 11, color: C.muted });
+          if (st.img) {
+            // Tangkapan layar asli, dipaskan ke kotak tanpa merusak rasio.
+            const iw = cw - 0.36;
+            const ih = Math.min(2.45, iw / 1.5);
+            slide.addImage({ path: st.img, x: x + 0.18, y: top + 1.8, w: iw, h: ih, sizing: { type: "contain", w: iw, h: ih } });
+          } else {
+            slide.addText(`[Screenshot: ${st.shot}]`, {
+              x: x + 0.18, y: top + 1.85, w: cw - 0.36, h: 1.2, fontFace: F, fontSize: 9.5, italic: true, color: C.muted,
+              fill: { color: C.pale }, align: "center", valign: "middle",
+            });
+          }
+        });
+        if (s.caption) slide.addText(s.caption, { x: 0.5, y: 6.35, w: 12.33, h: 0.4, fontFace: F, fontSize: 10, italic: true, color: C.muted });
+        return;
+      }
+
+      // Arsitektur + tech stack
+      if (s.type === "architecture") {
+        const n = s.boxes.length;
+        const gap = 0.2;
+        const cw = (12.33 - gap * (n - 1)) / n;
+        s.boxes.forEach((b, k) => {
+          const x = 0.5 + k * (cw + gap);
+          slide.addShape(pptx.ShapeType.roundRect, { x, y: top + 0.1, w: cw, h: 1.85, fill: { color: k === 2 ? C.pale : C.card }, line: { color: C.accent, width: 1 }, rectRadius: 0.06 });
+          slide.addText(b.dh.toUpperCase(), { x: x + 0.14, y: top + 0.2, w: cw - 0.28, h: 0.26, fontFace: F, fontSize: 8.5, bold: true, color: C.accent, charSpacing: 1 });
+          slide.addText(b.h4, { x: x + 0.14, y: top + 0.46, w: cw - 0.28, h: 0.35, fontFace: F, fontSize: 13, bold: true, color: C.title });
+          slide.addText(b.ul.map((u) => `• ${u}`).join("\n"), { x: x + 0.14, y: top + 0.85, w: cw - 0.28, h: 0.95, fontFace: F, fontSize: 9.5, color: C.muted });
+        });
+        if (s.caption) slide.addText(s.caption, { x: 0.5, y: top + 2.05, w: 12.33, h: 0.3, fontFace: F, fontSize: 9.5, italic: true, color: C.muted });
+        const n2 = s.tech.length;
+        const g2 = 0.16;
+        const w2 = (12.33 - g2 * (n2 - 1)) / n2;
+        s.tech.forEach((t, k) => {
+          const x = 0.5 + k * (w2 + g2);
+          slide.addShape(pptx.ShapeType.roundRect, { x, y: top + 2.55, w: w2, h: 1.35, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.06 });
+          slide.addText(t.name.toUpperCase(), { x: x + 0.13, y: top + 2.64, w: w2 - 0.26, h: 0.24, fontFace: F, fontSize: 8, bold: true, color: C.accent });
+          slide.addText(t.tools, { x: x + 0.13, y: top + 2.88, w: w2 - 0.26, h: 0.42, fontFace: F, fontSize: 10, bold: true, color: C.title });
+          slide.addText(t.why, { x: x + 0.13, y: top + 3.3, w: w2 - 0.26, h: 0.55, fontFace: F, fontSize: 8.8, color: C.muted });
+        });
+        return;
+      }
+
+      // Hasil before–after
+      if (s.type === "results") {
+        const head = ["Ukuran", "Sebelum", "Sesudah", "Perubahan", "Target", "Tercapai?"].map((h) => ({ text: h, options: { bold: true, color: "FFFFFF", fill: { color: C.accent }, fontSize: 9.5 } }));
+        const rows = HASIL.map((h) => {
+          const diff = +(h.after - h.before).toFixed(1);
+          const better = h.lowerBetter ? h.after <= h.before : h.after >= h.before;
+          const hit = h.lowerBetter ? h.after <= h.target : h.after >= h.target;
+          return [
+            { text: h.label, options: { fontSize: 10.5, bold: true, color: C.title } },
+            { text: `${h.before}${h.unit ? " " + h.unit : ""}`, options: { fontSize: 10.5, color: C.ink } },
+            { text: `${h.after}${h.unit ? " " + h.unit : ""}`, options: { fontSize: 10.5, color: C.ink } },
+            { text: `${diff > 0 ? "+" : ""}${diff}`, options: { fontSize: 10.5, color: C.ink } },
+            { text: `${h.target}${h.unit ? " " + h.unit : ""}`, options: { fontSize: 10.5, color: C.ink } },
+            { text: hit ? "Tercapai" : better ? "Sebagian" : "Belum", options: { fontSize: 10, bold: true, color: hit ? "047857" : better ? "B45309" : "B91C1C" } },
+          ];
+        });
+        slide.addTable([head, ...rows], {
+          x: 0.5, y: top, w: 12.33, colW: [3.4, 1.5, 1.5, 2.1, 1.5, 2.33],
+          fontFace: F, border: { type: "solid", color: C.line, pt: 0.75 }, valign: "middle", rowH: 0.32,
+        });
+        if (s.caption) slide.addText(s.caption, { x: 0.5, y: 6.45, w: 12.33, h: 0.4, fontFace: F, fontSize: 9.5, italic: true, color: C.muted });
+        return;
+      }
+
+      // Struktur data (ERD)
+      if (s.type === "erd") {
+        if (s.lead) slide.addText(s.lead.replace(/<[^>]+>/g, ""), { x: 0.5, y: top - 0.05, w: 12.33, h: 0.4, fontFace: F, fontSize: 12, color: C.ink });
+        const n = s.entities.length;
+        const gap = 0.2;
+        const cw = (12.33 - gap * (n - 1)) / n;
+        s.entities.forEach((e, k) => {
+          const x = 0.5 + k * (cw + gap);
+          slide.addShape(pptx.ShapeType.roundRect, { x, y: top + 0.5, w: cw, h: 2.7, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.06 });
+          slide.addShape(pptx.ShapeType.rect, { x, y: top + 0.5, w: cw, h: 0.42, fill: { color: C.accent } });
+          slide.addText(`${e.name.toUpperCase()}`, { x: x + 0.14, y: top + 0.56, w: cw - 0.28, h: 0.3, fontFace: F, fontSize: 10.5, bold: true, color: "FFFFFF" });
+          slide.addText(e.fields.map((f) => `• ${f}`).join("\n"), { x: x + 0.14, y: top + 1.02, w: cw - 0.28, h: 2.1, fontFace: F, fontSize: 10.5, color: C.ink, lineSpacingMultiple: 1.3 });
+        });
+        if (s.note) slide.addText(s.note.replace(/<[^>]+>/g, ""), { x: 0.5, y: 5.9, w: 12.33, h: 0.5, fontFace: F, fontSize: 11, italic: true, color: C.ink, fill: { color: C.pale } });
+        return;
+      }
+
+      // Agenda
+      if (s.type === "agenda") {
+        const half = Math.ceil(s.items.length / 2);
+        [0, 1].forEach((col) => {
+          const part = s.items.slice(col * half, col * half + half);
+          const text = part.map((it, k) => ({
+            text: `${String(col * half + k + 1).padStart(2, "0")}  ${it.title}\n      ${it.desc}`,
+            options: { fontSize: 12.5, color: C.ink, breakLine: true, paraSpaceAfter: 10 },
+          }));
+          slide.addText(text, { x: 0.5 + col * 6.2, y: top + 0.1, w: 5.9, h: 4.4, fontFace: F, valign: "top" });
+        });
+        return;
+      }
+
+      // Rekomendasi
+      if (s.type === "recs") {
+        s.recs.forEach((r, k) => {
+          const y = top + 0.1 + k * 1.3;
+          slide.addShape(pptx.ShapeType.roundRect, { x: 0.5, y, w: 12.33, h: 1.15, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.06 });
+          slide.addText(`0${k + 1}`, { x: 0.7, y: y + 0.22, w: 0.8, h: 0.7, fontFace: F, fontSize: 24, bold: true, color: C.accent });
+          slide.addText(r.title, { x: 1.6, y: y + 0.16, w: 11, h: 0.4, fontFace: F, fontSize: 14.5, bold: true, color: C.title });
+          slide.addText(r.desc, { x: 1.6, y: y + 0.56, w: 11, h: 0.5, fontFace: F, fontSize: 11, color: C.muted });
+        });
+        return;
+      }
+
+      // Penutup
+      if (s.type === "closing") {
+        slide.addText("Terima kasih", { x: 0.5, y: top + 0.1, w: 7, h: 0.7, fontFace: F, fontSize: 30, bold: true, color: C.title });
+        slide.addText("Pertanyaan & Diskusi · Q&A", { x: 0.5, y: top + 0.85, w: 7, h: 0.3, fontFace: F, fontSize: 11, bold: true, color: C.accent, charSpacing: 2 });
+        slide.addText(s.links.map((l) => `${l.label}: ${l.url}`).join("\n"), {
+          x: 0.5, y: top + 1.3, w: 7.4, h: 2.6, fontFace: F, fontSize: 10.5, color: C.ink, lineSpacingMultiple: 1.5,
+        });
+        slide.addShape(pptx.ShapeType.roundRect, { x: 8.3, y: top + 0.15, w: 4.5, h: 3.9, fill: { color: C.card }, line: { color: C.line, width: 1 }, rectRadius: 0.08 });
+        slide.addText("[QR CODE]\nTempel gambar QR di sini", {
+          x: 8.6, y: top + 0.6, w: 3.9, h: 1.6, fontFace: F, fontSize: 12, italic: true, color: C.muted, align: "center", valign: "middle", fill: { color: C.pale },
+        });
+        slide.addText(`Pindai untuk membuka portal\n${s.qrUrl}`, { x: 8.5, y: top + 2.4, w: 4.1, h: 0.9, fontFace: F, fontSize: 10, color: C.ink, align: "center" });
+        slide.addText(`Tim: ${ANGGOTA.map((a) => a.nama.split(" ")[0]).join(" · ")}`, {
+          x: 0.5, y: 6.1, w: 12.33, h: 0.35, fontFace: F, fontSize: 10, color: C.muted, align: "center",
+        });
+        return;
+      }
+    });
+
+    await pptx.writeFile({ fileName: `${META.judulSingkat}-Kelompok-${META.kelompok}.pptx` });
+    toast(`File PPTX berhasil diunduh: ${META.judulSingkat}-Kelompok-${META.kelompok}.pptx`, "ok");
+  } catch (err) {
+    toast("Gagal membuat PPTX: " + err.message + ". Gunakan tombol “Unduh PDF” sebagai alternatif.", "err");
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+
+/* ============================================================================
+   QR CODE PADA SLIDE PENUTUP
+   Coba library QR via CDN; bila gagal, pakai gambar dari layanan API;
+   bila keduanya gagal, tampilkan kotak placeholder yang rapi.
+   ============================================================================ */
+async function initQR() {
+  const host = $("#qrTarget");
+  if (!host) return;
+  const url = slides[slides.length - 1].qrUrl;
+
+  // 1) Coba library qrcodejs (murni di browser, tanpa jaringan gambar)
+  try {
+    await loadScript("https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js", 8000);
+    if (typeof QRCode !== "undefined") {
+      host.innerHTML = "";
+      new QRCode(host, { text: url, width: 146, height: 146, correctLevel: QRCode.CorrectLevel.M });
+      return;
+    }
+  } catch (e) { /* lanjut ke alternatif */ }
+
+  // 2) Alternatif: gambar QR dari layanan publik
+  const img = new Image();
+  img.alt = "QR code menuju portal Desa Fajar Baru";
+  img.width = 146; img.height = 146;
+  img.onload = () => { host.innerHTML = ""; host.appendChild(img); };
+  img.onerror = () => {
+    host.innerHTML = `<div class="qrf"><strong>QR CODE</strong><span>Tempel gambar QR di sini</span><span style="opacity:.7">${esc(url)}</span></div>`;
+  };
+  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=1&data=${encodeURIComponent(url)}`;
+}
+initQR();
+
+/* ============================================================================
+   PINTASAN PAPAN TOMBOL, SWIPE, DEEP LINK
+   ============================================================================ */
+document.addEventListener("keydown", (e) => {
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea" || tag === "select") return;
+
+  switch (e.key) {
+    case "ArrowRight": case "PageDown": e.preventDefault(); next(); break;
+    case "ArrowLeft": case "PageUp": e.preventDefault(); prev(); break;
+    case " ": case "Enter": e.preventDefault(); next(); break;
+    case "Home": e.preventDefault(); go(0); break;
+    case "End": e.preventDefault(); go(total - 1); break;
+    case "f": case "F": e.preventDefault(); toggleFull(); break;
+    case "g": case "G": e.preventDefault(); toggleOverview(); break;
+    case "n": case "N": e.preventDefault(); toggleNotes(); break;
+    case "p": case "P": e.preventDefault(); toggleGuide(); break;    case "t": case "T": e.preventDefault(); toggleTheme(); break;
+    case "?": e.preventDefault(); showHelp(); break;
+    case "Escape":
+      if (lbEl.classList.contains("open")) closeLightbox();
+      else if (ovEl.classList.contains("open")) toggleOverview(false);
+      else if (notesEl.classList.contains("open")) toggleNotes(false);
+      else if (document.body.classList.contains("is-full") && !(document.fullscreenElement || document.webkitFullscreenElement)) setFullUI(false);
+      break;
+  }
+});
+
+function showHelp() {
+  toast("Pintasan: ←/→ atau Spasi pindah slide · Home/End awal/akhir · F layar penuh (menu disembunyikan) · G ikhtisar · N naskah · P panduan · T tema · Esc keluar/ menutup panel. Mode baca di HP: index.html?naskah=1");
+}
+$("#btnHelp").addEventListener("click", showHelp);
+
+/* Navigasi tombol */
+$("#btnPrev").addEventListener("click", prev);
+$("#btnNext").addEventListener("click", next);
+
+/* Swipe pada layar sentuh */
+let touchX = 0, touchY = 0, touchT = 0;
+$("#stage").addEventListener("touchstart", (e) => {
+  const t = e.changedTouches[0];
+  touchX = t.clientX; touchY = t.clientY; touchT = Date.now();
+}, { passive: true });
+$("#stage").addEventListener("touchend", (e) => {
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchX;
+  const dy = t.clientY - touchY;
+  if (Date.now() - touchT > 800) return;
+  if (Math.abs(dx) < 52 || Math.abs(dx) < Math.abs(dy)) return;
+  dx < 0 ? next() : prev();
+}, { passive: true });
+
+/* Klik pada panggung (bukan tombol/tautan/gambar) untuk lanjut */
+$("#stage").addEventListener("click", (e) => {
+  if (e.target.closest("a,button,.shot-frame img,#qrTarget")) return;
+  next();
+});
+
+/* --- Pratinjau gambar (klik tangkapan layar) ---------------------------- */
+const lbEl = $("#lightbox");
+const lbImg = lbEl.querySelector("img");
+const lbCap = lbEl.querySelector("p");
+function openLightbox(src, caption) {
+  lbImg.src = src;
+  lbImg.alt = caption || "Pratinjau gambar";
+  lbCap.textContent = caption || "";
+  lbEl.classList.add("open");
+  lbEl.setAttribute("aria-hidden", "false");
+}
+function closeLightbox() {
+  lbEl.classList.remove("open");
+  lbEl.setAttribute("aria-hidden", "true");
+  lbImg.removeAttribute("src");
+}
+lbEl.addEventListener("click", closeLightbox);
+canvas.addEventListener("click", (e) => {
+  const img = e.target.closest(".shot-frame img");
+  if (!img) return;
+  e.stopPropagation();
+  openLightbox(img.getAttribute("src"), img.dataset.caption);
+});
+/* Gambar QR di slide penutup juga bisa diperbesar */
+document.addEventListener("click", (e) => {
+  const qr = e.target.closest("#qrTarget canvas, #qrTarget img");
+  if (!qr) return;
+  const src = qr.tagName === "CANVAS" ? qr.toDataURL("image/png") : qr.src;
+  openLightbox(src, "QR portal Desa Fajar Baru");
+});
+
+/* Deep link: #5 membuka slide 5 */
+function fromHash() {
+  const n = parseInt((location.hash || "").replace("#", ""), 10);
+  return Number.isFinite(n) && n >= 1 && n <= total ? n - 1 : 0;
+}
+window.addEventListener("hashchange", () => {
+  const i = fromHash();
+  if (i !== index) go(i);
+});
+
+/* ============================================================================
+   INISIALISASI
+   ============================================================================ */
+go(fromHash());
+paintNotes();
+// ?naskah=1 → mode naskah saja (teks penuh, tanpa panggung) untuk dibaca di HP
+// ?notes=1  → buka panel naskah di samping slide
+const qs = new URLSearchParams(location.search);
+if (qs.get("naskah") === "1") {
+  document.body.classList.add("script-only");
+  toggleNotes(true);
+  notesEl.style.transform = "none";
+} else if (qs.get("notes") === "1") {
+  toggleNotes(true);
+}
+setTimeout(fitCanvas, 60);
+window.addEventListener("load", () => { fitCanvas(); if (ovEl.classList.contains("open")) scaleOverview(); });
+window.addEventListener("beforeprint", () => {
+  document.body.classList.add("capturing");
+  elSlides().forEach((el) => el.classList.add("active"));
+});
+window.addEventListener("afterprint", () => {
+  document.body.classList.remove("capturing");
+  paint();
+});
+
+/* Fokus awal ke slide aktif agar pembaca layar & panah bekerja konsisten */
+elSlides().forEach((el) => el.setAttribute("tabindex", "-1"));
+
+console.info(
+  "%cPresentasi Portal Desa Fajar Baru — Kelompok 3",
+  "font:700 13px Georgia;color:#047857",
+  `\n${slides.length} slide · Edit array DATA di bagian atas berkas.`
+);
+</script>
+</body>
+</html>
