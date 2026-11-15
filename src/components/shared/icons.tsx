@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-export type IconName = "arrow" | "back" | "briefcase" | "building" | "chart" | "check" | "chevron" | "chevron-down" | "chevron-up" | "clipboard" | "clock" | "edit" | "external" | "eye" | "eye-off" | "graduation" | "instagram" | "link" | "logout" | "mail" | "map" | "menu" | "pin" | "plus" | "qrcode" | "search" | "share" | "shield" | "tiktok" | "trash" | "users" | "x"
+export type IconName = "arrow" | "back" | "briefcase" | "building" | "chart" | "check" | "chevron" | "chevron-down" | "chevron-up" | "clipboard" | "clock" | "edit" | "external" | "eye" | "eye-off" | "graduation" | "instagram" | "link" | "logout" | "mail" | "map" | "menu" | "mosque" | "pin" | "plus" | "qrcode" | "search" | "share" | "shield" | "store" | "tiktok" | "trash" | "users" | "x"
 
 export function Icon({
   name,
@@ -134,6 +134,11 @@ export function Icon({
         <path d="M4 7h16M4 12h16M4 17h16" />
       </>
     ),
+    mosque: (
+      <>
+        <path d="M3 21h18M5 21V12h14v9M3 12l9-8 9 8M9 12v-2a3 3 0 0 1 6 0v2M12 2v2" />
+      </>
+    ),
     pin: (
       <>
         <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
@@ -167,6 +172,11 @@ export function Icon({
       <>
         <path d="M12 3 4.5 6v5.5c0 4.5 3.1 7.7 7.5 9.5 4.4-1.8 7.5-5 7.5-9.5V6L12 3Z" />
         <path d="m9 12 2 2 4-4" />
+      </>
+    ),
+    store: (
+      <>
+        <path d="M3 10h18l-2-6H5l-2 6ZM5 10v10h14V10M9 20v-6h6v6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0" />
       </>
     ),
     tiktok: (

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
-import { Icon } from "@/components/shared/icons";
+import { Icon, type IconName } from "@/components/shared/icons";
 import type { Marker, MarkerJenisInfo } from "@/types/database";
 import { DEFAULT_MARKERS } from "@/lib/default-markers";
 
@@ -20,7 +20,50 @@ const filters: { value: "semua" | MarkerJenisInfo; label: string }[] = [
   { value: "kantor", label: "Kantor" },
   { value: "layanan", label: "Layanan" },
   { value: "pendidikan", label: "Pendidikan" },
+  { value: "ibadah", label: "Tempat Ibadah" },
+  { value: "minimarket", label: "Minimarket" },
 ];
+
+const categoryPresentation: Record<
+  MarkerJenisInfo,
+  { label: string; dot: string; badge: string; gradient: string; icon: IconName }
+> = {
+  kantor: {
+    label: "Kantor Pemerintahan",
+    dot: "bg-teal-600",
+    badge: "bg-teal-50 text-teal-800 border-teal-200",
+    gradient: "bg-gradient-to-br from-teal-600 to-emerald-700",
+    icon: "pin",
+  },
+  layanan: {
+    label: "Layanan Warga",
+    dot: "bg-amber-600",
+    badge: "bg-amber-50 text-amber-800 border-amber-200",
+    gradient: "bg-gradient-to-br from-amber-500 to-orange-600",
+    icon: "pin",
+  },
+  pendidikan: {
+    label: "Pendidikan",
+    dot: "bg-rose-600",
+    badge: "bg-rose-50 text-rose-800 border-rose-200",
+    gradient: "bg-gradient-to-br from-rose-500 to-pink-600",
+    icon: "graduation",
+  },
+  ibadah: {
+    label: "Tempat Ibadah",
+    dot: "bg-violet-600",
+    badge: "bg-violet-50 text-violet-800 border-violet-200",
+    gradient: "bg-gradient-to-br from-violet-600 to-purple-700",
+    icon: "mosque",
+  },
+  minimarket: {
+    label: "Minimarket",
+    dot: "bg-sky-600",
+    badge: "bg-sky-50 text-sky-800 border-sky-200",
+    gradient: "bg-gradient-to-br from-sky-500 to-cyan-600",
+    icon: "store",
+  },
+};
 
 export function VillageMapSection({ markers }: VillageMapSectionProps) {
   const [mapFilter, setMapFilter] = useState<"semua" | MarkerJenisInfo>("semua");
@@ -40,6 +83,8 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
   );
 
   const selectedMarker = visibleMarkers.find((marker) => marker.id === selectedId) ?? visibleMarkers[0];
+  const selectedCategory =
+    categoryPresentation[selectedMarker?.jenis_info ?? "layanan"];
 
   const selectedMarkerUrl = selectedMarker?.maps_url
     ? selectedMarker.maps_url
@@ -115,6 +160,7 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
               <div className="flex items-center gap-2">
                 {visibleMarkers.map((marker) => {
                   const isCurrent = marker.id === selectedMarker?.id;
+                  const category = categoryPresentation[marker.jenis_info];
                   return (
                     <button
                       key={marker.id}
@@ -126,11 +172,11 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                           : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                       }`}
                     >
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        marker.jenis_info === "kantor" ? (isCurrent ? "bg-white" : "bg-teal-600") :
-                        marker.jenis_info === "layanan" ? (isCurrent ? "bg-white" : "bg-amber-600") :
-                        (isCurrent ? "bg-white" : "bg-rose-600")
-                      }`} />
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          isCurrent ? "bg-white" : category.dot
+                        }`}
+                      />
                       <span>{marker.name}</span>
                     </button>
                   );
@@ -162,30 +208,16 @@ export function VillageMapSection({ markers }: VillageMapSectionProps) {
                 <div className="space-y-5">
                   {/* Kategori Badge */}
                   <div>
-                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${
-                      selectedMarker.jenis_info === "kantor"
-                        ? "bg-teal-50 text-teal-800 border border-teal-200"
-                        : selectedMarker.jenis_info === "layanan"
-                          ? "bg-amber-50 text-amber-800 border border-amber-200"
-                          : "bg-rose-50 text-rose-800 border border-rose-200"
-                    }`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        selectedMarker.jenis_info === "kantor" ? "bg-teal-600" :
-                        selectedMarker.jenis_info === "layanan" ? "bg-amber-600" : "bg-rose-600"
-                      }`} />
-                      {selectedMarker.jenis_info === "kantor" ? "Kantor Pemerintahan" :
-                       selectedMarker.jenis_info === "layanan" ? "Layanan Warga" : "Pendidikan"}
+                    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${selectedCategory.badge}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${selectedCategory.dot}`} />
+                      {selectedCategory.label}
                     </span>
                   </div>
 
                   {/* Icon & Nama Tempat */}
                   <div className="flex items-start gap-3.5">
-                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm text-white ${
-                      selectedMarker.jenis_info === "kantor" ? "bg-gradient-to-br from-teal-600 to-emerald-700" :
-                      selectedMarker.jenis_info === "layanan" ? "bg-gradient-to-br from-amber-500 to-orange-600" :
-                      "bg-gradient-to-br from-rose-500 to-pink-600"
-                    }`}>
-                      <Icon name={selectedMarker.jenis_info === "pendidikan" ? "graduation" : "pin"} size={24} />
+                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm text-white ${selectedCategory.gradient}`}>
+                      <Icon name={selectedCategory.icon} size={24} />
                     </div>
                     <div>
                       <h4 className="text-xl font-extrabold leading-snug text-slate-900">

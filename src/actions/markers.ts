@@ -4,12 +4,22 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createPublicClient } from "@/lib/supabase/public";
 import { DEFAULT_MARKERS } from "@/lib/default-markers";
+import {
+  isLocalMarkerPreviewEnabled,
+  LOCAL_MARKER_PREVIEW,
+} from "@/lib/marker-preview";
 import { isHttpUrl } from "@/lib/validation";
 import type { ActionResult } from "@/types/actions";
 import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
 
 function isMarkerJenisInfo(value: string): value is MarkerJenisInfo {
-  return value === "kantor" || value === "layanan" || value === "pendidikan";
+  return (
+    value === "kantor" ||
+    value === "layanan" ||
+    value === "pendidikan" ||
+    value === "ibadah" ||
+    value === "minimarket"
+  );
 }
 
 function getMarkerPayload(
@@ -97,6 +107,10 @@ function getMarkerPayload(
  * (ISR/statis) dan tidak dirender ulang di setiap request.
  */
 export async function getPublicMarkers(): Promise<Marker[]> {
+  if (isLocalMarkerPreviewEnabled()) {
+    return [...DEFAULT_MARKERS, ...LOCAL_MARKER_PREVIEW];
+  }
+
   const supabase = createPublicClient();
 
   const { data, error } = await supabase

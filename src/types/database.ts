@@ -39,7 +39,12 @@ export type NewQrCode = Omit<
 
 export type TrafficEventType = "qr_scan" | "page_view" | "link_click";
 
-export type MarkerJenisInfo = "kantor" | "layanan" | "pendidikan";
+export type MarkerJenisInfo =
+  | "kantor"
+  | "layanan"
+  | "pendidikan"
+  | "ibadah"
+  | "minimarket";
 
 export interface Marker {
   id: string;
