@@ -1,5 +1,12 @@
 import type { Marker } from "@/types/database";
 
+export function isLocalMarkerPreviewEnabled() {
+  return (
+    process.env.NODE_ENV === "development" &&
+    process.env.LOCAL_MARKER_PREVIEW === "true"
+  );
+}
+
 type PreviewMarker = Omit<Marker, "id" | "created_at" | "updated_at">;
 
 const previewMarkers: PreviewMarker[] = [

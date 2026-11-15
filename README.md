@@ -88,7 +88,9 @@ Buka `http://localhost:3000`. Perintah validasi yang tersedia:
 Untuk melihat marker masjid dan minimarket tanpa menulis ke Supabase, ubah
 `LOCAL_MARKER_PREVIEW=false` menjadi `LOCAL_MARKER_PREVIEW=true` di `.env.local`,
 lalu restart server. Preview ini hanya aktif di mode development; halaman publik
-produksi tetap mengambil marker dari Supabase.
+produksi tetap mengambil marker dari Supabase. Mode ini menonaktifkan pencatatan
+event analytics, tetapi layanan dan media sosial tetap membaca data publik dari
+Supabase.
 
 ```bash
 npm run lint       # ESLint

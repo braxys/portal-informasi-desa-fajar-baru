@@ -4,7 +4,10 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createPublicClient } from "@/lib/supabase/public";
 import { DEFAULT_MARKERS } from "@/lib/default-markers";
-import { LOCAL_MARKER_PREVIEW } from "@/lib/marker-preview";
+import {
+  isLocalMarkerPreviewEnabled,
+  LOCAL_MARKER_PREVIEW,
+} from "@/lib/marker-preview";
 import { isHttpUrl } from "@/lib/validation";
 import type { ActionResult } from "@/types/actions";
 import type { Marker, MarkerJenisInfo, NewMarker } from "@/types/database";
@@ -104,10 +107,7 @@ function getMarkerPayload(
  * (ISR/statis) dan tidak dirender ulang di setiap request.
  */
 export async function getPublicMarkers(): Promise<Marker[]> {
-  if (
-    process.env.NODE_ENV === "development" &&
-    process.env.LOCAL_MARKER_PREVIEW === "true"
-  ) {
+  if (isLocalMarkerPreviewEnabled()) {
     return [...DEFAULT_MARKERS, ...LOCAL_MARKER_PREVIEW];
   }
 

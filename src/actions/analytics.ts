@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { isLocalMarkerPreviewEnabled } from "@/lib/marker-preview";
 import type { AnalyticsSummary, TrafficEventType } from "@/types/database";
 
 interface LogEventParams {
@@ -21,6 +22,10 @@ export async function logTrafficEvent({
   qrCodeId,
   source = "direct",
 }: LogEventParams): Promise<{ success: boolean }> {
+  if (isLocalMarkerPreviewEnabled()) {
+    return { success: true };
+  }
+
   try {
     const supabase = await createClient();
     const headersList = await headers();
