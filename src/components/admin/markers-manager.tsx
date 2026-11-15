@@ -28,6 +28,8 @@ const JENIS_OPTIONS: {
   { value: "kantor", label: "Kantor", icon: "building" },
   { value: "layanan", label: "Layanan", icon: "briefcase" },
   { value: "pendidikan", label: "Pendidikan", icon: "graduation" },
+  { value: "ibadah", label: "Tempat Ibadah", icon: "mosque" },
+  { value: "minimarket", label: "Minimarket", icon: "store" },
 ];
 
 const EMPTY_FORM = {

@@ -145,6 +145,26 @@
   border: 3px solid #fb7185;
 }
 
+.pin-modern.category-ibadah .pin-head {
+  background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+}
+.pin-modern.category-ibadah .pin-tip {
+  border-top: 11px solid #8b5cf6;
+}
+.pin-modern.category-ibadah .pin-pulse-ring {
+  border: 3px solid #a78bfa;
+}
+
+.pin-modern.category-minimarket .pin-head {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+}
+.pin-modern.category-minimarket .pin-tip {
+  border-top: 11px solid #0ea5e9;
+}
+.pin-modern.category-minimarket .pin-pulse-ring {
+  border: 3px solid #38bdf8;
+}
+
 /* 2. Floating Badge Style */
 .pin-badge {
   position: relative;
@@ -218,6 +238,14 @@
 .pin-badge.category-pendidikan.is-selected .badge-box { background: #e11d48; border-color: #e11d48; }
 .pin-badge.category-pendidikan.is-selected .badge-pointer { border-top-color: #e11d48; }
 
+.pin-badge.category-ibadah .badge-icon { background: #7c3aed; }
+.pin-badge.category-ibadah.is-selected .badge-box { background: #7c3aed; border-color: #7c3aed; }
+.pin-badge.category-ibadah.is-selected .badge-pointer { border-top-color: #7c3aed; }
+
+.pin-badge.category-minimarket .badge-icon { background: #0284c7; }
+.pin-badge.category-minimarket.is-selected .badge-box { background: #0284c7; border-color: #0284c7; }
+.pin-badge.category-minimarket.is-selected .badge-pointer { border-top-color: #0284c7; }
+
 /* 3. Radar Dot Style */
 .pin-radar {
   position: relative;
@@ -261,6 +289,12 @@
 
 .pin-radar.category-pendidikan .radar-core { background: #e11d48; }
 .pin-radar.category-pendidikan .radar-wave { border: 2.5px solid #fb7185; }
+
+.pin-radar.category-ibadah .radar-core { background: #7c3aed; }
+.pin-radar.category-ibadah .radar-wave { border: 2.5px solid #a78bfa; }
+
+.pin-radar.category-minimarket .radar-core { background: #0284c7; }
+.pin-radar.category-minimarket .radar-wave { border: 2.5px solid #38bdf8; }
 
 /* Leaflet Modern Popup Customization */
 .leaflet-popup-content-wrapper {

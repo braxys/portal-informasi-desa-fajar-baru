@@ -85,6 +85,10 @@ export function getCategoryLabel(jenis: MarkerJenisInfo): { label: string; badge
       return { label: "Layanan Warga", badgeClass: "bg-amber-50 text-amber-800 border-amber-200", colorHex: "#d97706" };
     case "pendidikan":
       return { label: "Pendidikan", badgeClass: "bg-rose-50 text-rose-800 border-rose-200", colorHex: "#e11d48" };
+    case "ibadah":
+      return { label: "Tempat Ibadah", badgeClass: "bg-violet-50 text-violet-800 border-violet-200", colorHex: "#7c3aed" };
+    case "minimarket":
+      return { label: "Minimarket", badgeClass: "bg-sky-50 text-sky-800 border-sky-200", colorHex: "#0284c7" };
     default:
       return { label: "Lokasi Desa", badgeClass: "bg-slate-50 text-slate-800 border-slate-200", colorHex: "#0f766e" };
   }
@@ -96,6 +100,12 @@ function getCategoryIconSvg(category: MarkerJenisInfo): string {
   }
   if (category === "pendidikan") {
     return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6"/><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`;
+  }
+  if (category === "ibadah") {
+    return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V12h14v9M3 12l9-8 9 8M9 12v-2a3 3 0 0 1 6 0v2M12 2v2"/></svg>`;
+  }
+  if (category === "minimarket") {
+    return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18l-2-6H5l-2 6ZM5 10v10h14V10M9 20v-6h6v6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/></svg>`;
   }
   return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
 }
@@ -279,23 +289,12 @@ export function GeographicMap({
               <div className="overflow-hidden font-sans">
                 {/* Header Kategori */}
                 <div
-                  className={`flex items-center justify-between px-3.5 py-2 text-xs font-bold border-b ${
-                    marker.jenis_info === "kantor"
-                      ? "bg-teal-50 text-teal-800 border-teal-100"
-                      : marker.jenis_info === "layanan"
-                        ? "bg-amber-50 text-amber-800 border-amber-100"
-                        : "bg-rose-50 text-rose-800 border-rose-100"
-                  }`}
+                  className={`flex items-center justify-between px-3.5 py-2 text-xs font-bold border-b ${category.badgeClass}`}
                 >
                   <span className="flex items-center gap-1.5 uppercase tracking-wider text-[10px]">
                     <span
-                      className={`inline-block w-2 h-2 rounded-full ${
-                        marker.jenis_info === "kantor"
-                          ? "bg-teal-600"
-                          : marker.jenis_info === "layanan"
-                            ? "bg-amber-600"
-                            : "bg-rose-600"
-                      }`}
+                      className="inline-block w-2 h-2 rounded-full"
+                      style={{ backgroundColor: category.colorHex }}
                     />
                     {category.label}
                   </span>
